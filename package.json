@@ -1,0 +1,13 @@
+{
+  "name": "dnd-dm-assistant",
+  "version": "1.0.0",
+  "description": "D&D AI Dungeon Master — Web app with 3D dice roller and AI chat",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/http-server/bin/http-server . -p 3000 -c-1 --cors",
+    "start-no-cache": "node node_modules/http-server/bin/http-server . -p 3000 -c-1 --cors -o"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
