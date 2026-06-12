@@ -381,6 +381,100 @@ const eldritchInvocations = [
   { name: "Witch Sight", prerequisite: "15th level", description: "You can see the true form of any shapechanger or creature concealed by illusion or transmutation magic while it is within 30 feet of you." }
 ];
 
+// Pact Boon options for Warlocks
+const pactBoonOptions = [
+  "Pact of the Blade",
+  "Pact of the Chain",
+  "Pact of the Tome",
+  "Pact of the Talisman"
+];
+
+// ========== WARLOCK PATRONS DATABASE ==========
+const warlockPatrons = {
+  "The Archfey": {
+    expandedSpells: {
+      1: ["faerie fire", "sleep"],
+      2: ["calm emotions", "misty step"],
+      3: ["blink", "plant growth"],
+      4: ["dominate beast", "greater invisibility"],
+      5: ["dominate person", "seeming"]
+    },
+    features: [
+      { level: 1, name: "Fey Presence", description: "As an action, you cause each creature in a 10‑ft cube to make a Wisdom save vs. your spell save DC. On a failure, they are charmed or frightened (your choice) until the end of your next turn. Once per short or long rest." },
+      { level: 6, name: "Misty Escape", description: "When you take damage, you can use your reaction to become invisible and teleport up to 60 ft to an unoccupied space you can see. You remain invisible until the start of your next turn or until you attack/cast a spell. Once per short or long rest." },
+      { level: 10, name: "Beguiling Defenses", description: "You are immune to being charmed. When a creature attempts to charm you, you can use your reaction to turn the effect back on that creature, forcing it to make a Wisdom save or be charmed by you for 1 minute." },
+      { level: 14, name: "Dark Delirium", description: "As an action, you cause a creature you can see within 60 ft to make a Wisdom save. On a failure, it is charmed or frightened (your choice) for 1 minute or until you lose concentration. The creature perceives a hallucinatory realm of your design. Once per long rest." }
+    ],
+    resource: null
+  },
+  "The Fiend": {
+    expandedSpells: {
+      1: ["burning hands", "command"],
+      2: ["blindness/deafness", "scorching ray"],
+      3: ["fireball", "stinking cloud"],
+      4: ["fire shield", "wall of fire"],
+      5: ["flame strike", "hallow"]
+    },
+    features: [
+      { level: 1, name: "Dark One's Blessing", description: "When you reduce a hostile creature to 0 hit points, you gain temporary HP equal to your Charisma modifier + your warlock level." },
+      { level: 6, name: "Dark One's Own Luck", description: "When you make an ability check or saving throw, you can add a d10 to the roll. You must decide before the DM says if you succeed/fail. Once per short or long rest." },
+      { level: 10, name: "Fiendish Resilience", description: "When you finish a short or long rest, choose one damage type (except bludgeoning, piercing, slashing from nonmagical attacks). You gain resistance to that damage type until you finish a rest or choose a different type." },
+      { level: 14, name: "Hurl Through Hell", description: "When you hit a creature with an attack, you can teleport it through the lower planes. The creature disappears and takes 10d10 psychic damage, then reappears in the space it left (or the nearest unoccupied space). Once per long rest." }
+    ],
+    resource: null
+  },
+  "The Great Old One": {
+    expandedSpells: {
+      1: ["dissonant whispers", "Tasha's hideous laughter"],
+      2: ["detect thoughts", "phantasmal force"],
+      3: ["clairvoyance", "sending"],
+      4: ["confusion", "Evard's black tentacles"],
+      5: ["dominate person", "telekinesis"]
+    },
+    features: [
+      { level: 1, name: "Awakened Mind", description: "You can telepathically speak to any creature within 30 ft that you can see and that understands at least one language. The creature does not need to share a language." },
+      { level: 6, name: "Entropic Ward", description: "When a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll. If the attack misses, you have advantage on your next attack roll against that creature before the end of your next turn. Once per short or long rest." },
+      { level: 10, name: "Thought Shield", description: "You have resistance to psychic damage. Additionally, any creature that deals psychic damage to you or reads your thoughts takes 3d6 psychic damage." },
+      { level: 14, name: "Create Thrall", description: "When you touch an incapacitated humanoid, it becomes charmed by you until a remove curse or similar magic is cast on it. You can communicate telepathically with the thrall at any distance (as long as you are on the same plane). You can have only one thrall at a time." }
+    ],
+    resource: null
+  },
+  "The Hexblade": {
+    expandedSpells: {
+      1: ["shield", "wrathful smite"],
+      2: ["blur", "branding smite"],
+      3: ["blink", "elemental weapon"],
+      4: ["phantasmal killer", "staggering smite"],
+      5: ["banishing smite", "cone of cold"]
+    },
+    features: [
+      { level: 1, name: "Hexblade's Curse", description: "As a bonus action, choose one creature you can see within 30 ft. Once per short rest, you gain: bonus to damage rolls equal to proficiency bonus; critical hit on 19–20; you regain HP equal to your warlock level + Cha mod if the cursed target dies. Lasts 1 minute." },
+      { level: 1, name: "Hex Warrior", description: "You can use your Charisma modifier instead of Strength or Dexterity for attack and damage rolls with one handed weapon you touch (not two‑handed). Also gain proficiency with medium armor, shields, and martial weapons." },
+      { level: 6, name: "Accursed Specter", description: "When you slay a humanoid, you can bind its spirit as a specter (use specter stat block). It gains bonus HP equal to half your warlock level. It obeys your verbal commands and rolls its own initiative. Lasts until you finish a long rest. Once per long rest." },
+      { level: 10, name: "Armor of Hexes", description: "While your Hexblade's Curse is on a target, when that target hits you with an attack roll, you can roll a d6. On a 4–6, the attack misses regardless of its roll." },
+      { level: 14, name: "Master of Hexes", description: "You can transfer your Hexblade's Curse to a new creature as a bonus action (no action required if the previous cursed creature died). No longer limited to once per rest – you can use it at will, but only one curse active at a time." }
+    ],
+    resource: { name: "Hexblade's Curse", maxUses: "proficiency bonus per short rest", currentUses: 0 }
+  },
+  "The Fathomless": {
+    expandedSpells: {
+      1: ["create or destroy water", "thunderwave"],
+      2: ["gust of wind", "shatter"],
+      3: ["lightning bolt", "sleet storm"],
+      4: ["control water", "summon elemental (water only)"],
+      5: ["bigby's hand (appears as a watery tentacle)", "cone of cold"]
+    },
+    features: [
+      { level: 1, name: "Tentacle of the Deeps", description: "As a bonus action, create a spectral tentacle at a point you can see within 60 ft. It lasts 1 minute. When you create it, make a melee spell attack against a creature within 10 ft of it; on hit, it deals 1d8 cold damage and reduces the target's speed by 10 ft. As a bonus action, you can move the tentacle 30 ft and repeat the attack. Uses equal to proficiency bonus per long rest." },
+      { level: 1, name: "Gift of the Sea", description: "You gain a swimming speed equal to your walking speed, and you can breathe underwater." },
+      { level: 6, name: "Oceanic Soul", description: "You gain resistance to cold damage. Additionally, when you are fully submerged, any creature that starts its turn in the water within 30 ft of you takes cold damage equal to your Charisma modifier." },
+      { level: 10, name: "Guardian Coil", description: "When a creature you can see hits you with an attack, you can use your reaction to reduce the damage by 1d8. You can use this after the damage roll but before the damage is applied. You gain additional uses equal to your proficiency bonus per long rest." },
+      { level: 14, name: "Fathomless Plunge", description: "As a bonus action, you can teleport to an unoccupied space you can see that is submerged in water (or within 30 ft of a body of water). You can also cause a 20‑ft radius sphere of water to erupt, forcing creatures within to make a Strength save or take 2d6 bludgeoning damage and be pushed 15 ft away. Once per long rest." }
+    ],
+    resource: { name: "Tentacle of the Deeps", maxUses: "proficiency bonus per long rest", currentUses: 0 }
+  }
+};
+
 const battleMasterManeuvers = [
   { name: "Commander's Strike", description: "When you take the Attack action on your turn, you can forgo one of your attacks and use a bonus action to direct one of your companions to strike. When you do so, choose a friendly creature who can see or hear you and expend one superiority die. That creature can immediately use its reaction to make one weapon attack, adding the superiority die to the attack's damage roll." },
   { name: "Disarming Attack", description: "When you hit a creature with a weapon attack, you can expend one superiority die to attempt to disarm the target. Add the superiority die to the attack's damage roll. The target must succeed on a Strength saving throw or drop one item of your choice that it is holding." },
@@ -448,6 +542,10 @@ const abilities = ["Strength","Dexterity","Constitution","Intelligence","Wisdom"
 const sessionBtnWraps = ['wrap-char', 'wrap-quest', 'wrap-npc', 'wrap-guide', 'wrap-combat'];
 const sessionBtns     = ['btn-char', 'btn-quest', 'btn-npc', 'btn-guide', 'btn-combat'];
 
+// Portrait cropping globals
+let cropper = null;
+let currentCropResolve = null;
+
 /* ========== GLOBAL STATE ========== */
 let sessionActive = false;
 let activeBtn     = null;
@@ -479,6 +577,7 @@ let chosenMetamagic = [];
 let chosenInvocations = [];
 let chosenManeuvers = [];
 let chosenArcaneShots = [];
+let selectedPactBoon = "";
 let selectedDragonbornAncestry = "";
 let selectedSorcererAncestry = "";
 let selectedAlignment = "N";
@@ -775,6 +874,23 @@ function updateSubclassDropdown() {
     subclassSelect.innerHTML = `<option value="">None (choose later)</option>` + cls.subclasses.map(sc => `<option value="${sc}">${sc}</option>`).join("");
     selectedSubclass = "";
   } else subclassSelect.innerHTML = `<option value="">None</option>`;
+  updatePactBoonUI();
+}
+function updatePactBoonUI() {
+  const field = document.getElementById("pactBoonField");
+  const select = document.getElementById("wizardPactBoon");
+  if (!field || !select) return;
+  if (selectedClass === "Warlock") {
+    field.style.display = "block";
+    // Only populate if empty (preserve selection)
+    if (select.options.length === 0) {
+      select.innerHTML = `<option value="">— Choose Pact Boon —</option>`
+        + pactBoonOptions.map(p => `<option value="${p}">${p}</option>`).join("");
+    }
+  } else {
+    field.style.display = "none";
+    selectedPactBoon = "";
+  }
 }
 function updateVariantHumanUI() {
   // Variant Human removed – no action needed
@@ -1473,7 +1589,9 @@ function renderFeatureGrid(containerId, optionsArray, selectedSet, maxAllowed, f
 }
 
 function getAvailableInvocations(level) {
+  const pact = selectedPactBoon || (currentCharacter && currentCharacter.pactBoon) || "";
   return eldritchInvocations.filter(inv => {
+    // Level prerequisite check
     if (inv.prerequisite && inv.prerequisite.includes("level")) {
       const match = inv.prerequisite.match(/(\d+)/);
       if (match) {
@@ -1481,6 +1599,16 @@ function getAvailableInvocations(level) {
         if (level < reqLevel) return false;
       }
     }
+    // Pact Boon prerequisite check
+    if (inv.prerequisite && inv.prerequisite.includes("Pact of the")) {
+      // Extract the pact name from prerequisite (e.g., "Pact of the Blade" from "5th level, Pact of the Blade")
+      const pactMatch = inv.prerequisite.match(/(Pact of the \w+)/);
+      if (pactMatch) {
+        const requiredPact = pactMatch[1];
+        if (pact !== requiredPact) return false;
+      }
+    }
+    // Eldritch blast prerequisite (already passed level check)
     return true;
   });
 }
@@ -1612,6 +1740,7 @@ function nextStep() {
     selectedSubrace = document.getElementById("wizardSubrace").value;
     selectedClass = document.getElementById("wizardClass").value;
     selectedSubclass = document.getElementById("wizardSubclass").value;
+    selectedPactBoon = document.getElementById("wizardPactBoon")?.value || "";
     selectedBackground = document.getElementById("wizardBackground").value;
     characterLevel = parseInt(document.getElementById("wizardLevel").value, 10);
     updateVariantHumanUI();
@@ -1660,6 +1789,7 @@ function generateReview() {
     <p><strong>Race:</strong> ${selectedRace} (${selectedSubrace})</p>
     <p><strong>Class:</strong> ${selectedClass} ${selectedSubclass ? `(${selectedSubclass})` : ""}</p>
     <p><strong>Level:</strong> ${characterLevel}</p>
+    ${selectedClass === "Warlock" && selectedPactBoon ? `<p><strong>Pact Boon:</strong> ${selectedPactBoon}</p>` : ""}
     <p><strong>Background:</strong> ${selectedBackground}</p>
     <p><strong>Ability Scores:</strong> ${abilities.map(ab => `${ab}: ${finalScores[ab]} (${calculateModifier(finalScores[ab])>=0?"+":""}${calculateModifier(finalScores[ab])})`).join(", ")}</p>
     <p><strong>Hit Points:</strong> ${hp}</p>
@@ -1695,6 +1825,7 @@ function finishWizard() {
     invocations: chosenInvocations.slice(),
     maneuvers: chosenManeuvers.slice(),
     arcaneShots: chosenArcaneShots.slice(),
+    pactBoon: selectedPactBoon || "",
     dragonbornAncestry: selectedDragonbornAncestry,
     sorcererDragonAncestry: selectedSorcererAncestry,
     alignment: selectedAlignment,
@@ -1703,7 +1834,16 @@ function finishWizard() {
     racialCantrip: chosenHighElfCantrip,
     selectedPack: selectedPack,
     backgroundFeature: backgrounds[selectedBackground]?.feature || null,
-    alwaysPreparedSpells: subclassSpells[selectedSubclass] || [],
+    alwaysPreparedSpells: selectedClass === "Warlock" && warlockPatrons[selectedSubclass]
+      ? (function() {
+          const patron = warlockPatrons[selectedSubclass];
+          let spells = [];
+          for (let level in patron.expandedSpells) {
+            spells = spells.concat(patron.expandedSpells[level]);
+          }
+          return spells;
+        })()
+      : subclassSpells[selectedSubclass] || [],
     // Inventory items
     inventory: [],
     // New feature fields
@@ -2273,6 +2413,17 @@ function populateCharacterSheet() {
   if (!currentCharacter) return;
   const char = currentCharacter;
   document.getElementById("sheetCharName").innerText = char.name || "Unnamed Hero";
+  // ── Portrait ──
+  const charImg = document.getElementById('charPortraitImg');
+  const charPlaceholder = document.getElementById('charPortraitPlaceholder');
+  if (char.portrait) {
+    charImg.src = char.portrait;
+    charImg.style.display = 'block';
+    charPlaceholder.style.display = 'none';
+  } else {
+    charImg.style.display = 'none';
+    charPlaceholder.style.display = 'flex';
+  }
   document.getElementById("sheetRace").innerText = `${char.race}${char.subrace ? " (" + char.subrace + ")" : ""}`;
   document.getElementById("sheetClass").innerText = `${char.class}${char.subclass ? " (" + char.subclass + ")" : ""}`;
   document.getElementById("sheetLevel").value = char.level || 1;
@@ -2413,6 +2564,51 @@ function populateFeatsTab() {
   if (currentCharacter.subclass) classFeatures += " (" + currentCharacter.subclass + ")";
   document.getElementById("classFeaturesList").value = classFeatures;
   document.getElementById("racialTraitsList").value = racialTraitsText;
+
+  // Pact Boon (Warlock)
+  const pactBoonArea = document.getElementById("sheetPactBoonArea");
+  const pactBoonDisplay = document.getElementById("sheetPactBoonDisplay");
+  if (currentCharacter.class === "Warlock" && currentCharacter.pactBoon) {
+    pactBoonArea.style.display = "block";
+    pactBoonDisplay.innerHTML = `<div class="feature-item"><strong>${currentCharacter.pactBoon}</strong></div>`;
+  } else {
+    pactBoonArea.style.display = "none";
+  }
+
+  // Patron Expanded Spells (Warlock)
+  const patronSpellsArea = document.getElementById("sheetPatronSpellsArea");
+  const patronSpellsList = document.getElementById("sheetPatronSpellsList");
+  const patron = warlockPatrons[currentCharacter.subclass];
+  if (currentCharacter.class === "Warlock" && patron) {
+    patronSpellsArea.style.display = "block";
+    let allSpells = [];
+    for (let slvl in patron.expandedSpells) {
+      allSpells = allSpells.concat(patron.expandedSpells[slvl]);
+    }
+    patronSpellsList.innerHTML = allSpells.map(s => `<span class="spell-readonly-item">${s}</span>`).join("");
+  } else {
+    patronSpellsArea.style.display = "none";
+  }
+
+  // Patron Features (Warlock)
+  const patronFeaturesArea = document.getElementById("sheetPatronFeaturesArea");
+  const patronFeaturesList = document.getElementById("sheetPatronFeaturesList");
+  if (currentCharacter.class === "Warlock" && patron) {
+    patronFeaturesArea.style.display = "block";
+    const level = currentCharacter.level || 1;
+    const availableFeatures = patron.features.filter(f => f.level <= level);
+    patronFeaturesList.innerHTML = availableFeatures.map(f =>
+      `<div class="feature-item">
+        <strong>${f.name}</strong>
+        <br><span class="feature-desc">${f.description}</span>
+        ${patron.resource && patron.resource.name === f.name
+          ? `<br><span class="feature-desc" style="color:#C8A96E;">Resource: ${patron.resource.maxUses}</span>`
+          : ""}
+      </div>`
+    ).join("");
+  } else {
+    patronFeaturesArea.style.display = "none";
+  }
 
   // Metamagic in sheet
   const metaArea = document.getElementById("sheetMetamagicArea");
@@ -3002,6 +3198,113 @@ function getActiveQuestsForPrompt() {
   }).join('\n');
 }
 
+/* ═══════════════════════════════════════════════════════
+   PORTRAIT CROPPING — Shared by Character & NPC
+═══════════════════════════════════════════════════════ */
+
+/**
+ * Show the crop modal with an image Blob/URL.
+ * @param {string} imageUrl - A blob URL or object URL for the image.
+ * @param {number} aspectRatio - Aspect ratio for the crop box (default 1/1 square).
+ * @returns {Promise<string>} Resolves with cropped base64 data URL, or rejects if cancelled.
+ */
+function showCropModal(imageUrl, aspectRatio = 1/1) {
+  return new Promise((resolve, reject) => {
+    const modal = document.getElementById('cropModal');
+    const cropImg = document.getElementById('cropImage');
+    if (!modal || !cropImg) { reject(new Error('Crop modal not found')); return; }
+
+    // Clean up any previous cropper
+    if (cropper) {
+      cropper.destroy();
+      cropper = null;
+    }
+
+    currentCropResolve = { resolve, reject };
+
+    cropImg.src = imageUrl;
+    modal.style.display = 'flex';
+    setTimeout(() => {
+      modal.classList.add('show');
+      // Initialize cropper after the image is loaded
+      cropImg.onload = function() {
+        cropper = new Cropper(cropImg, {
+          aspectRatio: aspectRatio,
+          viewMode: 1,
+          dragMode: 'crop',
+          autoCropArea: 1,
+          restore: false,
+          guides: true,
+          center: true,
+          highlight: false,
+          cropBoxMovable: true,
+          cropBoxResizable: true,
+          toggleDragModeOnDblclick: false,
+        });
+      };
+      // If image already loaded
+      if (cropImg.complete && cropImg.naturalWidth) {
+        cropImg.onload = null;
+        cropper = new Cropper(cropImg, {
+          aspectRatio: aspectRatio,
+          viewMode: 1,
+          dragMode: 'crop',
+          autoCropArea: 1,
+          restore: false,
+          guides: true,
+          center: true,
+          highlight: false,
+          cropBoxMovable: true,
+          cropBoxResizable: true,
+          toggleDragModeOnDblclick: false,
+        });
+      }
+    }, 10);
+  });
+}
+
+function closeCropModal() {
+  const modal = document.getElementById('cropModal');
+  if (!modal) return;
+  if (cropper) {
+    cropper.destroy();
+    cropper = null;
+  }
+  modal.classList.remove('show');
+  setTimeout(() => { modal.style.display = 'none'; }, 200);
+  if (currentCropResolve) {
+    currentCropResolve.reject(new Error('Crop cancelled'));
+    currentCropResolve = null;
+  }
+}
+
+function applyCrop() {
+  if (!cropper || !currentCropResolve) return;
+  const canvas = cropper.getCroppedCanvas({
+    width: 256,
+    height: 256,
+    imageSmoothingQuality: 'high',
+  });
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+  const resolve = currentCropResolve;
+  currentCropResolve = null;
+  closeCropModal();
+  resolve.resolve(dataUrl);
+}
+
+function updateCharacterPortrait(base64Data) {
+  const img = document.getElementById('charPortraitImg');
+  const placeholder = document.getElementById('charPortraitPlaceholder');
+  if (!img || !placeholder) return;
+  img.src = base64Data;
+  img.style.display = 'block';
+  placeholder.style.display = 'none';
+  if (currentCharacter) {
+    currentCharacter.portrait = base64Data;
+    localStorage.setItem('dnd_current_character', JSON.stringify(currentCharacter));
+  }
+}
+
 /* ── NPC Directory ── */
 let npcs = [];
 
@@ -3031,6 +3334,7 @@ function addNPC(data) {
     location: data.location || '',
     description: data.description || '',
     relationship: data.relationship || 'Unknown',
+    portrait: data.portrait || '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   };
@@ -3052,7 +3356,7 @@ function deleteNPC(id) {
 }
 
 function renderNPCList() {
-  const container = document.getElementById('npcList');
+  const container = document.getElementById('npcGrid');
   const search = (document.getElementById('npcSearchInput').value || '').toLowerCase();
   if (!container) return;
   let filtered = npcs;
@@ -3068,18 +3372,25 @@ function renderNPCList() {
     return;
   }
   container.innerHTML = filtered.map(n => {
+    const portraitSrc = n.portrait ? n.portrait : '';
+    const portraitStyle = n.portrait ? '' : ' style="display:none;"';
+    const placeholderStyle = n.portrait ? ' style="display:none;"' : '';
     const relClass = (n.relationship || 'Unknown').replace(/\s+/g, '');
-    return `<div class="npc-card">
-      <div class="npc-card-header">
-        <span class="npc-name">${escapeHtml(n.name)}</span>
-        <div class="npc-actions">
-          <button data-npc-action="edit" data-npc-id="${n.id}" title="Edit">✏️</button>
-          <button data-npc-action="delete" data-npc-id="${n.id}" title="Delete" style="color:#C85A3A;">🗑</button>
-        </div>
+    return `<div class="npc-card" data-npc-id="${n.id}">
+      <div class="npc-card-portrait">
+        <img src="${portraitSrc}" alt="${escapeHtml(n.name)}"${portraitStyle}>
+        <div class="portrait-placeholder-small"${placeholderStyle}>🎭</div>
       </div>
-      <div class="npc-role-loc">${escapeHtml(n.role)}${n.role && n.location ? ' – ' : ''}${escapeHtml(n.location)}</div>
-      <div class="npc-desc">${escapeHtml(n.description)}</div>
-      <span class="npc-relationship ${relClass}">${escapeHtml(n.relationship)}</span>
+      <div class="npc-card-info">
+        <div class="npc-card-name">${escapeHtml(n.name)}</div>
+        <div class="npc-card-role-loc">${escapeHtml(n.role)}${n.role && n.location ? ' – ' : ''}${escapeHtml(n.location)}</div>
+        <div class="npc-card-desc">${escapeHtml(n.description)}</div>
+        <span class="npc-relationship ${relClass}">${escapeHtml(n.relationship)}</span>
+      </div>
+      <div class="npc-card-actions">
+        <button data-npc-action="edit" data-npc-id="${n.id}" title="Edit">✏️</button>
+        <button data-npc-action="delete" data-npc-id="${n.id}" title="Delete">🗑</button>
+      </div>
     </div>`;
   }).join('');
 }
@@ -3125,6 +3436,18 @@ function openNPCForm(id) {
   document.getElementById('npcFormLocation').value = npc ? npc.location : '';
   document.getElementById('npcFormDesc').value = npc ? npc.description : '';
   document.getElementById('npcFormRelationship').value = npc ? npc.relationship : 'Neutral';
+  // Portrait
+  tempNpcPortrait = npc ? (npc.portrait || '') : '';
+  const preview = document.getElementById('npcPortraitPreview');
+  const placeholder = document.getElementById('npcPortraitPlaceholder');
+  if (tempNpcPortrait) {
+    preview.src = tempNpcPortrait;
+    preview.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    preview.style.display = 'none';
+    placeholder.style.display = 'flex';
+  }
   document.getElementById('npcFormModal').style.display = 'flex';
   setTimeout(() => document.getElementById('npcFormModal').classList.add('show'), 10);
 }
@@ -3135,13 +3458,18 @@ function closeNPCForm() {
   modal.classList.remove('show');
   setTimeout(() => { modal.style.display = 'none'; }, 200);
   editingNpcId = null;
+  tempNpcPortrait = '';
 }
+
+// Temp storage for NPC portrait during form editing
+let tempNpcPortrait = '';
 
 function saveNPCForm() {
   const name = document.getElementById('npcFormName').value.trim();
   if (!name) { alert('NPC name is required.'); return; }
   const data = {
     name,
+    portrait: tempNpcPortrait || '',
     role: document.getElementById('npcFormRole').value.trim(),
     location: document.getElementById('npcFormLocation').value.trim(),
     description: document.getElementById('npcFormDesc').value.trim(),
@@ -3152,6 +3480,7 @@ function saveNPCForm() {
   } else {
     addNPC(data);
   }
+  tempNpcPortrait = '';
   closeNPCForm();
   renderNPCList();
 }
@@ -3173,6 +3502,9 @@ function openCharacterCreationWizard() {
   chosenCantrips = []; chosenSpells = []; characterName = "";
   selectedArmor = ""; hasShield = false; selectedWeapons = []; customItems = "";
   chosenMetamagic = []; chosenInvocations = []; chosenManeuvers = []; chosenArcaneShots = [];
+  selectedPactBoon = "";
+  const pactSelect = document.getElementById("wizardPactBoon");
+  if (pactSelect) pactSelect.innerHTML = "";
   const raceSelect = document.getElementById("wizardRace");
   if (raceSelect) { raceSelect.innerHTML = Object.keys(races).map(r => `<option value="${r}">${r}</option>`).join(""); raceSelect.value = "Dwarf"; updateSubraceDropdown(); }
   const classSelect = document.getElementById("wizardClass");
@@ -3295,7 +3627,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('addNpcBtn').onclick = () => openNPCForm(null);
   document.getElementById('npcSearchInput').addEventListener('input', renderNPCList);
   document.getElementById('btn-npc').onclick = () => { setActive('btn-npc'); openNPCDirectory(); };
-  document.getElementById('npcList').addEventListener('click', handleNpcAction);
+  document.getElementById('npcGrid').addEventListener('click', handleNpcAction);
   // Campaign Summary wiring
   const summaryModal = document.getElementById('campaignSummaryModal');
   document.getElementById('btn-summary').onclick = () => { setActive('btn-summary'); openCampaignSummaryModal(); };
@@ -3330,9 +3662,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const deathModal = document.getElementById('deathSaveModal');
   const hitDiceModal = document.getElementById('hitDiceModal');
   const levelUpModal = document.getElementById('levelUpModal');
-  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal];
-  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } } }); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } } });
+  const cropModal = document.getElementById('cropModal');
+  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal, cropModal];
+  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (modal === cropModal) closeCropModal(); } }); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (cropModal && cropModal.style.display === 'flex') closeCropModal(); } });
   document.getElementById('btn-char').addEventListener('click', () => { setActive('btn-char'); if (currentCharacter) openCharacterSheetModal(); else alert('No character created yet. Start a campaign first.'); });
   initSheetTabs();
   const storedChar = localStorage.getItem('dnd_current_character');
@@ -3353,6 +3686,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  // ── Portrait cropping event binding ──
+  document.getElementById('closeCropModalBtn').onclick = closeCropModal;
+  document.getElementById('cancelCropBtn').onclick = closeCropModal;
+  document.getElementById('applyCropBtn').onclick = applyCrop;
+  document.getElementById('cropModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeCropModal();
+  });
+
+  // ── Character portrait upload ──
+  document.getElementById('uploadCharPortraitBtn').addEventListener('click', () => {
+    document.getElementById('charPortraitFileInput').click();
+  });
+  document.getElementById('charPortraitFileInput').addEventListener('change', (e) => {
+    if (e.target.files.length) {
+      const file = e.target.files[0];
+      const blob = URL.createObjectURL(file);
+      showCropModal(blob).then(croppedBase64 => {
+        updateCharacterPortrait(croppedBase64);
+      }).catch(() => {});
+      e.target.value = '';
+    }
+  });
+
+  // ── NPC portrait upload ──
+  document.getElementById('uploadNpcPortraitBtn').addEventListener('click', () => {
+    document.getElementById('npcPortraitFileInput').click();
+  });
+  document.getElementById('npcPortraitFileInput').addEventListener('change', (e) => {
+    if (e.target.files.length) {
+      const file = e.target.files[0];
+      const blob = URL.createObjectURL(file);
+      showCropModal(blob).then(croppedBase64 => {
+        tempNpcPortrait = croppedBase64;
+        const preview = document.getElementById('npcPortraitPreview');
+        const placeholder = document.getElementById('npcPortraitPlaceholder');
+        preview.src = croppedBase64;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+      }).catch(() => {});
+      e.target.value = '';
+    }
+  });
+
   // Wizard listeners
   const raceSelect = document.getElementById("wizardRace");
   const bgSelect = document.getElementById("wizardBackground");
@@ -3364,6 +3740,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (classSelect) classSelect.addEventListener("change", () => { selectedClass = classSelect.value; updateSubclassDropdown(); updateClassSummaryPanel(); if (wizardStep === 4) { updateEquipmentUI(); updateSpellUI(); updateSubclassFeaturesUI(); } updateClassDescription(); updateSubclassDescription(); });
   const subclassSelect = document.getElementById("wizardSubclass");
   if (subclassSelect) subclassSelect.addEventListener("change", () => { selectedSubclass = subclassSelect.value; if (wizardStep === 4) updateSubclassFeaturesUI(); updateSubclassDescription(); });
+  // Pact Boon select
+  const pactBoonSelect = document.getElementById("wizardPactBoon");
+  if (pactBoonSelect) pactBoonSelect.addEventListener("change", () => { selectedPactBoon = pactBoonSelect.value; });
   const levelInput = document.getElementById("wizardLevel");
   if (levelInput) levelInput.addEventListener("change", () => { characterLevel = parseInt(levelInput.value, 10) || 1; if (wizardStep === 4) updateSubclassFeaturesUI(); });
   const variantCheck = document.getElementById("variantHumanCheck");
@@ -3923,6 +4302,22 @@ Examples (copy exactly):
 - **Remove weapon:** \`<!-- char_remove_weapon name="Longsword" quantity="1" -->\`
 - **XP award:** \`<!-- xp_award amount="200" reason="Defeated goblin" -->\`
 - **Ability score change (optional):** \`<!-- char_ability strength="+2" constitution="+1" -->\`
+- **Quest Create (HTML tag):** \`<!-- quest_create name="Rescue the Blacksmith" description="The blacksmith has been taken by goblins" milestones="Find the goblin camp,Defeat the goblin chief,Free the blacksmith" -->\`
+- **Quest Create (inline text — alternative):** \`[QUEST CREATE: "Rescue the Blacksmith"|"The blacksmith has been taken by goblins"]\`
+- **Quest Complete (inline):** \`[QUEST COMPLETE: "Rescue the Blacksmith"]\`
+- **Quest Milestone (inline):** \`[QUEST MILESTONE: "Rescue the Blacksmith"|"Find the goblin camp"|complete]\`
+- **NPC Add:** \`<!-- npc_add name="Elara" role="Innkeeper" location="Phandalin" description="A friendly halfling with a warm smile" relationship="Friendly" -->\`
+- **Combat Start:** \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin","hp":7,"ac":15}]' -->\`
+- **Combat Damage:** \`<!-- combat damage id="enemy_0" amount="5" -->\`
+- **Combat Next Turn:** \`<!-- combat next_turn -->\`
+- **Combat End:** \`<!-- combat end -->\`
+- **Spell Consume:** \`<!-- spell_consume level="1" -->\`
+- **Short Rest:** \`<!-- short_rest -->\`
+- **Long Rest:** \`<!-- long_rest -->\`
+- **Stabilize:** \`<!-- stabilize -->\`
+- **Condition Add:** \`<!-- char_add_condition name="Poisoned" duration="1 minute" -->\`
+- **Condition Remove:** \`<!-- char_remove_condition name="Poisoned" -->\`
+- **Resource Spend:** \`<!-- resource spend type="Rage" amount="1" -->\`
 
 Always update the character sheet after any change. Save to localStorage and refresh any open sheet UI.
 
@@ -3936,10 +4331,10 @@ You do not need to provide hp and ac for common monsters. The system will automa
 
 **Examples:**
 - For a standard goblin, you can write:
-  [tag: combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin"}]' close]
+  \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin"}]' -->\`
   The system will fill in HP 7 and AC 15.
 - For a custom monster not in the database, provide full stats:
-  [tag: combat start initiative="Thalion:17, Shadow Beast:9" enemies='[{"name":"Shadow Beast","hp":45,"ac":14}]' close]
+  \`<!-- combat start initiative="Thalion:17, Shadow Beast:9" enemies='[{"name":"Shadow Beast","hp":45,"ac":14}]' -->\`
 
 Always include the monster's name **exactly** as it appears in the database (case-insensitive). The database contains monsters from the official 5e Monster Manual.
 
@@ -4920,6 +5315,9 @@ function parseAITags(content) {
     console.warn("Repaired missing tag close for known tag: " + match);
     return match + ' -->';
   });
+
+  // Parse inline quest commands [QUEST CREATE: "..."|"..."] etc.
+  result = parseQuestCommands(result);
 
   // Parse quest_create tags
   const questCreateRegex = /<!--\s*quest_create\s+name="([^"]*)"\s+description="([^"]*)"\s+milestones="([^"]*)"\s*-->/g;
