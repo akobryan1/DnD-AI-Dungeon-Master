@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DnD DM – Sidebar</title>
+<link rel="stylesheet" href="main_page.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR (unchanged) -->
+  <aside class="sidebar" id="sidebar">
+    <button class="collapse-btn" id="collapseBtn" title="Collapse sidebar" onclick="toggleCollapse()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 2L4 7L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="sidebar-brand">
+      <svg class="brand-rune" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="#C8A96E" stroke-width="1.2" fill="none" opacity="0.7"/>
+        <polygon points="14,6 22,10 22,18 14,22 6,18 6,10" stroke="#C8A96E" stroke-width="0.6" fill="none" opacity="0.3"/>
+        <text x="14" y="17.5" text-anchor="middle" font-size="9" font-family="Cinzel,serif" fill="#C8A96E" opacity="0.9" font-weight="700">20</text>
+      </svg>
+      <span class="brand-text">Dungeon Master</span>
+    </div>
+    <div class="sidebar-section">
+      <div class="btn-tooltip-wrap" data-collapsed-label="Campaign">
+        <button class="nav-btn" id="btn-campaign" onclick="openCampaignModal()">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h5l1 2h6v10H4V4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+            <path d="M4 4v12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Campaign</span>
+          <svg class="dropdown-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="divider-thin"></div>
+    <div class="sidebar-section" style="padding-top:4px;">
+      <div class="btn-tooltip-wrap" data-collapsed-label="Settings">
+        <button class="nav-btn" id="btn-settings" onclick="setActive('btn-settings')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M10 3v1.5M10 15.5V17M3 10h1.5M15.5 10H17M4.9 4.9l1.1 1.1M14 14l1.1 1.1M4.9 15.1l1.1-1.1M14 6l1.1-1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Settings</span>
+        </button>
+      </div>
+    </div>
+    <div class="session-section" id="session-section">
+      <div class="divider-session">
+        <div class="session-dot" id="session-dot"></div>
+        <span class="session-label">In Session</span>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-char" data-collapsed-label="Character Sheet">
+        <button class="nav-btn" id="btn-char" onclick="setActive('btn-char')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2L3 6v6c0 3.5 3 6 7 7 4-1 7-3.5 7-7V6l-7-4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+            <path d="M7 10h6M7 13h4" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Character Sheet</span>
+        </button>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-quest" data-collapsed-label="Quest Tracker">
+        <button class="nav-btn" id="btn-quest" onclick="setActive('btn-quest')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.3"/>
+            <circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.1"/>
+            <path d="M10 3v2M10 15v2M3 10h2M15 10h2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Quest Tracker</span>
+        </button>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-npc" data-collapsed-label="NPC Directory">
+        <button class="nav-btn" id="btn-npc" onclick="setActive('btn-npc')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <circle cx="13" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <path d="M2 17c0-2.8 2.2-5 5-5M18 17c0-2.8-2.2-5-5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M10 12c1.5 0 3 .9 3.8 2.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M6.2 14.3C7 12.9 8.5 12 10 12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">NPC Directory</span>
+        </button>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-summary" data-collapsed-label="Campaign Summary">
+        <button class="nav-btn" id="btn-summary" onclick="setActive('btn-summary')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h12v2l-4 4v6H8v-6L4 6V4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+            <path d="M4 4v12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Campaign Summary</span>
+        </button>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-guide" data-collapsed-label="DM Guide">
+        <button class="nav-btn" id="btn-guide" onclick="setActive('btn-guide')">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 3h9a1 1 0 011 1v12a1 1 0 01-1 1H4V3z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+            <path d="M14 4h1a1 1 0 011 1v11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <path d="M7 7h5M7 10h5M7 13h3" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">DM Guide</span>
+        </button>
+      </div>
+      <div class="btn-tooltip-wrap" id="wrap-combat" data-collapsed-label="Combat">
+        <button class="nav-btn" id="btn-combat" onclick="setActive('btn-combat'); openCombatTracker()">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 2L3 6v6c0 3.5 3 6 7 7 4-1 7-3.5 7-7V6l-7-4z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" fill="none"/>
+            <path d="M10 8v4M8 10h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span class="nav-label">Combat Tracker</span>
+        </button>
+      </div>
+      <!-- ── Sidebar Dice Roller Widget ── -->
+      <div class="dice-widget" id="diceWidgetContainer" style="display:none;">
+        <div class="dice-widget-header">🎲 Dice Roller</div>
+        <div class="dice-widget-controls">
+          <input type="number" class="dice-widget-input dice-qty" id="dwQty" value="1" min="1" max="20">
+          <span class="dice-widget-d">d</span>
+          <select class="dice-widget-select" id="dwDie">
+            <option value="4">d4</option>
+            <option value="6">d6</option>
+            <option value="8" selected>d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+            <option value="20">d20</option>
+            <option value="100">d100</option>
+          </select>
+          <button class="dice-sign-btn" id="dwSign">+</button>
+          <input type="number" class="dice-widget-input dice-mod" id="dwMod" value="0">
+        </div>
+        <button class="dice-roll-btn" id="dwRollBtn">🎲 Roll</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT — AI Chat Interface
+  ═══════════════════════════════════════════ -->
+  <main class="main-content" id="main-content">
+
+    <!-- ── NO SESSION state (shown when sessionActive = false) ── -->
+    <div class="chat-no-session" id="chatNoSession">
+      <div class="no-session-rune">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="40,4 76,22 76,58 40,76 4,58 4,22" stroke="#C8A96E" stroke-width="1.2" fill="none" opacity="0.25"/>
+          <polygon points="40,14 66,27 66,53 40,66 14,53 14,27" stroke="#C8A96E" stroke-width="0.6" fill="none" opacity="0.12"/>
+          <text x="40" y="48" text-anchor="middle" font-size="26" font-family="Cinzel,serif" fill="#C8A96E" opacity="0.35" font-weight="700">20</text>
+        </svg>
+      </div>
+      <h2 class="no-session-title">Awaiting Adventure</h2>
+      <p class="no-session-sub">Open a campaign to begin your session.</p>
+      <button class="no-session-btn" onclick="openCampaignModal()">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 4h5l1 2h6v10H4V4z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>
+        Open Campaign
+      </button>
+    </div>
+
+    <!-- ── ACTIVE SESSION state (shown when sessionActive = true) ── -->
+    <div class="chat-shell" id="chatShell" style="display:none;">
+
+      <!-- TOP BAR -->
+      <div class="chat-topbar" id="chatTopbar">
+        <div class="chat-topbar-left">
+          <div class="chat-session-dot"></div>
+          <div class="chat-campaign-info">
+            <span class="chat-campaign-name" id="chatCampaignName">The Lost Mine of Phandelver</span>
+            <span class="chat-character-name" id="chatCharacterName">— No character loaded</span>
+          </div>
+        </div>
+        <div class="chat-topbar-right">
+          <!-- Context chips: toggled quick-context injectors -->
+          <div class="chat-context-chips" id="chatContextChips">
+            <button class="ctx-chip" id="chipChar" title="Inject character context" onclick="toggleContextChip('char')">
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><path d="M10 2L3 6v6c0 3.5 3 6 7 7 4-1 7-3.5 7-7V6l-7-4z" stroke="currentColor" stroke-width="1.4" fill="none"/></svg>
+              Character
+            </button>
+            <button class="ctx-chip" id="chipQuest" title="Inject quest context" onclick="toggleContextChip('quest')">
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.3"/><circle cx="10" cy="10" r="2" stroke="currentColor" stroke-width="1.1"/></svg>
+              Quests
+            </button>
+            <button class="ctx-chip" id="chipNpc" title="Inject NPC context" onclick="toggleContextChip('npc')">
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="13" cy="7" r="2.5" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M2 17c0-2.8 2.2-5 5-5M18 17c0-2.8-2.2-5-5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              NPCs
+            </button>
+          </div>
+
+          <!-- Model indicator + token counter -->
+          <div class="chat-model-badge" id="chatModelBadge" title="Model in use">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#C8A96E" stroke-width="1.2"/><path d="M8 5v3l2 1.5" stroke="#C8A96E" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <span id="chatModelName">—</span>
+          </div>
+
+          <!-- Clear conversation -->
+          <button class="chat-topbar-icon-btn" title="Clear conversation" onclick="clearChat()">
+            <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M5 7h10M8 7V5h4v2M6 7l1 10h6l1-10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- MESSAGE FEED -->
+      <div class="chat-messages" id="chatMessages">
+        <!-- Intro message injected by JS on session start -->
+      </div>
+
+      <!-- TYPING INDICATOR (hidden until AI responds) -->
+      <div class="chat-typing" id="chatTyping" style="display:none;">
+        <div class="typing-avatar">
+          <svg width="14" height="14" viewBox="0 0 28 28" fill="none">
+            <polygon points="14,2 26,8 26,20 14,26 2,20 2,8" stroke="#C8A96E" stroke-width="1.2" fill="none" opacity="0.7"/>
+            <text x="14" y="17.5" text-anchor="middle" font-size="8" font-family="Cinzel,serif" fill="#C8A96E" font-weight="700">DM</text>
+          </svg>
+        </div>
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- INPUT AREA -->
+      <div class="chat-input-area" id="chatInputArea">
+
+        <!-- Active context pills (shown when a chip is toggled on) -->
+        <div class="chat-active-context" id="chatActiveContext" style="display:none;"></div>
+
+        <!-- Textarea row -->
+        <div class="chat-input-row">
+          <div class="chat-textarea-wrap">
+            <textarea
+              id="chatInput"
+              class="chat-textarea"
+              placeholder="Speak your action, ask the DM a question, or describe what you do…"
+              rows="1"
+              maxlength="4000"
+              onkeydown="handleChatKey(event)"
+              oninput="autoResizeChatInput(this)"
+            ></textarea>
+          </div>
+          <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()" title="Send (Enter)">
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path d="M3 10L17 3l-4 7 4 7L3 10z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
+              <path d="M13 10H3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Footer row: char count + hint -->
+        <div class="chat-input-footer">
+          <span class="chat-input-hint">Enter to send &nbsp;·&nbsp; Shift+Enter for new line</span>
+          <span class="chat-char-count" id="chatCharCount">0 / 4000</span>
+        </div>
+
+      </div><!-- /chat-input-area -->
+
+    </div><!-- /chat-shell -->
+
+  </main>
+
+</div>
+
+<!-- ── NPC DIRECTORY MODAL ── -->
+<div id="npcDirectoryModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container npc-container">
+    <div class="modal-header">
+      <h2 class="modal-title">NPC Directory</h2>
+      <div class="modal-subtitle">People you've met on your journey</div>
+      <button class="modal-close" id="closeNpcModalBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="npc-search">
+      <input type="text" id="npcSearchInput" placeholder="Search by name or location..." class="sheet-input">
+    </div>
+    <div id="npcGrid" class="npc-grid"></div>
+    <div class="modal-divider"></div>
+    <div class="npc-footer">
+      <button class="btn-primary" id="addNpcBtn">+ Add NPC</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── NPC ADD/EDIT MODAL (nested) ── -->
+<div id="npcFormModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container npc-form-container">
+    <div class="modal-header">
+      <h2 class="modal-title" id="npcFormTitle">Add NPC</h2>
+      <button class="modal-close" id="closeNpcFormBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <div class="form-field"><label>Name</label><input type="text" id="npcFormName" class="sheet-input" placeholder="e.g., Elara the Wise"></div>
+      <div class="form-field"><label>Portrait</label>
+        <div class="npc-portrait-upload">
+          <img id="npcPortraitPreview" class="npc-preview-img" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; display: none;">
+          <div id="npcPortraitPlaceholder" class="portrait-placeholder-small">🎭</div>
+          <button type="button" id="uploadNpcPortraitBtn" class="small-btn">Upload Image</button>
+          <input type="file" id="npcPortraitFileInput" accept="image/*" style="display: none;">
+        </div>
+      </div>
+      <div class="form-field"><label>Role / Title</label><input type="text" id="npcFormRole" class="sheet-input" placeholder="Village elder, healer"></div>
+      <div class="form-field"><label>Location</label><input type="text" id="npcFormLocation" class="sheet-input" placeholder="Oakhaven"></div>
+      <div class="form-field"><label>Description</label><textarea id="npcFormDesc" rows="3" class="sheet-input" placeholder="A kind elderly elf with silver hair..."></textarea></div>
+      <div class="form-field"><label>Relationship</label>
+        <select id="npcFormRelationship" class="sheet-input">
+          <option value="Friendly">Friendly</option>
+          <option value="Neutral" selected>Neutral</option>
+          <option value="Hostile">Hostile</option>
+          <option value="Ally">Ally</option>
+          <option value="Enemy">Enemy</option>
+          <option value="Unknown">Unknown</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelNpcFormBtn">Cancel</button>
+      <button class="btn-primary" id="saveNpcFormBtn">Save NPC</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── QUEST TRACKER MODAL ── -->
+<div id="questModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container quest-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Quest Tracker</h2>
+        <div class="modal-subtitle">Shared record between you and the AI Dungeon Master</div>
+      </div>
+      <button class="modal-close" id="closeQuestBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="quest-tabs">
+      <button class="quest-tab active" data-quest-tab="active">Active Quests</button>
+      <button class="quest-tab" data-quest-tab="archived">Archived</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="quest-body" id="questBody">
+      <div class="quest-list" id="questActiveList"></div>
+      <div class="quest-list" id="questArchivedList" style="display:none;"></div>
+    </div>
+    <div class="quest-footer-bar">
+      <button class="btn-primary" id="addQuestBtn">+ Add Custom Quest</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="quest-log" id="questLogSection">
+      <div class="quest-log-header" id="questLogToggle">▼ Recent Activity</div>
+      <div id="questLogContent" class="quest-log-content"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeQuestFooterBtn">Close</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── QUEST EDIT/CREATE MODAL (nested) ── -->
+<div id="questEditModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container quest-edit-container">
+    <div class="modal-header">
+      <h2 class="modal-title" id="questEditTitle">New Quest</h2>
+      <button class="modal-close" id="closeQuestEditBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <div class="form-field"><label>Quest Name</label><input type="text" id="questEditName" class="sheet-input" placeholder="e.g., Rescue the Blacksmith's Daughter"></div>
+      <div class="form-field"><label>Description</label><textarea id="questEditDesc" rows="3" class="sheet-input" placeholder="Brief description of the quest..."></textarea></div>
+      <div class="form-field">
+        <label>Milestones</label>
+        <div id="questEditMilestones"></div>
+        <button class="btn-secondary small-btn" id="questAddMilestoneBtn" style="margin-top:6px;">+ Add Milestone</button>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelQuestEditBtn">Cancel</button>
+      <button class="btn-primary" id="saveQuestEditBtn">Save Quest</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── CAMPAIGN MODAL (session list) ── -->
+<div id="campaignModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2 class="modal-title">Campaigns</h2>
+      <button class="modal-close" id="closeModalBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <div class="session-list-label">Active Sessions</div>
+      <div class="session-list" id="sessionList"></div>
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7A6E62" stroke-width="1.2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" fill="none"/>
+          <path d="M12 12v7" stroke="currentColor"/>
+        </svg>
+        <span>No campaigns yet. Start a new adventure.</span>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <div class="footer-note">Campaigns are saved locally</div>
+      <div class="footer-buttons">
+        <button class="btn-primary" id="newCampaignBtn">New Campaign</button>
+        <button class="btn-secondary" id="deleteCampaignBtn" disabled>Delete Campaign</button>
+      </div>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── CAMPAIGN SELECTION MODAL (story vs open world) ── -->
+<div id="campaignSelectionModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container selection-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Choose Your Adventure in Faerûn</h2>
+        <div class="modal-subtitle">Pre‑written campaigns or an open world – the choice is yours.</div>
+      </div>
+      <button class="modal-close" id="closeSelectionBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="selection-list" id="campaignList">
+      <!-- dynamic cards will be injected -->
+    </div>
+    <div class="modal-footer selection-footer">
+      <div class="footer-note">Story campaigns have pre‑written main plots. Open World is AI‑driven sandbox.</div>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── OPEN WORLD CONFIGURATION MODAL ── -->
+<div id="openWorldConfigModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container config-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Begin Your Open World Adventure</h2>
+        <div class="modal-subtitle">Customize your sandbox experience in Faerûn</div>
+      </div>
+      <button class="modal-close" id="closeConfigBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="config-form">
+      <div class="form-field">
+        <label>Adventure Name</label>
+        <input type="text" id="owSessionName" placeholder="e.g., The Emerald Coast Expedition" maxlength="50">
+        <div class="field-error" id="owNameError"></div>
+      </div>
+      <div class="form-field">
+        <label>Starting Location</label>
+        <select id="owStartLocation">
+          <option value="Forest of Allanar">Forest of Allanar</option>
+          <option value="Khigvorda Mountains">Khigvorda Mountains</option>
+          <option value="The Fading Swamp">The Fading Swamp</option>
+          <option value="Starview Plains">Starview Plains</option>
+          <option value="The Merchant's Pass">The Merchant's Pass</option>
+          <option value="Random" selected>Random</option>
+          <option value="random town">random town</option>
+          <option value="random village">random village</option>
+        </select>
+        <div class="field-help">The AI will generate an initial hook based on this location.</div>
+      </div>
+      <div class="form-field">
+        <label>Narrative Tone</label>
+        <select id="owTone">
+          <option value="Heroic">Heroic</option>
+          <option value="Grimdark">Grimdark</option>
+          <option value="Lighthearted">Lighthearted</option>
+          <option value="Mystery">Mystery</option>
+        </select>
+        <div class="field-help">Influences quest generation and NPC behavior.</div>
+      </div>
+      <!-- Starting Level removed — handled by Character Creation Wizard -->
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer config-footer">
+      <button class="btn-secondary" id="cancelConfigBtn">Cancel</button>
+      <button class="btn-primary" id="submitConfigBtn">Begin Adventure</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- Confirmation sub‑modal (for delete) -->
+<div id="confirmDeleteModal" class="confirm-overlay" style="display: none;">
+  <div class="confirm-box">
+    <p id="confirmMessage">Delete "Campaign Name"? This action is permanent.</p>
+    <div class="confirm-actions">
+      <button class="confirm-cancel">Cancel</button>
+      <button class="confirm-delete">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CHARACTER SHEET MODAL ========== -->
+<div id="characterSheetModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container sheet-container">
+    <div class="modal-header">
+      <div class="sheet-header-left">
+        <h2 class="modal-title">Character Sheet</h2>
+        <span class="character-name-edit" contenteditable="true" id="sheetCharName">Unnamed Hero</span>
+      </div>
+      <button class="modal-close" id="closeSheetBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="sheet-layout">
+      <!-- Left sidebar - will be populated by JS -->
+      <div class="sheet-sidebar" id="sheetSidebar">
+        <div class="portrait-wrapper">
+          <div class="portrait-container" id="charPortraitContainer">
+            <img id="charPortraitImg" class="character-portrait" src="" alt="Portrait" style="display: none;">
+            <div id="charPortraitPlaceholder" class="portrait-placeholder" style="display: flex;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C8A96E">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <button id="uploadCharPortraitBtn" class="small-btn" style="margin-top: 8px;">📷 Upload Portrait</button>
+          </div>
+        </div>
+        <input type="file" id="charPortraitFileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+        <div id="conditionIcons"></div>
+        <div class="sidebar-section-title">Basic Info</div>
+        <div class="sheet-input" id="sheetRace">Race</div>
+        <div class="sheet-input" id="sheetClass">Class</div>
+        <div class="inline-fields">
+          <label>Level</label>
+          <input type="number" id="sheetLevel" class="sheet-input small" min="1" max="20" value="1">
+        </div>
+        <div class="sidebar-section-title">Hit Points</div>
+        <div class="hp-row">
+          <label>Current HP: <input type="number" id="sheetHP" class="sheet-input small hp-input" value="0" min="0" max="999"></label>
+          <label>Max HP: <span id="sheetMaxHP" class="hp-readonly">0</span></label>
+          <label>Temp HP: <input type="number" id="sheetTempHP" class="sheet-input small hp-input" value="0" min="0" max="999"></label>
+        </div>
+        <div class="sidebar-section-title">Spell Slots</div>
+        <div id="spellSlotContainer"></div>
+        <div class="sidebar-section-title">Hit Dice &amp; Rests</div>
+        <div id="hitDiceContainer"></div>
+        <div class="sidebar-section-title">Class Resources</div>
+        <div id="classResourcesContainer"></div>
+        <div class="sidebar-section-title">Encumbrance</div>
+        <div id="encumbranceDisplay"></div>
+        <div class="sidebar-section-title">Ability Scores</div>
+        <div id="abilityScoresSidebar"></div>
+        <div class="sidebar-section-title">Saving Throws</div>
+        <div id="savesContainer"></div>
+        <div class="sidebar-section-title">Skills</div>
+        <div id="skillsContainer"></div>
+        <div class="sidebar-section-title">Combat</div>
+        <div class="stat-readonly">Passive Perception: <span id="passivePerception">0</span></div>
+        <div class="stat-readonly">Initiative: <span id="initiative">0</span></div>
+        <div><label>Speed (ft): <input type="number" id="sheetSpeed" class="sheet-input small" value="30"></label></div>
+        <div class="sidebar-section-title">Experience</div>
+        <div class="xp-tracker">
+          <div class="xp-current"><span>Current XP:</span><span id="xpCurrent">0</span></div>
+          <div class="xp-next-level"><span>To next level:</span><span id="xpToNext">300</span></div>
+          <div class="xp-progress"><div class="xp-progress-bar" id="xpProgressBar" style="width:0%"></div></div>
+          <button class="small-btn" id="manualXpBtn">Award XP</button>
+        </div>
+      </div>
+      <!-- Right content -->
+      <div class="sheet-content" id="sheetContent">
+        <div class="sheet-tabs">
+          <button class="sheet-tab active" data-tab="backstory">Backstory</button>
+          <button class="sheet-tab" data-tab="inventory">Inventory</button>
+          <button class="sheet-tab" data-tab="equipment">Equipment</button>
+          <button class="sheet-tab" data-tab="spells">Spells</button>
+          <button class="sheet-tab" data-tab="feats">Feats &amp; Perks</button>
+          <button class="sheet-tab" data-tab="details">Details</button>
+        </div>
+        <!-- Backstory tab -->
+        <div class="sheet-tab-content" id="tab-backstory">
+          <div class="form-field"><label>Appearance</label><textarea id="backstoryAppearance" rows="3"></textarea></div>
+          <div class="form-field"><label>Backstory</label><textarea id="backstoryText" rows="6"></textarea></div>
+          <div class="form-field"><label>Personality Traits</label><textarea id="backstoryTraits" rows="3"></textarea></div>
+        </div>
+        <!-- Inventory tab -->
+        <div class="sheet-tab-content" id="tab-inventory" style="display:none;">
+          <div class="currency-row">
+            <label>CP: <input type="number" id="inventoryCP" class="sheet-input small" value="0" min="0"></label>
+            <label>SP: <input type="number" id="inventorySP" class="sheet-input small" value="0" min="0"></label>
+            <label>EP: <input type="number" id="inventoryEP" class="sheet-input small" value="0" min="0"></label>
+            <label>GP: <input type="number" id="inventoryGP" class="sheet-input small" value="0" min="0"></label>
+            <label>PP: <input type="number" id="inventoryPP" class="sheet-input small" value="0" min="0"></label>
+          </div>
+          <div class="subsection-title">Items</div>
+          <table class="inventory-table">
+            <thead><tr><th>Item</th><th>Qty</th><th>Weight</th><th>Notes</th><th></th></tr></thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+          <button class="add-row-btn" id="addInventoryRow">+ Add Item</button>
+        </div>
+        <!-- Equipment tab -->
+        <div class="sheet-tab-content" id="tab-equipment" style="display:none;">
+          <div class="form-field"><label>Armor</label><input type="text" id="equipmentArmor" class="sheet-input" placeholder="e.g., Leather armor"></div>
+          <div class="form-field"><label><input type="checkbox" id="equipmentShield"> Shield</label></div>
+          <div class="subsection-title">Weapons</div>
+          <div id="weaponsList"></div>
+          <button class="add-row-btn" id="addWeaponRow">+ Add Weapon</button>
+        </div>
+        <!-- Spells tab -->
+        <div class="sheet-tab-content" id="tab-spells" style="display:none;">
+          <div class="subsection-title">Cantrips</div>
+          <textarea id="spellCantrips" rows="4" placeholder="One per line"></textarea>
+          <div class="subsection-title">Spells</div>
+          <textarea id="spellSpells" rows="8" placeholder="One per line, optionally with level"></textarea>
+          <div id="subclassSpellsSection" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Subclass Spells (always prepared)</span></div>
+            <div id="subclassSpellsList" class="readonly-skill-list"></div>
+          </div>
+        </div>
+        <!-- Feats & Perks tab -->
+        <div class="sheet-tab-content" id="tab-feats" style="display:none;">
+          <div class="subsection-title">Feats</div>
+          <textarea id="featsList" rows="3"></textarea>
+          <div class="subsection-title">Class Features</div>
+          <textarea id="classFeaturesList" rows="4"></textarea>
+          <div class="subsection-title">Racial Traits</div>
+          <textarea id="racialTraitsList" rows="4"></textarea>
+          <div id="sheetMetamagicArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Metamagic</span></div>
+            <div id="sheetMetamagicList" class="feature-list"></div>
+          </div>
+          <div id="sheetInvocationsArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Eldritch Invocations</span></div>
+            <div id="sheetInvocationsList" class="feature-list"></div>
+          </div>
+          <div id="sheetManeuversArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Battle Master Maneuvers</span></div>
+            <div id="sheetManeuversList" class="feature-list"></div>
+          </div>
+          <div id="sheetArcaneShotsArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Arcane Shots</span></div>
+            <div id="sheetArcaneShotsList" class="feature-list"></div>
+          </div>
+        </div>
+        <!-- Details tab -->
+        <div class="sheet-tab-content" id="tab-details" style="display:none;">
+          <div class="form-field"><label>Race</label><input id="detailsRace" class="sheet-input" readonly></div>
+          <div class="form-field"><label>Subrace</label><input id="detailsSubrace" class="sheet-input" readonly></div>
+          <div class="form-field"><label>Class</label><input id="detailsClass" class="sheet-input" readonly></div>
+          <div class="form-field"><label>Subclass</label><input id="detailsSubclass" class="sheet-input" readonly></div>
+          <div class="form-field"><label>Background</label><input id="detailsBackground" class="sheet-input" readonly></div>
+          <div class="form-field"><label>Alignment</label><select id="detailsAlignment" class="sheet-input"><option>LG</option><option>NG</option><option>CG</option><option>LN</option><option selected>N</option><option>CN</option><option>LE</option><option>NE</option><option>CE</option></select></div>
+          <div class="form-field"><label>Languages</label><input id="detailsLanguages" class="sheet-input" placeholder="Common, Elvish..."></div>
+          <div class="form-field"><label>Background Feature</label>
+            <div id="detailsBackgroundFeature" class="readonly-skill-list"></div>
+          </div>
+          <div class="form-field"><label>Proficiencies</label><textarea id="detailsProficiencies" rows="3" class="sheet-input" placeholder="Armor, weapons, tools..."></textarea></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer sheet-footer">
+      <button class="btn-secondary" id="cancelSheetBtn">Cancel</button>
+      <button class="btn-primary" id="saveSheetBtn">Save Changes</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== SETTINGS MODAL ========== -->
+<div id="settingsModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container settings-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">DM Settings</h2>
+        <div class="modal-subtitle">Configure your AI Dungeon Master</div>
+      </div>
+      <button class="modal-close" id="closeSettingsBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body settings-body">
+      <!-- API Key -->
+      <div class="form-field">
+        <label>OpenRouter API Key</label>
+        <input type="password" id="settingsApiKey" class="sheet-input" placeholder="sk-or-v1-..." autocomplete="off">
+        <div class="field-help">Get your API key at <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" class="settings-link">openrouter.ai/keys</a></div>
+      </div>
+
+      <!-- Model Selection -->
+      <div class="form-field">
+        <label>AI Model</label>
+        <div class="settings-model-row">
+          <select id="settingsModelSelect" class="sheet-input" disabled>
+            <option value="">— Enter API key and fetch models —</option>
+          </select>
+          <button id="fetchModelsBtn" class="btn-secondary small-btn" disabled>Fetch Models</button>
+        </div>
+        <div id="modelStatus" class="settings-status"></div>
+        <div class="settings-model-note">
+          <span>Also available:</span>
+          <code>openrouter/owl-alpha</code>
+          <code>openai/gpt-oss-120b:free</code>
+        </div>
+      </div>
+
+      <!-- Test Connection -->
+      <div class="form-field">
+        <button id="testConnectionBtn" class="btn-secondary small-btn" disabled>Test Connection</button>
+        <span id="testConnectionStatus" class="settings-status" style="display:inline-block; margin-left:12px;"></span>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelSettingsBtn">Cancel</button>
+      <button class="btn-primary" id="saveSettingsBtn">Save Settings</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== CAMPAIGN SUMMARY MODAL ========== -->
+<div id="campaignSummaryModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container summary-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Campaign Summary</h2>
+        <div class="modal-subtitle">A living record of your adventure</div>
+      </div>
+      <button class="modal-close" id="closeSummaryBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="summary-body">
+      <div id="summaryLoading" class="summary-loading" style="display:none;">
+        <span class="streaming-cursor"></span> Weaving the tale...
+      </div>
+      <div id="summaryContent" class="summary-content">No summary yet. Click "Refresh Summary" to generate one.</div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="summary-footer">
+      <div class="summary-timestamp" id="summaryTimestamp"></div>
+      <div class="summary-actions">
+        <button class="btn-secondary" id="refreshSummaryBtn">Refresh Summary</button>
+        <button class="btn-secondary" id="copySummaryBtn">Copy to Clipboard</button>
+      </div>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== DUNGEON MASTER GUIDE MODAL ========== -->
+<div id="dmGuideModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container dmguide-container">
+    <div class="modal-header">
+      <h2 class="modal-title">Dungeon Master Guide</h2>
+      <button class="modal-close" id="closeDMGuideBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <div class="field-note">Add notes, instructions, or story details for the AI Dungeon Master. These will influence every response.</div>
+      <textarea id="dmGuideText" class="dmguide-textarea" rows="12" placeholder="Example: The party is secretly being followed by a raven which appears every time they enter a forest. Use grimdark tone."></textarea>
+      <div class="dmguide-counter" id="dmGuideCounter">0 / 2000 characters</div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer config-footer">
+      <button class="btn-secondary" id="cancelDMGuideBtn">Cancel</button>
+      <button class="btn-primary" id="saveDMGuideBtn">Save &amp; Close</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== COMBAT TRACKER MODAL ========== -->
+<div id="combatTrackerModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container combat-container">
+    <div class="modal-header">
+      <h2 class="modal-title">⚔️ Combat Tracker</h2>
+      <button class="modal-close" id="closeCombatBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="combat-body" id="combatBody">
+      <!-- Idle state: shown when no active combat -->
+      <div id="combatIdleState" class="combat-idle">
+        <div class="combat-idle-icon">⚔️</div>
+        <p class="combat-idle-text">No active combat.</p>
+        <p class="combat-idle-sub">The AI will notify you when combat begins.</p>
+        <button class="btn-primary" id="rollInitiativeBtn" style="display:none;">Roll Initiative</button>
+      </div>
+      <!-- Active state: shown during combat -->
+      <div id="combatActiveState" class="combat-active" style="display:none;">
+        <div class="combat-header">
+          <div class="combat-round">Round <span id="combatRound">1</span></div>
+          <div class="combat-current-turn">Current Turn: <span id="combatCurrentTurn">—</span></div>
+        </div>
+        <div class="combat-columns">
+          <div class="combat-column">
+            <h3 class="combat-col-title">Party</h3>
+            <div id="combatPartyList" class="combat-participant-list"></div>
+          </div>
+          <div class="combat-column">
+            <h3 class="combat-col-title">Enemies</h3>
+            <div id="combatEnemyList" class="combat-participant-list"></div>
+          </div>
+        </div>
+        <div class="combat-divider"></div>
+        <div class="combat-initiative-section">
+          <h3 class="combat-col-title">Initiative Order</h3>
+          <div id="combatInitiativeList" class="combat-initiative-list"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeCombatFooterBtn">Close</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== DEATH SAVE MODAL ========== -->
+<div id="deathSaveModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container death-container">
+    <div class="modal-header">
+      <h2 class="modal-title">💀 Death Saving Throws</h2>
+      <button class="modal-close" id="closeDeathSaveBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="death-body" id="deathBody">
+      <p class="death-subtitle">You are unconscious and making death saving throws.</p>
+      <div class="death-tracker">
+        <div class="death-section">
+          <span class="death-label">Successes</span>
+          <div class="death-circles" id="deathSuccessCircles">
+            <span class="death-circle" data-idx="0"></span>
+            <span class="death-circle" data-idx="1"></span>
+            <span class="death-circle" data-idx="2"></span>
+          </div>
+        </div>
+        <div class="death-section">
+          <span class="death-label">Failures</span>
+          <div class="death-circles" id="deathFailureCircles">
+            <span class="death-circle death-circle-fail" data-idx="0"></span>
+            <span class="death-circle death-circle-fail" data-idx="1"></span>
+            <span class="death-circle death-circle-fail" data-idx="2"></span>
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary" id="rollDeathSaveBtn">🎲 Roll Death Save</button>
+      <div id="deathResult" class="death-result" style="display:none;"></div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeDeathSaveFooterBtn">Close</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== HIT DICE SHORT REST MODAL ========== -->
+<div id="hitDiceModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container hitdice-container">
+    <div class="modal-header">
+      <h2 class="modal-title">🛌 Short Rest</h2>
+      <button class="modal-close" id="closeHitDiceBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <p class="death-subtitle">Spend Hit Dice to recover HP during a short rest.</p>
+      <div class="form-field">
+        <label>Hit Dice Remaining: <span id="hdRemainingDisplay">0</span> / <span id="hdTotalDisplay">0</span> (<span id="hdTypeDisplay">d8</span>)</label>
+        <label>How many hit dice to spend?</label>
+        <input type="number" id="hdSpendAmount" class="sheet-input" value="1" min="1" max="20">
+      </div>
+      <button class="btn-primary" id="applyHitDiceBtn">Roll &amp; Heal</button>
+      <div id="hdResult" class="death-result" style="display:none;"></div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelHitDiceBtn">Skip</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== LEVEL-UP MODAL ========== -->
+<div id="levelUpModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container levelup-container">
+    <div class="modal-header">
+      <h2 class="modal-title">🌟 Level Up!</h2>
+      <button class="modal-close" id="closeLevelUpBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body" id="levelUpBody">
+      <div class="levelup-summary" id="levelUpSummary"></div>
+      <div class="levelup-asi" id="levelUpAsiSection" style="display:none;">
+        <h3 class="combat-col-title">Ability Score Improvement</h3>
+        <p class="death-subtitle">You can increase one ability score by 2 or two ability scores by 1.</p>
+        <div class="asi-grid" id="asiGrid"></div>
+      </div>
+      <div class="levelup-spells" id="levelUpSpellsSection" style="display:none;">
+        <h3 class="combat-col-title">New Spells</h3>
+        <div id="levelUpSpellChoices"></div>
+      </div>
+      <div class="levelup-features" id="levelUpFeaturesSection" style="display:none;">
+        <h3 class="combat-col-title">New Class Features</h3>
+        <div id="levelUpFeatureChoices"></div>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="confirmLevelUpBtn">Confirm Level Up</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== CROP PORTRAIT MODAL ========== -->
+<div id="cropModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container crop-container">
+    <div class="modal-header">
+      <h2 class="modal-title">Crop Portrait</h2>
+      <button class="modal-close" id="closeCropModalBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="crop-body">
+      <div class="img-container" style="max-height: 60vh; overflow: hidden;">
+        <img id="cropImage" src="" alt="Crop preview" style="max-width: 100%; display: block;">
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelCropBtn">Cancel</button>
+      <button class="btn-primary" id="applyCropBtn">Apply</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== CHARACTER CREATION WIZARD (step by step) ========== -->
+<div id="charCreationWizard" class="modal-overlay" style="display: none;">
+  <div class="modal-container wizard-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Create Your Hero</h2>
+        <div class="step-indicator" id="stepIndicator">Step 1 of 5</div>
+      </div>
+      <button class="modal-close" id="closeWizardBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="wizard-steps" id="wizardSteps">
+      <div class="step active" data-step="1">1. Identity</div>
+      <div class="step" data-step="2">2. Appearance</div>
+      <div class="step" data-step="3">3. Ability Scores</div>
+      <div class="step" data-step="4">4. Equipment & Spells</div>
+      <div class="step" data-step="5">5. Review</div>
+    </div>
+
+    <!-- Step 1: Identity -->
+    <div class="wizard-step-content" id="wizard-step-1">
+      <div class="two-columns">
+        <div class="form-field">
+          <label>Race</label>
+          <select id="wizardRace"></select>
+        </div>
+        <div class="form-field">
+          <label>Subrace</label>
+          <select id="wizardSubrace"></select>
+        </div>
+        <div class="form-field" id="dragonbornAncestryContainer" style="display:none;">
+          <label>Draconic Ancestry</label>
+          <select id="dragonbornAncestrySelect"></select>
+          <div class="field-help">Determines your breath weapon and damage resistance.</div>
+        </div>
+        <div class="form-field" id="highElfCantripContainer" style="display:none;">
+          <label>Racial Cantrip (from wizard spell list)</label>
+          <select id="highElfCantripSelect"></select>
+          <div class="field-help">High Elves know one wizard cantrip.</div>
+        </div>
+        <!-- Variant Human removed -->
+        <div class="form-field">
+          <label>Class</label>
+          <select id="wizardClass"></select>
+        </div>
+        <div class="form-field">
+          <label>Subclass</label>
+          <select id="wizardSubclass"></select>
+        </div>
+        <div class="form-field">
+          <label>Background</label>
+          <select id="wizardBackground"></select>
+        </div>
+        <!-- Background Description -->
+        <div class="desc-panel" id="bgDescPanel">
+          <div class="desc-header">📜 Background</div>
+          <div class="desc-text" id="bgDescText">Select a background to see a short description.</div>
+        </div>
+        <div class="form-field">
+          <label>Level</label>
+          <input type="number" id="wizardLevel" min="1" max="20" value="1">
+        </div>
+      </div>
+      <div class="racial-traits-panel" id="racialTraitsPanel"></div>
+
+      <!-- Race Description -->
+      <div class="desc-panel" id="raceDescPanel">
+        <div class="desc-header">📖 Race</div>
+        <div class="desc-text" id="raceDescText">Select a race to see a short description.</div>
+      </div>
+
+      <div class="class-summary-panel" id="classSummaryPanel"></div>
+
+      <!-- Class Description -->
+      <div class="desc-panel" id="classDescPanel">
+        <div class="desc-header">⚔️ Class</div>
+        <div class="desc-text" id="classDescText">Select a class to see a short description.</div>
+      </div>
+
+      <!-- Subclass Description -->
+      <div class="desc-panel" id="subclassDescPanel" style="display: none;">
+        <div class="desc-header">✨ Subclass</div>
+        <div class="desc-text" id="subclassDescText"></div>
+      </div>
+
+      <div class="saving-throws-panel">
+        <h4>Saving Throws</h4>
+        <div id="savingThrowsList"></div>
+      </div>
+    </div>
+
+    <!-- Step 2: Appearance & Backstory -->
+    <div class="wizard-step-content" id="wizard-step-2" style="display:none;">
+      <div class="form-field"><label>Character Name</label><input type="text" id="charName" maxlength="50" placeholder="e.g., Aelar the Swift"></div>
+      <div class="form-field"><label>Appearance</label><textarea id="charAppearance" rows="3" placeholder="Height, eyes, scars, clothing..."></textarea></div>
+      <div class="form-field"><label>Backstory</label><textarea id="charBackstory" rows="5" placeholder="Character history, motivations..."></textarea></div>
+      <div class="form-field"><label>Personality Traits</label><textarea id="charTraits" rows="2"></textarea></div>
+      <div class="form-field">
+        <label>Alignment</label>
+        <select id="wizardAlignment">
+          <option value="LG">Lawful Good</option>
+          <option value="NG">Neutral Good</option>
+          <option value="CG">Chaotic Good</option>
+          <option value="LN">Lawful Neutral</option>
+          <option value="N" selected>Neutral</option>
+          <option value="CN">Chaotic Neutral</option>
+          <option value="LE">Lawful Evil</option>
+          <option value="NE">Neutral Evil</option>
+          <option value="CE">Chaotic Evil</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 3: Ability Scores (Point Buy) -->
+    <div class="wizard-step-content" id="wizard-step-3" style="display:none;">
+      <div class="ability-scores-container">
+        <div class="point-buy-panel">
+          <h3>Point Buy</h3>
+          <div>Points remaining: <span id="pointBuyPoints">27</span></div>
+          <div id="abilityScoresTable"></div>
+          <div class="button-group">
+            <button type="button" id="recommendedSpreadBtn" class="small-btn">Recommended</button>
+            <button type="button" id="randomAbilitiesBtn" class="small-btn">Random All</button>
+            <button type="button" id="resetAbilitiesBtn" class="small-btn">Reset</button>
+          </div>
+          <div class="variant-human-bonus" id="variantHumanBonusArea" style="display:none;">
+            <label>Variant Human +1 bonuses (choose two different abilities):</label>
+            <select id="vhBonus1"></select>
+            <select id="vhBonus2"></select>
+          </div>
+        </div>
+        <div class="final-scores-panel">
+          <h3>Final Ability Scores (with racial modifiers)</h3>
+          <div id="finalScoresTable"></div>
+          <div class="warning" id="abilityWarning"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Equipment & Spells -->
+    <div class="wizard-step-content" id="wizard-step-4" style="display:none;">
+
+      <!-- ══ EQUIPMENT PANEL ══ -->
+      <div class="eq-panel">
+
+        <!-- Section header -->
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="eq-section-icon">
+            <path d="M5 3h10v3L12 8v9H8V8L5 6V3z" stroke="#C8A96E" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+            <path d="M5 6h10" stroke="#C8A96E" stroke-width="1.1"/>
+          </svg>
+          <h3 class="eq-section-title">Starting Equipment</h3>
+        </div>
+
+        <!-- Two-column grid: choices left, summary right -->
+        <div class="eq-two-col">
+
+          <!-- LEFT: Equipment choices -->
+          <div class="eq-choices-col">
+
+            <!-- Armor -->
+            <div class="eq-category">
+              <div class="eq-cat-header">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M10 2L3 6v6c0 3.5 3 6 7 7 4-1 7-3.5 7-7V6l-7-4z" stroke="#C8A96E" stroke-width="1.3" fill="none"/></svg>
+                <span>Armor &amp; Shield</span>
+              </div>
+              <div class="form-field eq-field">
+                <label class="eq-label">Armor</label>
+                <div id="armorSelection">
+                  <!-- populated by updateEquipmentUI() -->
+                  <div class="eq-placeholder">Select class &amp; race in Step 1 to see available armor.</div>
+                </div>
+              </div>
+              <div class="form-field eq-field" id="shieldSelection" style="display:none;">
+                <label class="eq-label eq-checkbox-label">
+                  <input type="checkbox" id="shieldCheck" class="eq-checkbox"> Shield <span class="eq-prop-badge">+2 AC</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Weapons -->
+            <div class="eq-category">
+              <div class="eq-cat-header">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M3 17L14 6M10 3l4 1 2 2-1 4" stroke="#C8A96E" stroke-width="1.3" stroke-linecap="round"/><circle cx="4" cy="16" r="1.5" stroke="#C8A96E" stroke-width="1.1"/></svg>
+                <span>Weapons</span>
+              </div>
+              <div id="weaponGrid">
+                <div class="eq-placeholder">Select class in Step 1 to see available weapons.</div>
+              </div>
+            </div>
+
+            <!-- Adventuring Gear Pack -->
+            <div class="eq-category">
+              <div class="eq-cat-header">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 3h10v3L12 8v9H8V8L5 6V3z" stroke="#C8A96E" stroke-width="1.3"/></svg>
+                <span>Adventuring Gear Pack</span>
+              </div>
+              <div class="form-field eq-field">
+                <label class="eq-label">Choose one pack (class-restricted)</label>
+                <div id="packSelection"></div>
+                <div id="packContentsDisplay" class="pack-contents"></div>
+              </div>
+            </div>
+
+            <!-- Additional items -->
+            <div class="eq-category">
+              <div class="eq-cat-header">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="12" rx="1" stroke="#C8A96E" stroke-width="1.3" fill="none"/><path d="M7 5V4a3 3 0 016 0v1" stroke="#C8A96E" stroke-width="1.2"/></svg>
+                <span>Additional Items</span>
+              </div>
+              <textarea id="extraItems" rows="3" placeholder="Rope (50 ft), Potion of Healing, Tinderbox…" class="eq-textarea"></textarea>
+            </div>
+
+          </div><!-- /eq-choices-col -->
+
+          <!-- RIGHT: Summary + currency -->
+          <div class="eq-summary-col">
+
+            <!-- Carried equipment list -->
+            <div class="eq-summary-box">
+              <div class="eq-summary-header">
+                <span class="eq-summary-title">Carried Equipment</span>
+                <span class="eq-summary-note">Updates live</span>
+              </div>
+              <div class="eq-summary-body">
+
+                <!-- Background gear (always shown) -->
+                <div class="eq-summary-section">
+                  <div class="eq-summary-cat-label">Background Gear</div>
+                  <div id="backgroundEquipmentDisplay">
+                    <span class="eq-summary-empty">Select background in Step 1.</span>
+                  </div>
+                </div>
+
+                <!-- Armor summary -->
+                <div class="eq-summary-section" id="summaryArmorSection">
+                  <div class="eq-summary-cat-label">Armor</div>
+                  <div id="summaryArmorText" class="eq-summary-item-list">—</div>
+                </div>
+
+                <!-- Weapons summary -->
+                <div class="eq-summary-section" id="summaryWeaponsSection">
+                  <div class="eq-summary-cat-label">Weapons</div>
+                  <div id="summaryWeaponsText" class="eq-summary-item-list">—</div>
+                </div>
+
+                <!-- Extra items summary -->
+                <div class="eq-summary-section" id="summaryExtraSection">
+                  <div class="eq-summary-cat-label">Extra Items</div>
+                  <div id="summaryExtraText" class="eq-summary-item-list">—</div>
+                </div>
+
+              </div><!-- /eq-summary-body -->
+            </div><!-- /eq-summary-box -->
+
+            <!-- Currency -->
+            <div class="eq-currency-box">
+              <div class="eq-summary-header">
+                <span class="eq-summary-title">Starting Currency</span>
+              </div>
+              <div class="eq-currency-grid">
+                <div class="eq-coin">
+                  <span class="eq-coin-label">CP</span>
+                  <input type="number" id="coinCP" class="eq-coin-input" min="0" value="0">
+                  <span class="eq-coin-name">Copper</span>
+                </div>
+                <div class="eq-coin">
+                  <span class="eq-coin-label">SP</span>
+                  <input type="number" id="coinSP" class="eq-coin-input" min="0" value="0">
+                  <span class="eq-coin-name">Silver</span>
+                </div>
+                <div class="eq-coin">
+                  <span class="eq-coin-label" style="color:#B0C4DE;">EP</span>
+                  <input type="number" id="coinEP" class="eq-coin-input" min="0" value="0">
+                  <span class="eq-coin-name">Electrum</span>
+                </div>
+                <div class="eq-coin">
+                  <span class="eq-coin-label" style="color:#F5D76E;">GP</span>
+                  <input type="number" id="coinGP" class="eq-coin-input" min="0" value="0">
+                  <span class="eq-coin-name">Gold</span>
+                </div>
+                <div class="eq-coin">
+                  <span class="eq-coin-label" style="color:#E0E0E0;">PP</span>
+                  <input type="number" id="coinPP" class="eq-coin-input" min="0" value="0">
+                  <span class="eq-coin-name">Platinum</span>
+                </div>
+              </div>
+            </div><!-- /eq-currency-box -->
+
+          </div><!-- /eq-summary-col -->
+        </div><!-- /eq-two-col -->
+      </div><!-- /eq-panel -->
+
+      <!-- ══ SKILL PROFICIENCIES PANEL ══ -->
+      <div class="eq-panel" id="skillProficienciesPanel">
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 5h12v2H4V5zm0 4h12v2H4V9zm0 4h8v2H4v-2z" stroke="#C8A96E" stroke-width="1.2"/></svg>
+          <h3 class="eq-section-title">Skill Proficiencies</h3>
+        </div>
+        <div class="skill-picker two-columns">
+          <div class="skill-class-col">
+            <h4>Class Skills (<span id="classSkillsMax">0</span> to choose)</h4>
+            <div id="classSkillsList" class="skill-checkbox-grid"></div>
+            <div class="skill-counter" id="classSkillsCounter">0 / 0</div>
+          </div>
+          <div class="skill-bonus-col">
+            <h4>Background Skills (automatic)</h4>
+            <div id="backgroundSkillsDisplay" class="readonly-skill-list"></div>
+            <div id="raceBonusSkillsContainer" style="display:none;">
+              <h4>Race Bonus Skills (choose <span id="raceBonusMax">0</span>)</h4>
+              <div id="raceBonusSkillsList" class="skill-checkbox-grid"></div>
+              <div class="skill-counter" id="raceBonusCounter">0 / 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CLASS STARTING EQUIPMENT CHOICES ══ -->
+      <div class="eq-panel" id="classEquipmentPanel">
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><path d="M4 4h5l1 2h6v10H4V4z" stroke="#C8A96E" stroke-width="1.3" fill="none"/></svg>
+          <h3 class="eq-section-title">Class Starting Equipment Choices</h3>
+        </div>
+        <div id="classEquipmentChoiceGroups"></div>
+      </div>
+
+      <!-- ══ SPELLS PANEL ══ -->
+      <div class="spells-section" id="spellsSection" style="display:none;">
+
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="eq-section-icon">
+            <path d="M10 2l1.5 4.5H16l-3.7 2.7 1.4 4.3L10 11l-3.7 2.5 1.4-4.3L4 6.5h4.5z" stroke="#C8A96E" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+          </svg>
+          <h3 class="eq-section-title">Spells &amp; Cantrips</h3>
+          <span class="spell-ability-badge">
+            <span class="spell-ability-label">Casting Ability:</span>
+            <strong id="spellcastingAbility">—</strong>
+          </span>
+        </div>
+
+        <!-- Spell slot reference (compact table) -->
+        <div class="spell-slots-row">
+          <div class="spell-slots-label">Spell Slots</div>
+          <div class="spell-slots-table" id="spellSlotsTable"></div>
+        </div>
+
+        <!-- Tab switcher: Cantrips / Spells -->
+        <div class="spell-tabs">
+          <button class="spell-tab active" id="tabCantrips" onclick="switchSpellTab('cantrips')">
+            Cantrips
+            <span class="spell-tab-counter" id="tabCounterCantrips">0 / 0</span>
+          </button>
+          <button class="spell-tab" id="tabSpells" onclick="switchSpellTab('spells')">
+            Spells
+            <span class="spell-tab-counter" id="tabCounterSpells">0 / 0</span>
+          </button>
+        </div>
+
+        <!-- CANTRIPS tab -->
+        <div class="spell-tab-panel" id="panelCantrips">
+          <div class="spell-filter-bar">
+            <div class="spell-filter-field">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#7A6E62" stroke-width="1.3"/><path d="M11 11l3 3" stroke="#7A6E62" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <input type="text" class="spell-search" id="cantripGrid-filter-name" placeholder="Search cantrips…" oninput="reRenderSpellGrids()">
+            </div>
+            <div class="spell-filter-field">
+              <select class="spell-filter-select" id="cantripGrid-filter-school" onchange="reRenderSpellGrids()">
+                <option value="">All Schools</option>
+                <option>Abjuration</option><option>Conjuration</option><option>Divination</option>
+                <option>Enchantment</option><option>Evocation</option><option>Illusion</option>
+                <option>Necromancy</option><option>Transmutation</option>
+              </select>
+            </div>
+            <div class="spell-counter-inline">
+              <span id="cantripsKnown">0</span> / <span id="maxCantrips">0</span> selected
+            </div>
+          </div>
+          <div id="cantripGrid" class="spell-grid-container"></div>
+        </div>
+
+        <!-- SPELLS tab -->
+        <div class="spell-tab-panel" id="panelSpells" style="display:none;">
+          <div class="spell-filter-bar">
+            <div class="spell-filter-field">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#7A6E62" stroke-width="1.3"/><path d="M11 11l3 3" stroke="#7A6E62" stroke-width="1.3" stroke-linecap="round"/></svg>
+              <input type="text" class="spell-search" id="spellGrid-filter-name" placeholder="Search spells…" oninput="reRenderSpellGrids()">
+            </div>
+            <div class="spell-filter-field">
+              <select class="spell-filter-select" id="spellGrid-filter-school" onchange="reRenderSpellGrids()">
+                <option value="">All Schools</option>
+                <option>Abjuration</option><option>Conjuration</option><option>Divination</option>
+                <option>Enchantment</option><option>Evocation</option><option>Illusion</option>
+                <option>Necromancy</option><option>Transmutation</option>
+              </select>
+            </div>
+            <div class="spell-filter-field">
+              <select class="spell-filter-select" id="spellGrid-filter-level" onchange="reRenderSpellGrids()">
+                <option value="">All Levels</option>
+                <option value="1">1st</option><option value="2">2nd</option>
+                <option value="3">3rd</option><option value="4">4th</option>
+                <option value="5">5th</option>
+              </select>
+            </div>
+            <div class="spell-counter-inline">
+              <span id="spellsKnownCount">0</span> / <span id="maxSpells">0</span> selected
+            </div>
+          </div>
+          <div id="spellGrid" class="spell-grid-container"></div>
+        </div>
+
+      </div><!-- /spells-section -->
+
+      <!-- ══ SUBCLASS SPELLS (WIZARD) ══ -->
+      <div id="subclassSpellsWizard" class="eq-panel" style="display:none;">
+        <div class="eq-section-header" style="margin-top:16px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E"><path d="M5 3h10v3L12 8v9H8V8L5 6V3z"/></svg>
+          <h4 class="eq-section-title">Subclass Spells (Always Prepared)</h4>
+        </div>
+        <div id="subclassSpellsListWizard" class="spell-readonly-list"></div>
+        <div class="field-note">These spells are granted by your subclass and do not count against your spells known/prepared.</div>
+      </div>
+
+      <!-- ══ SUBCLASS FEATURES PANEL ══ -->
+      <div id="subclassFeaturesSection" class="eq-panel" style="display:none;">
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M5 3h10v3L12 8v9H8V8L5 6V3z" stroke="currentColor" stroke-width="1.3"/>
+          </svg>
+          <h3 class="eq-section-title">Subclass Features</h3>
+        </div>
+
+        <!-- Metamagic -->
+        <div id="metamagicContainer" class="feature-category" style="display:none;">
+          <div class="feature-header">
+            <span>Metamagic</span>
+            <span class="feature-counter" id="metamagicCounter">0 / 0</span>
+          </div>
+          <div id="metamagicGrid" class="feature-grid"></div>
+        </div>
+
+        <!-- Eldritch Invocations -->
+        <div id="invocationsContainer" class="feature-category" style="display:none;">
+          <div class="feature-header">
+            <span>Eldritch Invocations</span>
+            <span class="feature-counter" id="invocationsCounter">0 / 0</span>
+          </div>
+          <div id="invocationGrid" class="feature-grid"></div>
+        </div>
+
+        <!-- Battle Master Maneuvers -->
+        <div id="maneuversContainer" class="feature-category" style="display:none;">
+          <div class="feature-header">
+            <span>Battle Master Maneuvers</span>
+            <span class="feature-counter" id="maneuversCounter">0 / 0</span>
+          </div>
+          <div id="maneuverGrid" class="feature-grid"></div>
+        </div>
+
+        <!-- Draconic Sorcerer Ancestry -->
+        <div id="draconicSorcererContainer" class="feature-category" style="display:none;">
+          <div class="feature-header">
+            <span>Draconic Bloodline</span>
+          </div>
+          <div class="form-field">
+            <label>Dragon Ancestor</label>
+            <select id="dragonSorcererAncestrySelect" class="sheet-input"></select>
+            <div class="field-help">Determines your Elemental Affinity damage type and resistance.</div>
+          </div>
+        </div>
+
+        <!-- Arcane Shots -->
+        <div id="arcaneShotsContainer" class="feature-category" style="display:none;">
+          <div class="feature-header">
+            <span>Arcane Shots</span>
+            <span class="feature-counter" id="arcaneShotsCounter">0 / 0</span>
+          </div>
+          <div id="arcaneShotsGrid" class="feature-grid"></div>
+        </div>
+      </div>
+
+    </div><!-- /wizard-step-4 -->
+
+    <!-- Step 5: Review -->
+    <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
+      <div class="review-card" id="reviewCard"></div>
+    </div>
+
+    <div class="modal-divider"></div>
+    <div class="modal-footer wizard-footer">
+      <button class="btn-secondary" id="wizardBackBtn" disabled>Back</button>
+      <button class="btn-primary" id="wizardNextBtn">Next</button>
+      <button class="btn-primary" id="wizardFinishBtn" style="display:none;">Begin Adventure</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<script src="main_page.js"></script>
+
+<!-- ═══════════════════════════════════════════
+     DICE ROLLER — Clean Line Layout Modal
+═══════════════════════════════════════════ -->
+<div id="diceRollerModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container dice-roller-container">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title" id="diceRollerTitle">🎲 Roll Dice</h2>
+        <div class="modal-subtitle" id="diceRollerSubtitle">Click any die to roll</div>
+      </div>
+      <button class="modal-close" id="closeDiceRollerBtn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="dice-canvas-wrap" id="diceCanvasWrap">
+      <div class="dice-row" id="diceRow">
+        <!-- Canvas injected here per die horizontally -->
+      </div>
+      <div id="diceCanvasContainer"></div>
+      <div class="dice-click-hint" id="diceClickHint">👆 Click any die to roll</div>
+      <div class="dice-prompt-result" id="dicePromptResult" style="display:none;">
+        <span class="dice-result-text">Rolled:</span>
+        <span class="dice-result-values" id="diceResultValues"></span>
+        <span class="dice-result-total" id="diceResultTotal"></span>
+        <span class="dice-result-inserted">✓ Inserted into chat</span>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="dice-roller-footer">
+      <button class="btn-secondary" id="closeDiceRollerBtn2">Close</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- Three.js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="dice_roller_3d.js"></script>
+<script>
+// Al'mundi worldbuilding reference — embedded for the AI Dungeon Master
+const ALMUNDI_WORLDBUILDING = `## 1. General Overview
+
+Over the centuries, the many species that inhabit Al'mundi have traveled and mingled in many different ways as neighbors tend to do. However, each species still has a preferred climate to inhabit (though there are always outliers).
+
+### Species & Preferred Climates
+* **Elves & High Elves:** Prefer to inhabit forests, in which they feel more connected to nature and where they learned the magic of the world.
+* **Dwarves & Hill Dwarves:** Dwarves prefer to inhabit mountains, while their cousins the hill dwarves prefer the neighboring foothills.
+* **Halflings & Lightfoot Halflings:** Halflings prefer to live in lush, temperate regions, while their cousins the Lightfoot halflings tend to be found in marshes and swamps, where they learned to step carefully.
+* **Humans:** Comfortable in every region of the continent, and as such, are the most widespread.
+* **Gnomes & Rock Gnomes:** Gnomes can be found anywhere, but are particularly in sprawling savannas and prairies. Their cousins, rock gnomes, prefer mountainous regions and often share living areas with dwarves.
+* **Dragonborn:** Few as they are, prefer the hot, arid regions of Al'mundi, where they are generally left alone.
+* **Tieflings:** Found scattered about the continent, but rumors suggest that they can be found more prominently near volcanoes, or perhaps in the farthest regions of the continent where daylight is scarce.
+* **Half-Elves & Half-Orcs:** Can be found basically anywhere, and for a long time, struggled to fit in within their respective cultures—on either, or both, sides of their parentage.
+
+---
+
+## 2. Prominent Regions
+
+### Forest of Allanar
+The northeastern part of the continent was once the elven Kingdom of Allanar. Although the kingdom fell to the tides of time long ago, the region is still often called Allanar, or the Forest of Allanar. This is because almost 95% of the region is a single, sprawling, 200-mile, arboreal forest. Nestled in the heart of Allanar Forest is the great city of \u00c6ressari\u2014once the seat of power for the Kingdom of Allanar, and now the oldest city in the continent. The widest river in Allanar is the Ghivanni River, which is enchanted to always be safe to drink and is a quarter of a mile wide at its widest point.
+
+### Khigvorda Mountains
+This towering mountain range is called the Iron Ridge Mountains by humans and many other species. These mountains contain the three tallest peaks in the world, as well as the oldest active mine (Khikaghan Mine) in the continent. Made almost entirely of various types of granite, these mountains are notoriously hard to mine. The great Dwarven city of Veladhur sits upon one of the smaller mountains on the edge of the Khigvorda Mountains.
+
+### Ada-vianelle - The Fading Swamp
+Far south, there is a thick swamp that only the most adventurous heroes\u2014and native Lightfoot halflings as well as the occasional elf\u2014dare to tread. Many who enter the swamp never return. Monsters lurk in its brackish water, and some rumors suggest that the trees actually move and eat unlucky travelers. Those that have survived the journey say that the swamp seems to fade in and out of existence, taking wanderers with it\u2014which is where it got its nickname.
+
+### Starview Plains
+Named after the sprawling sky of stars visible at night upon the plains. Humans, Gnomes, Halflings, Tieflings, Half-Elves, and Half-Orcs inhabit small to medium-sized villages scattered throughout the plains. These villages are mostly composed of one or two races, although some may have more diversity. They tend to keep to themselves but do like to trade amongst the nearby villages.
+
+### The Merchant's Pass
+Leskyir is a bustling city located in the center of the continent and is the hub for trade between different regions of the world. The buildings in the city are made predominantly of sandstone, with most of the houses set up as tents made from blankets and wood. Leskyir is known for being full of colorful banners and paintings which intend to attract merchants to goods as they pass through the city.
+
+---
+
+## 3. Three Great Cities
+
+### \u00c6ressari (Forest of Allanar)
+The oldest city in the continent, constructed almost entirely from living wood and warm marble. Only Elves, High Elves, and Half-Elves could originally find the city. Magic flows through almost every inch. It is considered a crime punishable by death to intentionally damage any of the living buildings. \u00c6ressari University is a bitter rival of Emberden College. The city is governed by a Council of Elders.
+
+Key locations: \u00c6ressari University, City Tower, Orchid's Inn, Nature's Garden, Firefly's Dream, Moonlit Forge, Treasure Trove.
+
+### Veladhur (Khigvorda Mountains)
+An ancient dwarven city carved from a mountain peak on the edge of the Khigvorda Mountains. Featured the best metalsmiths and gem workers in the world. The Craftsmen College trains all who wish to learn a craft. Veladhur has the most capable City Guard on the continent, focused on repelling monsters from the mountain range. The city is lit with enchanted crystalline lanterns.
+
+Key locations: Craftsmen College, Blacksmith Guild, Empty Mine Hostel, Stonebed Inn, Copper Spout Tavern, Crow's Nest, Glitter 'n Gold, Ancient Anvil, Echoing Hammer.
+
+### Emberden (Western Coast)
+The youngest of the Three Great Cities, founded by humans but made famous by gnomish artisans. It is the largest port on the continent and a bustling trade center. Half of the city is carved directly into the Ember Cliffs, while enchanted, lilac-stained wooden staircases connect the various levels. Emberden College attracts academics from across the world.
+
+Key locations: Emberden College, Doldren's Smithery, Sunset Square, Mudvin Tavern, Stonegleam Inn.
+
+---
+
+## 4. Leskyir (The Merchant's Pass)
+A bustling trade hub located in the heart of the Merchant's Pass in the center of the continent. Famous for being constantly decked out in incredibly colorful banners and paintings meant to catch the eyes of passing merchants. Divided into the Central District (market) and Residential District (tents made from blankets and wood).
+
+Key locations: Leskyir Palace, Leskyir Bazaar, The Sandstone Inn, The Iron Oasis, The Caravan House, Oasis of Delights.
+
+---
+
+## 5. Notable Townships and Villages
+
+**In Allanar:** Teafield (halfling tea village), Stormwood (stormy coastal town), Esalym (elven beach resort), Oakwood (human logging town under treaty), Strauvani (gnome trade-stop), Cerallya (hidden high-elven town), Andizyre (tiefling town in northern wilds).
+
+**Near Veladhur:** Ironhaven (mining town, famous for honey), Dhuran (halfling pottery and whiskey), Venragh (hill dwarf trade-post), Hillsburrow (hill dwarf rice farming), Giggeview (gnome city on Lapuz Lake).
+
+**Near Emberden:** Emberridge (wealthy estates), Esabury (isolationist elven town), Glorre (hill dwarf quarries), Vlinas (rock gnome goat herding), Pyre Port (trading post competitor).
+
+**Near Leskyir:** Village of Dust (textiles and pottery), Oasis of Serenity (healing oasis), Town of Ironwood (mining town), Nomadic Camps (tribal settlements).
+
+---
+
+## 6. Prominent People (by City)
+
+**\u00c6ressari Council:** Lazani Bloom, Zorwyn Ridanna, Eric Fenro, Miraka Starglen, Nerine Oaskly, Ollenia Feshard, Sephon Ambervan.
+**\u00c6ressari Others:** Orchid (mysterious innkeeper), Head Mage Byran Emoxia, Sylaquin (elderly innkeeper/info broker), Ole Luriant (elf blacksmith), Lila Rainview (halfling merchant).
+
+**Veladhur:** Mayor Dzune Gidenven, Head Craftsman Jia Coppervine, Guild-master Jhobe Silvervein, Abelina Sharpstone (hostel owner), Durwin Thap (hoarder merchant), Jed and Ajhed Ortevuni (twin jewelers), Veccan Thesierra (dragonborn security), Zaulder Silvervein (blacksmith), Mia Degrain (armorer).
+
+**Emberden:** Margie (tavern owner), Yavin (cook and fence), Doldren Brumvar (hidden master blacksmith).
+
+**Leskyir:** The Merchant Princess, The Desert Guide, The Blacksmith, The Nomadic Chieftain, The Oasis Guardian, The Tavern Keepers, The Head of the Caravan House, The Tribal Elder, The Sphinx (madame of Oasis of Delights).`;
+
+// Store worldbuilding on page load
+if (typeof saveWorldbuilding === 'function' && !localStorage.getItem('dnd_worldbuilding')) {
+  saveWorldbuilding(ALMUNDI_WORLDBUILDING);
+}
+</script>
+</body>
+</html>
