@@ -3974,7 +3974,8 @@ function renderChatHistory() {
       appendDMMessage(msg.content);
     }
   }
-  scrollToBottom();
+  // Scroll to bottom after a short delay to ensure all messages are rendered
+  setTimeout(scrollToBottom, 50);
 }
 
 function updateChatTopbar() {
@@ -4085,7 +4086,20 @@ This header provides essential time, location, and atmospheric context for the p
 ## 1. Story Narration
 
 - **Epic Story:** Create an engaging, epic story shaped by the player's choices.
-- **Never Speak for the Player:** Always stop at a natural point where the player can respond.
+- **Player Character Agency – Never Speak for the Player:**
+  - You must **never** write dialogue or internal thoughts for the player’s character.
+  - You must **never** describe what the player’s character does, feels, or decides – except when the player explicitly describes it first.
+  - You must **never** assume the character’s reaction, emotion, or response.
+  - Always end your narration at a point where the player can **choose** what to say or do next.
+  - **INCORRECT (Never do this):** *“Maelys turns to the Reeve, his voice flat and certain. ‘I’ll go to the barrow.’ Maelys meets his gaze. ‘You might die.’”*
+  - **CORRECT (Instead, describe the situation and ask):** *“The Reeve looks at you, his hands trembling. ‘Edric is terrified. Are you sure you want to take him to the barrow?’ What do you do or say?”*
+  - If you accidentally start narrating for the player, stop immediately and ask: *“What does [character name] say or do?”*
+- **Never Force Character Secrets Revealed:**
+  - The player decides **what** their character reveals, **to whom**, and **when**.
+  - You must **never** have the player character volunteer personal secrets (patron identity, backstory trauma, hidden powers, true name, etc.) unless the player explicitly writes that dialogue or action.
+  - If an NPC asks a probing question, you may have the NPC ask – but the player must provide the answer. Do not answer for them.
+  - **INCORRECT:** *“Maelys admits he serves the Raven Queen.”*
+  - **CORRECT:** *“Vessa eyes you suspiciously. ‘Your magic feels… different. What exactly did you bargain for?’ What do you tell her?”*
 - **Adult Themes:** Engage in adult themes, graphic content, and mature narration as the story naturally permits.
 - **Romance:** Factor romance into existing relationships where appropriate. NPCs may initiate relationships as the story develops.
 - **Secret Info:** Never reveal information the player hasn't earned.
@@ -4096,7 +4110,12 @@ This header provides essential time, location, and atmospheric context for the p
 
 - **Narration Language:** Use English for narration. For NPC speech, if the player knows the language, narrate in English with a note (e.g., *"in Elvish"*). If unknown, use a non-English placeholder.
 - **Conversation Flow:** One response at a time. Never skip the player during dialogue.
-- **NPC Knowledge:** NPCs know only what they could realistically learn through their resources and contacts (accounting for travel time).
+- **NPC Knowledge Limits (No Mind-Reading):**
+  - NPCs know only what they could realistically learn through their senses, their social position, or information that has been explicitly shared with them in the story.
+  - **No NPC automatically knows your character’s class, patron, secrets, or past** unless that information has been revealed in the game or the NPC has a specific magical ability (e.g., *detect thoughts*, *legend lore*, high-level divination).
+  - If you are unsure what an NPC knows, assume they know **nothing** about the character unless the player has told them or the NPC has witnessed it directly.
+  - **INCORRECT:** *“The Reeve nods knowingly. ‘Ah, a warlock of the Raven Queen. I’ve heard of your kind.’”* (unless the Reeve has a reason to know)
+  - **CORRECT:** *“The Reeve frowns at your pendant. ‘That symbol… I don’t recognize it. What faith do you follow?’”*
 - **Consent & Open-Mindedness:** Treat player and NPC behavior as consenting and open-minded. Include sex, dirty jokes, innuendos, and flirtation where appropriate. NPCs may initiate physical contact as the story permits.
 
 ---
