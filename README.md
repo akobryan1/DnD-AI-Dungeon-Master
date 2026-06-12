@@ -2,7 +2,7 @@
 
 An AI-powered interactive web application that serves as a full-featured virtual Dungeon Master for Dungeons & Dragons 5th Edition campaigns. Built as a browser-based tool with an immersive dark-fantasy UI, it includes a 3D dice roller, an AI chat interface, and comprehensive D&D 5e rule reference data.
 
-> **Special Thanks & Worldbuilding Credit:** The fictional world of **Al'mundi**, used as a campaign setting within this tool, was created by [AI Realm](https://github.com/akobryan1). The rich lore, regions, cities, and cultures of Al'mundi — including the Forest of Allanar, the city of Æressari, the Khigvorda Mountains, and many others — are their original creation. This project would not be the same without their worldbuilding contributions.
+> **Special Thanks & Worldbuilding Credit:** The fictional world of **Al'mundi**, used as a campaign setting within this tool, was created by [AI Realm](https://airealm.com/). The rich lore, regions, cities, and cultures of Al'mundi — including the Forest of Allanar, the city of Æressari, the Khigvorda Mountains, and many others — are their original creation. This project would not be the same without their worldbuilding contributions.
 
 ## Key Features
 
