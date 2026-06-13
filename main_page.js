@@ -581,11 +581,136 @@ let selectedPactBoon = "";
 let selectedDragonbornAncestry = "";
 let selectedSorcererAncestry = "";
 let selectedAlignment = "N";
+let tempLevelUpSpells = null; // temporary spell selection for level-up modal
+
 let chosenClassSkills = [];
 let chosenRaceBonusSkills = [];
 let chosenHighElfCantrip = "";
 let pendingOpenWorldConfig = null;
 let pendingStoryCampaign = null;
+
+// Step 0: External databases loaded from markdown files
+let spellDatabase = null;      // Will hold { normalizedName: spellObject }
+let featDatabase = null;       // Will hold { normalizedName: featObject }
+
+function normalizeName(name) {
+  return name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function loadSpellDatabase() {
+  const storageKey = 'dnd_spell_db';
+  const version = 2;
+  const cached = localStorage.getItem(storageKey);
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      if (data.version === version) {
+        spellDatabase = data.spells;
+        console.log('Spell DB loaded from cache:', Object.keys(spellDatabase).length);
+        return;
+      }
+    } catch(e) {}
+  }
+  try {
+    const response = await fetch('spells.md');
+    const text = await response.text();
+    const spells = parseSpellsFromMarkdown(text);
+    spellDatabase = spells;
+    localStorage.setItem(storageKey, JSON.stringify({ version, spells }));
+    console.log('Spell DB parsed:', Object.keys(spells).length);
+  } catch(e) {
+    console.warn('Could not load spells.md, using built-in database');
+    spellDatabase = null;
+  }
+}
+
+function parseSpellsFromMarkdown(markdown) {
+  const spells = {};
+  const blocks = markdown.split(/\n### /);
+  for (let block of blocks) {
+    if (!block.trim()) continue;
+    const lines = block.split('\n');
+    const name = lines[0].trim();
+    const spell = { name };
+    for (let line of lines.slice(1)) {
+      const match = line.match(/^-\s*\*\*([^*]+)\*\*:\s*(.*)/);
+      if (match) {
+        let key = match[1].toLowerCase().replace(/\s/g, '_');
+        let value = match[2].trim();
+        if (key === 'classes') value = value.split(',').map(s => s.trim());
+        spell[key] = value;
+      }
+    }
+    spells[normalizeName(name)] = spell;
+  }
+  return spells;
+}
+
+async function loadFeatDatabase() {
+  const storageKey = 'dnd_feat_db';
+  const version = 1;
+  const cached = localStorage.getItem(storageKey);
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      if (data.version === version) {
+        featDatabase = data.feats;
+        console.log('Feat DB loaded from cache:', Object.keys(featDatabase).length);
+        return;
+      }
+    } catch(e) {}
+  }
+  try {
+    const response = await fetch('feats.md');
+    const text = await response.text();
+    const feats = parseFeatsFromMarkdown(text);
+    featDatabase = feats;
+    localStorage.setItem(storageKey, JSON.stringify({ version, feats }));
+    console.log('Feat DB parsed:', Object.keys(feats).length);
+  } catch(e) {
+    console.warn('Could not load feats.md');
+    featDatabase = null;
+  }
+}
+
+function parseFeatsFromMarkdown(markdown) {
+  const feats = {};
+  const blocks = markdown.split(/\n### /);
+  for (let block of blocks) {
+    if (!block.trim()) continue;
+    const lines = block.split('\n');
+    const name = lines[0].trim();
+    const feat = { name };
+    for (let line of lines.slice(1)) {
+      const match = line.match(/^-\s*\*\*([^*]+)\*\*:\s*(.*)/);
+      if (match) {
+        let key = match[1].toLowerCase().replace(/\s/g, '_');
+        let value = match[2].trim();
+        if (key === 'prerequisite') {
+          // keep as string
+        } else if (key === 'benefit') {
+          // keep
+        } else if (key === 'ability_increase') {
+          const parts = value.match(/(\w+)\s*\+\s*(\d+)/);
+          if (parts) feat.abilityIncrease = { ability: parts[1], amount: parseInt(parts[2]) };
+        }
+        feat[key] = value;
+      }
+    }
+    feats[normalizeName(name)] = feat;
+  }
+  return feats;
+}
+
+function getSpellArray() {
+  if (spellDatabase) return Object.values(spellDatabase);
+  // Fallback: build from built-in spellsDatabase
+  const arr = [];
+  for (let level in spellsDatabase) {
+    arr.push(...spellsDatabase[level]);
+  }
+  return arr;
+}
 
 // Equipment selections
 let selectedPack = "";
@@ -602,7 +727,75 @@ let selectionModal, configModal, campaignListDiv;
 let characterSheetModal, charCreationWizard;
 
 // Hardcoded story campaigns
-const storyCampaigns = [];
+const storyCampaigns = [
+  {
+    id: "pale_harvest",
+    name: "The Pale Harvest",
+    setting: "Dalelands / Baldur's Gate / Northern Faerûn",
+    tone: "Grimdark / Mystery",
+    description: `The grain turns black in the fields. Rivers run thick and slow. A plague without a name sweeps the North, and the dead do not stay dead. A whisper on the wind says: "The Lord of Bones has set his table."
+
+You are not the prophesied saviour. No fallen prince will bear the cursed crown for you. There is only the rising dead, a cult that preys on the desperate, and a necromancer who claims to offer salvation. Behind him, in a citadel of frozen shadow, a Lich waits. His name is Aszagrix. He has seen empires rot and gods blink.
+
+This is not a story of a single monster. It is the story of how the world learns to fear the dark again. And how you, against all reason, decide to light a match.`,
+    initialHook: `*A cold wind rattles the windows of the inn. Outside, a funeral procession passes – but the corpse is walking at the front.*
+
+The town of Westbridge is dying. Not from war or famine, but from a sleeping sickness that turns its victims pale and hollow. Three days later, they rise. The local lords blame a foreign plague. The church of Lathander is baffled. But you've seen the symbol carved into the forehead of one of the risen – a black crown, the mark of Myrkul.
+
+A hooded figure has left a message under your door: "The harvest has begun. Come to the old catacombs if you wish to stop it."
+
+What do you do?`,
+    toneClass: "tone-grimdark"
+  },
+  {
+    id: "iron_wake",
+    name: "The Iron Wake",
+    setting: "The North (Silver Marches / Spine of the World)",
+    tone: "Heroic / Tactical",
+    description: `Palischuk burned in a single night. The half-orc city of smiths and shield-maidens, which stood for three centuries, is now ash and bone. The survivors speak of a warlord named Aragway—not a brute, but a general. He rides a frost dragon from the Spine of the World. His army of three thousand orcs, half-orcs, goblins, and ogres marches not for plunder, but for dominion.
+
+They say his black helm whispers. They say it broke the dragon's will in nine heartbeats. He offers every city one choice: kneel, and your people become the foundation of a new empire. Resist, and you become the mortar.
+
+The lords of Faerûn bicker. The Harpers watch and wait. But you have seen the razed farmsteads, the chained prisoners, the goblin raiders wearing half-orc sergeant's stripes. This is the story of free peoples standing against the iron fist. Of dragon-fire met with courage. Of a helm that breaks wills—and the wills that refuse to break.`,
+    initialHook: `*The morning sun is choked by smoke on the horizon. A half-dozen ragged survivors from Palischuk stumble into your camp, their eyes hollow. One of them, a one-armed shield-maiden named Threnn, grips your arm.*
+
+"Aragway is three days behind us. He has a dragon, three thousand killers, and a helm that eats souls. Every town between here and Silverymoon will burn unless someone rallies the lords. The Harpers are too slow. The lords are too scared."
+
+*She presses a tarnished compass into your hand.*
+
+"This belonged to my father. It points to an old dwarven cache – weapons, maybe a secret. Go. I'll gather who I can and meet you at the Ironfast."
+
+What do you do?`,
+    toneClass: "tone-heroic"
+  },
+  {
+    id: "crimson_rift",
+    name: "The Crimson Rift",
+    setting: "Athkatla / Thunder Peaks / Western Faerûn",
+    tone: "High Heroism / Desperate Last Stand",
+    description: `"The merchant lords of Athkatla speak of a miracle: a young heiress named Seren Vaskar, whose fortune doubled overnight after her father's mysterious death. She buys iron, slaves, and masons by the thousand. She says she is building a monument to her father's memory. She lies.
+
+Deep in the Thunder Peaks, her workers have carved a colossal archway into a mountain. When the sun sets, the stone bleeds light. When the wind blows, it smells of brimstone. Goblins raiding the lowlands now flee from things with wings and barbed tails. Farmers vanish. Villages wake to find their children's shadows missing.
+
+The demon lord Saramok the Screaming Hunger has waited ten thousand years for this. His tanarukk legions—half-demon, half-orc berserkers—stand ready beyond the Rift. Seren Vaskar promised him a world to devour. In return, he will make her a queen of ashes.
+
+The portal is not yet complete. It needs one final ingredient: thousands of souls, offered in a single night of blood. The sacrifices are already being rounded up.
+
+You are not generals. You are not chosen by prophecy. You are the only ones who have seen the truth beneath the rumors. And you are the only ones close enough to stop the slaughter before the Rift tears open.
+
+This is the story of a portal, a pact, and a people who refuse to kneel to the abyss."`,
+    initialHook: `*The evening air in Waymoot carries the scent of smoke from the east. A merchant caravan arrived this morning—or what was left of it. The guards are dead. The cargo is untouched. But every victim has a burned handprint seared into their face.*
+
+*A dwarf named Dorrik Stonehand sits in the corner of the tavern, nursing a mug of ale with trembling hands. He escaped from a place he calls "the Riftworks"—a massive construction site hidden in the Thunder Peaks. He mutters about a young heiress, a stone arch that bleeds crimson light, and something winged that hunts the night.*
+
+*He looks at you with haunted eyes.*
+
+"If you've got steel in your spine and foolsblood in your veins, you'll want to see what I saw. But I warn you—some doors are built to keep things out. That one was built to let something in."
+
+What do you do?`,
+    toneClass: "tone-heroic"
+  }
+];
 
 /* ========== COMBAT TRACKER STATE ========== */
 let activeCombat = {
@@ -1719,7 +1912,7 @@ function updateSubclassFeaturesUI() {
 }
 
 function updateWizardUI() {
-  for (let i=1; i<=5; i++) {
+  for (let i=1; i<=6; i++) {
     const stepDiv = document.getElementById(`wizard-step-${i}`);
     if (stepDiv) stepDiv.style.display = i === wizardStep ? "block" : "none";
   }
@@ -1727,10 +1920,10 @@ function updateWizardUI() {
     if (idx+1 === wizardStep) step.classList.add("active");
     else step.classList.remove("active");
   });
-  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 5`;
+  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 6`;
   const backBtn = document.getElementById("wizardBackBtn"), nextBtn = document.getElementById("wizardNextBtn"), finishBtn = document.getElementById("wizardFinishBtn");
   backBtn.disabled = (wizardStep === 1);
-  if (wizardStep === 5) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
+  if (wizardStep === 6) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
   else { nextBtn.style.display = "inline-block"; finishBtn.style.display = "none"; }
 }
 
@@ -1776,6 +1969,7 @@ function nextStep() {
   } else if (wizardStep === 4) {
     updateEquipmentUI();
     updateSpellUI();
+  } else if (wizardStep === 5) {
     updateSubclassFeaturesUI();
   }
 }
@@ -1866,17 +2060,25 @@ function finishWizard() {
   let newCampaign = null;
   if (wizardContext && wizardContext.type === 'openworld' && pendingOpenWorldConfig) {
     const config = pendingOpenWorldConfig;
+    const isFaerun = config.worldbuildingKey === 'faerun';
     newCampaign = {
       id: Date.now().toString(),
       name: config.name,
       lastPlayed: new Date().toISOString().slice(0,10),
       type: 'openworld',
       config: { location: config.location, tone: config.tone },
-      description: "The world of Al'mundi is yours to explore.",
+      description: isFaerun ? "The continent of Faerûn awaits. Explore the Sword Coast, brave the Underdark, and shape your legend in the Forgotten Realms." : "The world of Al'mundi is yours to explore.",
       initialHook: config.initialHook,
-      characterId: character.id
+      characterId: character.id,
+      worldbuildingKey: config.worldbuildingKey || 'almundi'
     };
     campaigns.push(newCampaign);
+    // Store the appropriate worldbuilding reference
+    if (isFaerun && typeof FAERUN_WORLDBUILDING !== 'undefined') {
+      saveWorldbuilding(FAERUN_WORLDBUILDING);
+    } else if (!isFaerun && typeof ALMUNDI_WORLDBUILDING !== 'undefined') {
+      saveWorldbuilding(ALMUNDI_WORLDBUILDING);
+    }
     pendingOpenWorldConfig = null;
   } else if (wizardContext && wizardContext.type === 'story' && pendingStoryCampaign) {
     newCampaign = {
@@ -1886,11 +2088,35 @@ function finishWizard() {
       type: 'story',
       refId: pendingStoryCampaign.id,
       description: pendingStoryCampaign.description || '',
-      initialHook: pendingStoryCampaign.description || '',
+      initialHook: pendingStoryCampaign.initialHook || pendingStoryCampaign.description || '',
       characterId: character.id
     };
     campaigns.push(newCampaign);
     pendingStoryCampaign = null;
+  } else if (wizardContext && wizardContext.type === 'custom' && wizardContext.campaign) {
+    const customCamp = wizardContext.campaign;
+    customCamp.characterId = character.id;
+    const index = campaigns.findIndex(c => c.id === customCamp.id);
+    if (index !== -1) campaigns[index] = customCamp;
+    saveCampaigns();
+
+    selectedCampaignId = customCamp.id;
+    sessionActive = true;
+    applyState();
+    chatSessionInit = false;
+    startGameSession(customCamp.id);
+
+    const chatNoSession = document.getElementById('chatNoSession');
+    const chatShell = document.getElementById('chatShell');
+    if (chatNoSession) chatNoSession.style.display = 'none';
+    if (chatShell) chatShell.style.display = 'flex';
+    sessionSec.classList.remove('hidden');
+    if (sessionBtns && sessionBtns.length) {
+      for (let i = 0; i < sessionBtns.length; i++) {
+        const btn = document.getElementById(sessionBtns[i]);
+        if (btn) btn.disabled = false;
+      }
+    }
   }
   
   if (newCampaign) {
@@ -2013,6 +2239,9 @@ function startGameSession(campaignId) {
     chatHistory = [];
   }
   
+  // Initialize summarization counter
+  messagesSinceLastSummary = chatHistory.filter(m => m.role !== 'system').length;
+  
   // Load quests for this campaign
   loadQuests();
   
@@ -2055,8 +2284,35 @@ function closeCampaignSelectionModal() { if (!selectionModal) return; selectionM
 function renderCampaignSelection() {
   if (!campaignListDiv) return;
   campaignListDiv.innerHTML = '';
-  const openWorld = { type: "openworld", id: "openworld", name: "Al'mundi", setting: "Al'mundi", tone: "Choose tone at creation", description: "The world of Al'mundi is yours to explore. No fixed main plot—the AI Dungeon Master creates dynamic adventures as you go.", toneClass: "tone-neutral" };
-  campaignListDiv.appendChild(createCampaignCard(openWorld, true));
+
+  // Open World: Al'mundi
+  const openWorldAlmundi = {
+    type: "openworld",
+    id: "openworld_almundi",
+    name: "Al'mundi",
+    setting: "Al'mundi (Homebrew)",
+    tone: "Custom",
+    description: "The world of Al'mundi is yours to explore. No fixed main plot—the AI Dungeon Master creates dynamic adventures as you go.",
+    toneClass: "tone-neutral"
+  };
+  campaignListDiv.appendChild(createCampaignCard(openWorldAlmundi, true));
+
+  // Open World: Faerûn (Forgotten Realms)
+  const openWorldFaerun = {
+    type: "openworld",
+    id: "openworld_faerun",
+    name: "Faerûn (Forgotten Realms)",
+    setting: "Faerûn",
+    tone: "Custom",
+    description: "Explore the Sword Coast, brave the Underdark, or sail the Sea of Fallen Stars. The classic D&D setting, open for sandbox adventure. The AI will generate quests, factions, and random encounters using Faerûn lore.",
+    toneClass: "tone-neutral"
+  };
+  campaignListDiv.appendChild(createCampaignCard(openWorldFaerun, true));
+
+  // Story campaigns
+  storyCampaigns.forEach(story => {
+    campaignListDiv.appendChild(createCampaignCard(story, false));
+  });
 }
 function createCampaignCard(campaign, isOpenWorld = false) {
   const card = document.createElement('div'); card.className = 'campaign-card';
@@ -2066,12 +2322,24 @@ function createCampaignCard(campaign, isOpenWorld = false) {
   const tone = document.createElement('div'); tone.className = `campaign-tone ${campaign.toneClass || 'tone-neutral'}`; tone.textContent = typeof campaign.tone === 'string' ? campaign.tone : 'Narrative Tone: ' + campaign.tone; card.appendChild(tone);
   const desc = document.createElement('div'); desc.className = 'campaign-description'; desc.textContent = campaign.description; card.appendChild(desc);
   const button = document.createElement('button'); button.className = 'card-button'; button.textContent = 'Start Adventure';
-  button.addEventListener('click', (e) => { e.stopPropagation(); if (isOpenWorld) openOpenWorldConfigModal(); else startStoryCampaign(campaign); });
+  button.addEventListener('click', (e) => { e.stopPropagation(); if (isOpenWorld) openOpenWorldConfigModal(campaign.id); else startStoryCampaign(campaign); });
   card.appendChild(button);
   return card;
 }
 function startStoryCampaign(story) { closeCampaignSelectionModal(); pendingStoryCampaign = story; wizardContext = { type: 'story' }; openCharacterCreationWizard(); }
-function openOpenWorldConfigModal() { closeCampaignSelectionModal(); if (!configModal) return; document.getElementById('owSessionName').value = "Al'mundi"; document.getElementById('owStartLocation').value = 'Random'; document.getElementById('owTone').value = 'Heroic'; document.getElementById('owNameError').innerText = ''; configModal.style.display = 'flex'; setTimeout(() => configModal.classList.add('show'), 10); }
+let pendingWorldbuildingKey = 'almundi'; // 'almundi' or 'faerun'
+function openOpenWorldConfigModal(campaignId) { 
+  closeCampaignSelectionModal(); 
+  if (!configModal) return; 
+  const isFaerun = campaignId === 'openworld_faerun';
+  pendingWorldbuildingKey = isFaerun ? 'faerun' : 'almundi';
+  document.getElementById('owSessionName').value = isFaerun ? "Faerûn" : "Al'mundi"; 
+  document.getElementById('owStartLocation').value = 'Random'; 
+  document.getElementById('owTone').value = 'Heroic'; 
+  document.getElementById('owNameError').innerText = ''; 
+  configModal.style.display = 'flex'; 
+  setTimeout(() => configModal.classList.add('show'), 10); 
+}
 function closeOpenWorldConfigModal() { if (!configModal) return; configModal.classList.remove('show'); setTimeout(() => { configModal.style.display = 'none'; }, 200); }
 function generateAIHook(location, tone) {
   const hooks = { 'Forest of Allanar': `Ancient trees whisper secrets in the Forest of Allanar, where fey creatures and forgotten ruins lie hidden...`, 'Khigvorda Mountains': `The Khigvorda Mountains hold veins of precious ore and deeper, darker tunnels where something stirs...`, 'The Fading Swamp': `Miasma clings to the Fading Swamp, a place where the veil between worlds is thin and strange lights flicker at night...`, 'Starview Plains': `Across the open Starview Plains, nomadic tribes trade tales of a falling star that brought something otherworldly...`, "The Merchant's Pass": `The Merchant's Pass is a vital trade route, but bandits and a recent monster attack have brought commerce to a halt...`, 'random town': `A bustling town square, a guarded gate, and rumors of trouble beyond the walls draw your attention...`, 'random village': `A quiet hamlet where the locals eye you with a mix of curiosity and concern—something is amiss...`, 'Random': `Rumors swirl of an ancient ruin...` };
@@ -2087,7 +2355,7 @@ function submitOpenWorldConfig() {
   const tone = document.getElementById('owTone').value;
   if (!name) { document.getElementById('owNameError').innerText = 'Adventure name is required'; return; }
   document.getElementById('owNameError').innerText = '';
-  pendingOpenWorldConfig = { name, location, tone, initialHook: generateAIHook(location, tone) };
+  pendingOpenWorldConfig = { name, location, tone, initialHook: generateAIHook(location, tone), worldbuildingKey: pendingWorldbuildingKey || 'almundi' };
   wizardContext = { type: 'openworld' };
   closeOpenWorldConfigModal();
   openCharacterCreationWizard();
@@ -2691,6 +2959,30 @@ function populateDetailsTab() {
     } else {
       bgFeatureDiv.innerHTML = `<span class="eq-summary-empty">No background feature available.</span>`;
     }
+  }
+  // Custom properties
+  const propsContainer = document.getElementById("customPropertiesDisplay");
+  if (currentCharacter.customProperties && Object.keys(currentCharacter.customProperties).length) {
+    let propsHtml = '<ul>';
+    for (let [key, value] of Object.entries(currentCharacter.customProperties)) {
+      propsHtml += `<li><strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}</li>`;
+    }
+    propsHtml += '</ul>';
+    propsContainer.innerHTML = propsHtml;
+  } else {
+    propsContainer.innerHTML = '<span class="eq-summary-empty">No custom properties set.</span>';
+  }
+  // Notes
+  const notesContainer = document.getElementById("characterNotesDisplay");
+  if (currentCharacter.notes && currentCharacter.notes.length) {
+    let notesHtml = '<ul>';
+    for (let note of currentCharacter.notes) {
+      notesHtml += `<li>${escapeHtml(note)}</li>`;
+    }
+    notesHtml += '</ul>';
+    notesContainer.innerHTML = notesHtml;
+  } else {
+    notesContainer.innerHTML = '<span class="eq-summary-empty">No notes added.</span>';
   }
 }
 
@@ -3545,6 +3837,62 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newCampaignBtn) newCampaignBtn.onclick = newCampaign;
   if (deleteCampaignBtn) deleteCampaignBtn.onclick = deleteCampaign;
   document.getElementById('closeSelectionBtn').onclick = closeCampaignSelectionModal;
+  // Custom campaign modal wiring
+  const customCampaignModal = document.getElementById('customCampaignModal');
+  document.getElementById('createCustomCampaignBtn').addEventListener('click', () => {
+    closeCampaignSelectionModal();
+    customCampaignModal.style.display = 'flex';
+    setTimeout(() => customCampaignModal.classList.add('show'), 10);
+  });
+  function closeCustomCampaignModal() {
+    customCampaignModal.classList.remove('show');
+    setTimeout(() => { customCampaignModal.style.display = 'none'; }, 200);
+  }
+  document.getElementById('closeCustomCampaignBtn').addEventListener('click', closeCustomCampaignModal);
+  document.getElementById('cancelCustomCampaignBtn').addEventListener('click', closeCustomCampaignModal);
+  document.getElementById('submitCustomCampaignBtn').addEventListener('click', () => {
+    const name = document.getElementById('customCampaignName').value.trim();
+    const nameError = document.getElementById('customCampaignNameError');
+    if (!name) {
+      nameError.style.display = 'block';
+      return;
+    }
+    nameError.style.display = 'none';
+
+    const campaignType = document.querySelector('input[name="campaignType"]:checked').value;
+    const location = document.getElementById('customCampaignLocation').value.trim();
+    const worldDesc = document.getElementById('customWorldDescription').value.trim();
+    const tone = document.getElementById('customCampaignTone').value;
+    const plotHook = document.getElementById('customMainPlotHook').value.trim();
+    const tagsRaw = document.getElementById('customCampaignTags').value.trim();
+    const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()) : [];
+    const houseRules = document.getElementById('customHouseRules').value.trim();
+
+    const newCampaign = {
+      id: Date.now().toString(),
+      name,
+      lastPlayed: new Date().toISOString().slice(0,10),
+      type: campaignType,
+      config: {
+        location: location || (campaignType === 'openworld' ? 'Random' : 'Unknown'),
+        tone: tone,
+      },
+      description: worldDesc,
+      initialHook: plotHook || (campaignType === 'openworld'
+        ? 'The world of Al\'mundi is yours to explore. Where do you begin?'
+        : 'Your journey begins...'),
+      custom: true,
+      tags,
+      houseRules,
+    };
+
+    campaigns.push(newCampaign);
+    saveCampaigns();
+    closeCustomCampaignModal();
+
+    wizardContext = { type: 'custom', campaign: newCampaign };
+    openCharacterCreationWizard();
+  });
   document.getElementById('closeConfigBtn').onclick = closeOpenWorldConfigModal;
   document.getElementById('cancelConfigBtn').onclick = closeOpenWorldConfigModal;
   document.getElementById('submitConfigBtn').onclick = submitOpenWorldConfig;
@@ -3663,9 +4011,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const hitDiceModal = document.getElementById('hitDiceModal');
   const levelUpModal = document.getElementById('levelUpModal');
   const cropModal = document.getElementById('cropModal');
-  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal, cropModal];
-  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (modal === cropModal) closeCropModal(); } }); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (cropModal && cropModal.style.display === 'flex') closeCropModal(); } });
+  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal, cropModal, customCampaignModal];
+  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (modal === cropModal) closeCropModal(); else if (modal === customCampaignModal) closeCustomCampaignModal(); } }); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (customCampaignModal && customCampaignModal.style.display === 'flex') closeCustomCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (cropModal && cropModal.style.display === 'flex') closeCropModal(); } });
   document.getElementById('btn-char').addEventListener('click', () => { setActive('btn-char'); if (currentCharacter) openCharacterSheetModal(); else alert('No character created yet. Start a campaign first.'); });
   initSheetTabs();
   const storedChar = localStorage.getItem('dnd_current_character');
@@ -3759,6 +4107,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("extraItems")?.addEventListener("input", updateEquipmentSummary);
   initDiceRoller();
   initMonsterDatabase();
+  loadSpellDatabase();
+  loadFeatDatabase();
   applyState();
 });
 /* ═══════════════════════════════════════════════════════
@@ -3770,6 +4120,12 @@ let chatHistory       = [];     // [{role:'user'|'assistant'|'system', content:'
 let activeContextChips = new Set(); // 'char' | 'quest' | 'npc'
 let chatSessionInit   = false;
 let isStreaming        = false;
+
+// ── Context management (summarization) ──
+const MAX_VISIBLE_MESSAGES = 20;        // Keep only last 20 non‑system messages
+const SUMMARY_INTERVAL = 20;            // Summarize every 20 new messages
+let messagesSinceLastSummary = 0;       // Counter since last summarization
+let isSummarizing = false;              // Prevent concurrent summarizations
 
 // ── Init on session start ──
 function initChatSession() {
@@ -4039,6 +4395,46 @@ function renderActiveContextPills() {
       <button class="ctx-pill-close" onclick="toggleContextChip('${type}')" title="Remove">&times;</button>
     </div>
   `).join('');
+}
+
+// ── Subclass Mechanical Essence ──
+function getSubclassMechanicalEssence(className, subclassName) {
+  const text = {
+    "Knowledge Domain": "\n- Level 1: Blessings of Knowledge – gain proficiency in two of: Arcana, History, Nature, Religion.\n- Level 2: Channel Divinity: Knowledge of the Ages – gain proficiency in any skill or tool for 10 minutes.\n- Level 6: Channel Divinity: Read Thoughts – read thoughts of a creature, then cast Suggestion without a spell slot.\n- Level 8: Potent Spellcasting – add Wisdom modifier to cleric cantrip damage.\n- Level 17: Visions of the Past – learn about an object's past or see 24 hours into a location's past.",
+    "Life Domain": "\n- Level 1: Heavy armor proficiency, Disciple of Life – when you cast a healing spell, target regains extra HP = 2 + spell's level.\n- Level 2: Channel Divinity: Preserve Life – restore 5 × cleric level HP (divided among creatures within 30 ft).\n- Level 6: Blessed Healer – when you heal another, you regain 2 + spell level HP.\n- Level 8: Divine Strike – once per turn, add 1d8 radiant damage to a weapon attack.\n- Level 17: Supreme Healing – when you cast a healing spell, you use the maximum possible healing.",
+    "Light Domain": "\n- Level 1: Warding Flare – when a creature within 30 ft attacks you, impose disadvantage (Wisdom modifier times per long rest).\n- Level 2: Channel Divinity: Radiance of the Dawn – each hostile within 30 ft makes Con save, takes 2d10 + cleric level radiant damage (half on save).\n- Level 6: Improved Flare – use Warding Flare to protect an ally within 30 ft.\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Corona of Light – shed bright light 60 ft, enemies have disadvantage on saves against fire/radiant.",
+    "Nature Domain": "\n- Level 1: Acolyte of Nature – gain proficiency in one of Animal Handling, Nature, Survival, plus one druid cantrip.\n- Level 2: Channel Divinity: Charm Animals and Plants – each beast/plant within 30 ft makes Wis save or is charmed.\n- Level 6: Dampen Elements – when you or ally within 30 ft takes acid, cold, fire, lightning, or thunder damage, use reaction to grant resistance.\n- Level 8: Divine Strike – once per turn add 1d8 cold, fire, or lightning damage to weapon attack.\n- Level 17: Master of Nature – beasts and plants have disadvantage on saves against your charm.",
+    "Tempest Domain": "\n- Level 1: Wrath of the Storm – when a creature within 5 ft hits you, use reaction to deal 2d8 lightning or thunder damage (Wis mod times per long rest).\n- Level 2: Channel Divinity: Destructive Wrath – maximize thunder or lightning damage.\n- Level 6: Thunderbolt Strike – when you deal lightning damage to a Large or smaller creature, push it up to 10 ft away.\n- Level 8: Divine Strike – add 1d8 thunder damage to weapon attack.\n- Level 17: Stormborn – gain flying speed while outside.",
+    "Trickery Domain": "\n- Level 1: Blessing of the Trickster – give an ally advantage on Stealth checks.\n- Level 2: Channel Divinity: Invoke Duplicity – create illusory duplicate; cast spells from its space.\n- Level 6: Channel Divinity: Cloak of Shadows – become invisible until end of next turn.\n- Level 8: Divine Strike – add 1d8 poison damage to weapon attack.\n- Level 17: Improved Duplicity – create up to four duplicates.",
+    "War Domain": "\n- Level 1: War Priest – make a bonus action weapon attack (Wis mod times per long rest).\n- Level 2: Channel Divinity: Guided Strike – add +10 to an attack roll.\n- Level 6: Channel Divinity: War God's Blessing – grant an ally +10 to an attack roll.\n- Level 8: Divine Strike – add 1d8 radiant damage to weapon attack.\n- Level 17: Avatar of Battle – resistance to nonmagical bludgeoning, piercing, slashing.",
+    "Forge Domain": "\n- Level 1: Blessing of the Forge – turn a nonmagical weapon or armor into a +1 magic item for 1 day.\n- Level 2: Channel Divinity: Artisan's Blessing – create a metal object worth up to 100 gp.\n- Level 6: Soul of the Forge – resistance to fire, +1 AC with heavy armor.\n- Level 8: Divine Strike – add 1d8 fire damage to weapon attack.\n- Level 17: Saint of Forge and Fire – immunity to fire, resistance to nonmagical bludgeoning/piercing/slashing.",
+    "Grave Domain": "\n- Level 1: Circle of Mortality – maximum healing on unconscious creatures; Spare the Dying is a bonus action.\n- Level 2: Channel Divinity: Path to the Grave – next attack against a creature has vulnerability to all damage.\n- Level 6: Sentinel at Death's Door – cancel a critical hit (Wis mod times per long rest).\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Keeper of Souls – when you slay a creature, heal an ally.",
+    "Order Domain": "\n- Level 1: Voice of Authority – when you cast a spell on an ally, they can use reaction to make a weapon attack.\n- Level 2: Channel Divinity: Order's Demand – each creature of your choice within 30 ft makes Wis save or is charmed.\n- Level 6: Embodiment of the Law – when you cast a spell of 1st level or higher, you can also cast a cantrip as a bonus action.\n- Level 8: Divine Strike – add 1d8 psychic damage to weapon attack.\n- Level 17: Order's Wrath – when you deal Divine Strike damage, the target also takes 2d8 psychic damage.",
+    "Peace Domain": "\n- Level 1: Emboldening Bond – bond up to two creatures; they can add a d4 to an attack, save, or check (proficiency bonus times per long rest).\n- Level 2: Channel Divinity: Balm of Peace – move without provoking opportunity attacks, heal allies you touch.\n- Level 6: Protective Bond – when a bonded creature takes damage, another bonded creature can teleport and take the damage instead.\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Expansive Bond – bond range increases to 60 ft, and damage sharing becomes resistance.",
+    "Twilight Domain": "\n- Level 1: Eyes of Night – 300 ft darkvision, grant to allies (shared long rest feature).\n- Level 2: Channel Divinity: Twilight Sanctuary – create a sphere of dim light that grants temporary HP or ends charm/frighten.\n- Level 6: Steps of Night – gain flying speed while in dim light or darkness.\n- Level 8: Divine Strike – add 1d8 radiant damage to weapon attack.\n- Level 17: Twilight Shroud – half cover and advantage on saving throws for allies in sanctuary.",
+    "Oath of Devotion": "\n- Level 3: Channel Divinity: Sacred Weapon (add Cha to attack, weapon sheds light), Turn the Unholy (fiends/undead within 30 ft are turned).\n- Level 7: Aura of Devotion – you and allies within 10 ft cannot be charmed.\n- Level 15: Purity of Spirit – always under protection from evil and good.\n- Level 20: Holy Nimbus – shed light, enemies within 30 ft take 10 radiant damage each turn.",
+    "Oath of the Ancients": "\n- Level 3: Channel Divinity: Nature's Wrath (restrain a creature), Turn the Faithless (fey/fiends are turned).\n- Level 7: Aura of Warding – you and allies within 10 ft have resistance to spell damage.\n- Level 15: Undying Sentinel – when reduced to 0 HP, drop to 1 instead (once per long rest).\n- Level 20: Elder Champion – aura of regeneration and spellcasting.",
+    "Oath of Vengeance": "\n- Level 3: Channel Divinity: Abjure Enemy (frighten one creature), Vow of Enmity (advantage on attacks against one creature for 1 minute).\n- Level 7: Relentless Avenger – opportunity attack reduces target's speed to 0.\n- Level 15: Soul of Vengeance – when a creature under your Vow attacks, you can make an opportunity attack.\n- Level 20: Avenging Angel – gain flying speed, aura of fear.",
+    "Oath of Conquest": "\n- Level 3: Channel Divinity: Conquering Presence (frighten creatures within 30 ft), Guided Strike (+10 to attack).\n- Level 7: Aura of Conquest – frightened creatures have speed 0 and take psychic damage if they start turn in aura.\n- Level 15: Scornful Rebuke – when a creature hits you, it takes psychic damage.\n- Level 20: Invincible Conqueror – resistance to all damage, extra attack.",
+    "Oath of Redemption": "\n- Level 3: Channel Divinity: Emissary of Peace (+10 Persuasion), Rebuke the Violent (deal radiant damage to attacker).\n- Level 7: Aura of the Guardian – take damage meant for an ally within 10 ft.\n- Level 15: Protective Spirit – regain HP each turn when below half HP.\n- Level 20: Emissary of Redemption – resistance to all damage, attackers take radiant damage.",
+    "Oath of Glory": "\n- Level 3: Channel Divinity: Peerless Athlete (advantage on Str/Dex checks, jump distance), Inspiring Smite (give temporary HP to allies).\n- Level 7: Aura of Alacrity – your speed increases by 10 ft; allies in aura also gain 10 ft.\n- Level 15: Glorious Defense – when you miss an attack, you can add your Cha to AC and gain temporary HP.\n- Level 20: Living Legend – you can reroll a missed attack and gain advantage on all attacks for 1 minute.",
+    "Oath of the Watchers": "\n- Level 3: Channel Divinity: Watcher's Will (advantage on Int/Wis/Cha saves for you and allies), Abjure the Extraplanar (turn aberrations, celestials, elementals, fey, fiends).\n- Level 7: Aura of the Sentinel – advantage on initiative rolls, you and allies within 10 ft.\n- Level 15: Vigilant Rebuke – when a creature you can see makes a save, you can deal radiant damage.\n- Level 20: Watcher's Refuge – you and allies become invisible for 1 minute, gain +10 to Stealth.",
+    "Champion": "\n- Improved Critical (19-20), Remarkable Athlete (add half proficiency to physical ability checks), Additional Fighting Style, Superior Critical (18-20), Survivor (regain HP each turn).",
+    "Battle Master": "\n- Maneuvers are chosen by the player; use the selected maneuvers.",
+    "Eldritch Knight": "\n- No additional resources beyond spellcasting; AI tracks.",
+    "Arcane Archer": "\n- Arcane Shots are chosen by the player.",
+    "Rune Knight": "\n- Giant's Might (become Large, extra damage), Rune choices (each rune gives passive and active benefits).",
+    "School of Abjuration": "\n- Arcane Ward (temp HP when casting abjuration), Projected Ward (shield ally).",
+    "School of Conjuration": "\n- Benign Transposition (teleport swap once per long rest).",
+    "School of Divination": "\n- Portent (roll two d20s, replace any roll).",
+    "School of Enchantment": "\n- Hypnotic Gaze (incapacitate one creature), Instinctive Charm (redirect attack).",
+    "School of Evocation": "\n- Sculpt Spells (allies auto-save), Potent Cantrip (save for half).",
+    "School of Illusion": "\n- Improved Illusion (make illusion real), Illusory Self (create a duplicate).",
+    "School of Necromancy": "\n- Grim Harvest (heal when you kill with necromancy spell).",
+    "School of Transmutation": "\n- Minor Alchemy (transmute materials), Transmuter's Stone (create a stone with benefits).",
+    "Bladesinging": "\n- Bladesong (bonus to AC, speed, concentration)."
+  };
+  return text[subclassName] || '';
 }
 
 // ── System prompt builder ──
@@ -4337,6 +4733,10 @@ Examples (copy exactly):
 - **Condition Add:** \`<!-- char_add_condition name="Poisoned" duration="1 minute" -->\`
 - **Condition Remove:** \`<!-- char_remove_condition name="Poisoned" -->\`
 - **Resource Spend:** \`<!-- resource spend type="Rage" amount="1" -->\`
+- **Store any property:** \`<!-- char_set_property key="Hexblade's Curse" value="1 use per short rest" -->\`
+- **Add a note:** \`<!-- char_add_note text="Hexblade's Curse: As a bonus action, curse a creature. Once per short rest." -->\`
+
+Use \`char_set_property\` for any class feature, racial trait, proficiency, language, resource description, or other text that should be stored as a named entry. Use \`char_add_note\` for longer descriptions or general notes. The player will see these in the character sheet.
 
 Always update the character sheet after any change. Save to localStorage and refresh any open sheet UI.
 
@@ -4377,12 +4777,48 @@ When generating the opening scene for an open-world campaign, invent an engaging
     if (camp.config?.location) prompt += `\n**Starting Location:** ${camp.config.location}`;
     if (camp.description) prompt += `\n**Description:** ${camp.description}`;
     if (camp.initialHook) prompt += `\n**Initial Hook:** ${camp.initialHook}`;
+    if (camp.houseRules && camp.houseRules.trim()) {
+      prompt += `\n\n## HOUSE RULES\n${camp.houseRules}`;
+    }
+    if (camp.tags && camp.tags.length) {
+      prompt += `\n\n## CAMPAIGN TAGS\n${camp.tags.join(', ')}`;
+    }
 
     // Open-world plot creation instruction
     if (camp.type === 'openworld') {
       prompt += `\n\nThis is an OPEN WORLD campaign. No main plot is provided. You are free to generate your own overarching plots, faction conflicts, personal character arcs, and side quests as the story unfolds. Introduce interesting NPCs, locations, and events that respond to the player's actions. Aim for a sandbox experience where the player's choices shape the world.`;
     }
   }
+
+  // Campaign summary (compressed long-term memory)
+  const summaryKey = `dnd_campaign_summary_${selectedCampaignId}`;
+  const storedSummary = localStorage.getItem(summaryKey);
+  if (storedSummary) {
+    try {
+      const summaryObj = JSON.parse(storedSummary);
+      if (summaryObj.text) {
+        prompt += `\n\n## CAMPAIGN SUMMARY (compressed history)\n${summaryObj.text}`;
+      }
+    } catch(e) {}
+  }
+
+  // Context management instructions
+  prompt += `
+
+## CONTEXT MANAGEMENT
+
+You are provided with two sources of campaign memory:
+
+1. **CAMPAIGN SUMMARY** (above) – Contains compressed core facts from older events that are no longer in the chat history. Treat this as the character's long‑term memory. Use it to recall past major events, NPCs, quests, and decisions.
+
+2. **RECENT CHAT HISTORY** – The last 20 messages (user + your responses). This is the immediate scene. The player cannot see older messages; you must rely on the Campaign Summary for anything older than 20 exchanges.
+
+**Rules for using the Campaign Summary:**
+- Do not repeat information from the summary verbatim. Instead, use it to maintain consistency (e.g., an NPC you met earlier should remember you).
+- If a player asks about a past event that is not in the recent history but is in the summary, answer based on the summary.
+- When you generate a response, you may refer to events in the summary as if they happened "recently" (the character remembers them).
+- The summary is automatically updated by the system every 20 messages. You do not need to request updates.
+- Keep your responses focused on the current scene. Use the summary only for continuity.`;
 
   // Character sheet
   if (currentCharacter) {
@@ -4397,6 +4833,12 @@ When generating the opening scene for an open-world campaign, invent an engaging
     if (c.spells?.length) prompt += `\n**Spells:** ${c.spells.join(', ')}`;
     if (c.equipment?.weapons?.length) prompt += `\n**Weapons:** ${c.equipment.weapons.map(w => w.name + (w.quantity > 1 ? ' x' + w.quantity : '')).join(', ')}`;
     if (c.equipment?.armor) prompt += `\n**Armor:** ${c.equipment.armor}`;
+  }
+
+  // Subclass mechanical essence
+  if (currentCharacter && currentCharacter.subclass) {
+    prompt += `\n\n## SUBCLASS: ${currentCharacter.subclass}`;
+    prompt += getSubclassMechanicalEssence(currentCharacter.class, currentCharacter.subclass);
   }
 
   // Active quests
@@ -4424,11 +4866,17 @@ When generating the opening scene for an open-world campaign, invent an engaging
     prompt += `\n\n## Additional instructions from the Dungeon Master Guide:\n${dmGuide}`;
   }
 
-  // Al'mundi worldbuilding reference
-  if (camp && (camp.name === "Al'mundi" || camp.setting === "Al'mundi" || (camp.config?.location && camp.config.location.includes("Al'mundi")))) {
+  // Worldbuilding reference (Al'mundi or Faerûn)
+  if (camp) {
     const worldbuilding = loadWorldbuilding();
-    if (worldbuilding) {
-      prompt += `\n\n## WORLD SETTING: Al'mundi\n\nBelow is the worldbuilding reference for the continent of Al'mundi. Use this to inform your descriptions, NPCs, locations, and plot hooks.\n\n${worldbuilding}`;
+    let worldName = '';
+    if (camp.name === "Al'mundi" || camp.setting === "Al'mundi" || (camp.config?.location && camp.config.location.includes("Al'mundi")) || camp.worldbuildingKey === 'almundi') {
+      worldName = "Al'mundi";
+    } else if (camp.name && camp.name.includes("Faerûn") || camp.setting === "Faerûn" || camp.worldbuildingKey === 'faerun') {
+      worldName = "Faerûn (Forgotten Realms)";
+    }
+    if (worldName && worldbuilding) {
+      prompt += `\n\n## WORLD SETTING: ${worldName}\n\nBelow is the worldbuilding reference for ${worldName}. Use this to inform your descriptions, NPCs, locations, and plot hooks.\n\n${worldbuilding}`;
     }
   }
 
@@ -4581,6 +5029,9 @@ async function sendChatMessage() {
     chatHistory.push({ role: 'assistant', content: fullText });
     saveChatHistory();
 
+    // Trigger summarization check after assistant response
+    await checkAndSummarize();
+
   } catch(err) {
     // Fallback: retry with the default model if the primary model failed
     if (model !== DEFAULT_MODEL) {
@@ -4614,6 +5065,8 @@ async function sendChatMessage() {
             chatHistory.push({ role: 'assistant', content: fallbackText });
             saveChatHistory();
             appendSystemMessage(`⚠️ Used fallback model (${DEFAULT_MODEL})`);
+            // Trigger summarization check after fallback response
+            await checkAndSummarize();
             return; // skip the error message below
           }
         }
@@ -4736,6 +5189,124 @@ function fallbackRoll(btn, formula, result) {
   const rollSummary = result.rolls.map(r => `d${r.sides}: ${r.result}`).join(', ');
   const sysMsg = `🎲 Rolled ${formula}: **${result.total}** — (${rollSummary}${modStr ? ', modifier' + modStr : ''})`;
   appendSystemMessage(sysMsg);
+}
+
+// ── Context summarization ──
+async function summarizeOldMessages(oldMessages) {
+  const saved = localStorage.getItem('dnd_ai_settings');
+  let apiKey = '', model = '';
+  if (saved) {
+    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
+  }
+  if (!apiKey || !model) return;
+
+  // Concatenate old messages into a log string
+  const logLines = oldMessages.map(m => {
+    const prefix = m.role === 'user' ? 'Player' : 'DM';
+    const content = m.content ? m.content.slice(0, 600) : '';
+    return `${prefix}: ${content}`;
+  });
+  const logText = logLines.join('\n');
+
+  const systemPrompt = `You are a campaign scribe. Extract ONLY the core factual details from the recent events below. Follow these rules strictly:
+
+- Output format: bullet points, each line starting with "- ".
+- Include ONLY: major plot developments, character decisions, combat outcomes, new NPCs met (name and disposition), quest updates (started/completed/failed), important items gained or lost.
+- EXCLUDE: dialogue, emotional descriptions, scenery, fluff, repeated information.
+- Write in present tense, third person.
+- Keep the entire output under 500 characters.
+
+Recent events:
+${logText}
+
+Core facts:`;
+
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.origin,
+        'X-Title': 'DnD DM'
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [{ role: 'user', content: systemPrompt }],
+        max_tokens: 200,
+        temperature: 0.4
+      })
+    });
+
+    if (!response.ok) return;
+    const data = await response.json();
+    const summaryUpdate = data.choices?.[0]?.message?.content;
+    if (!summaryUpdate) return;
+
+    // Store the result (replace, not append)
+    const summaryKey = `dnd_campaign_summary_${selectedCampaignId}`;
+    const stored = localStorage.getItem(summaryKey);
+    let mergedText = summaryUpdate;
+    if (stored) {
+      try {
+        const existing = JSON.parse(stored);
+        if (existing.text) {
+          mergedText = existing.text + '\n' + summaryUpdate;
+        }
+      } catch(e) {}
+    }
+    localStorage.setItem(summaryKey, JSON.stringify({
+      text: mergedText,
+      timestamp: new Date().toISOString()
+    }));
+
+    appendSystemMessage('📜 Campaign summary updated with recent events.');
+  } catch(e) {
+    console.warn('Summarization failed:', e);
+  }
+}
+
+async function checkAndSummarize() {
+  if (isSummarizing) return;
+  const nonSystemCount = chatHistory.filter(m => m.role !== 'system').length;
+  if (messagesSinceLastSummary === 0 && nonSystemCount > 0) {
+    messagesSinceLastSummary = nonSystemCount;
+  }
+  if (nonSystemCount - messagesSinceLastSummary >= SUMMARY_INTERVAL) {
+    await summarizeAndTrim();
+  }
+}
+
+async function summarizeAndTrim() {
+  if (isSummarizing) return;
+  isSummarizing = true;
+  // Disable input
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSendBtn');
+  const wasDisabled = chatInput?.disabled;
+  if (chatInput) chatInput.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
+  appendSystemMessage('⏳ The Dungeon Master pauses to record recent events... (summarizing)');
+
+  const systemMsg = chatHistory.find(m => m.role === 'system');
+  const nonSystem = chatHistory.filter(m => m.role !== 'system');
+  const toKeep = nonSystem.slice(-MAX_VISIBLE_MESSAGES);
+  const toSummarize = nonSystem.slice(0, -MAX_VISIBLE_MESSAGES);
+
+  if (toSummarize.length > 0) {
+    await summarizeOldMessages(toSummarize);
+  }
+
+  // Rebuild chatHistory
+  chatHistory = systemMsg ? [systemMsg, ...toKeep] : toKeep;
+  messagesSinceLastSummary = toKeep.length;
+  renderChatHistory();
+
+  // Re-enable input
+  if (chatInput) chatInput.disabled = wasDisabled;
+  if (sendBtn) sendBtn.disabled = false;
+  appendSystemMessage('✅ Summary complete. Continue your adventure!');
+  isSummarizing = false;
 }
 
 // ── DOM helpers ──
@@ -5096,6 +5667,232 @@ function parseCharacterTags(content) {
     } else {
       recalcDerivedStats();
       updateHPDisplay();
+    }
+    return '';
+  });
+
+  // ── Level: <!-- char_level value="5" --> ──
+  const levelRegex = /<!--\s*char_level\s+value="(\d+)"\s*-->/g;
+  result = result.replace(levelRegex, (match, level) => {
+    if (char) {
+      char.level = parseInt(level);
+      const cls = classes[char.class];
+      if (cls) {
+        const hitDieVal = cls.hitDie === "d12" ? 12 : cls.hitDie === "d10" ? 10 : cls.hitDie === "d8" ? 8 : cls.hitDie === "d6" ? 6 : 8;
+        const conMod = calculateModifier(char.abilityScores.Constitution);
+        char.maxHp = hitDieVal + conMod;
+        char.hitDiceTotal = char.level;
+        char.hitDiceRemaining = char.hitDiceTotal;
+        const slots = getSpellSlotsForClass(char.class, char.level);
+        if (!char.spellSlots) char.spellSlots = {};
+        for (let k in slots) {
+          if (!char.spellSlots[k]) char.spellSlots[k] = { used: 0, max: slots[k] };
+          else char.spellSlots[k].max = slots[k];
+        }
+        saveCharacter();
+        updateHPDisplay();
+        updateSpellSlotsUI();
+        updateHitDiceUI();
+        updateSavesAndSkills();
+      }
+    }
+    return '';
+  });
+
+  // ── Max HP: <!-- char_max_hp value="25" --> ──
+  const maxHpRegex = /<!--\s*char_max_hp\s+value="(\d+)"\s*-->/g;
+  result = result.replace(maxHpRegex, (match, value) => {
+    if (char) {
+      char.maxHp = parseInt(value);
+      if (char.hp > char.maxHp) char.hp = char.maxHp;
+      saveCharacter();
+      updateHPDisplay();
+    }
+    return '';
+  });
+
+  // ── Hit Dice: <!-- char_hit_dice total="5" type="d10" --> ──
+  const hitDiceRegex = /<!--\s*char_hit_dice\s+total="(\d+)"\s+type="([^"]+)"\s*-->/g;
+  result = result.replace(hitDiceRegex, (match, total, type) => {
+    if (char) {
+      char.hitDiceTotal = parseInt(total);
+      char.hitDiceRemaining = parseInt(total);
+      char.hitDiceType = type;
+      saveCharacter();
+      updateHitDiceUI();
+    }
+    return '';
+  });
+
+  // ── Spell Slots: <!-- char_spell_slots level="1" count="4" --> ──
+  const spellSlotsRegex = /<!--\s*char_spell_slots\s+level="(\d+)"\s+count="(\d+)"\s*-->/g;
+  result = result.replace(spellSlotsRegex, (match, level, count) => {
+    if (char && char.spellSlots) {
+      if (!char.spellSlots[level]) char.spellSlots[level] = { used: 0, max: 0 };
+      char.spellSlots[level].max = parseInt(count);
+      saveCharacter();
+      updateSpellSlotsUI();
+    }
+    return '';
+  });
+
+  // ── Add Feature: <!-- char_add_feature name="Action Surge" description="..." level="2" --> ──
+  const addFeatureRegex = /<!--\s*char_add_feature\s+name="([^"]+)"\s+description="([^"]*)"(?:\s+level="(\d+)")?\s*-->/g;
+  result = result.replace(addFeatureRegex, (match, name, description, level) => {
+    if (char) {
+      if (!char.classFeatures) char.classFeatures = [];
+      char.classFeatures.push({ name, description, level: level ? parseInt(level) : null });
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') populateFeatsTab();
+    }
+    return '';
+  });
+
+  // ── Add Maneuver: <!-- char_add_maneuver name="Trip Attack" --> ──
+  const addManeuverRegex = /<!--\s*char_add_maneuver\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addManeuverRegex, (match, name) => {
+    if (char) {
+      if (!char.maneuvers) char.maneuvers = [];
+      if (!char.maneuvers.includes(name)) char.maneuvers.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add Metamagic: <!-- char_add_metamagic name="Quickened Spell" --> ──
+  const addMetamagicRegex = /<!--\s*char_add_metamagic\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addMetamagicRegex, (match, name) => {
+    if (char) {
+      if (!char.metamagic) char.metamagic = [];
+      if (!char.metamagic.includes(name)) char.metamagic.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add Arcane Shot: <!-- char_add_arcane_shot name="Banishing Arrow" --> ──
+  const addArcaneShotRegex = /<!--\s*char_add_arcane_shot\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addArcaneShotRegex, (match, name) => {
+    if (char) {
+      if (!char.arcaneShots) char.arcaneShots = [];
+      if (!char.arcaneShots.includes(name)) char.arcaneShots.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Set Pact Boon: <!-- char_set_pact_boon name="Pact of the Blade" --> ──
+  const setPactBoonRegex = /<!--\s*char_set_pact_boon\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(setPactBoonRegex, (match, name) => {
+    if (char) {
+      char.pactBoon = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Set Draconic Ancestry: <!-- char_set_draconic_ancestry name="Gold" --> ──
+  const setDraconicRegex = /<!--\s*char_set_draconic_ancestry\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(setDraconicRegex, (match, name) => {
+    if (char) {
+      char.sorcererDragonAncestry = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Resource set/spend: <!-- resource set type="LayOnHands" amount="25" --> or resource spend
+  const resourceSetSpendRegex = /<!--\s*resource\s+(set|spend)\s+type="([^"]+)"\s+amount="(\d+)"\s*-->/g;
+  result = result.replace(resourceSetSpendRegex, (match, action, type, amount) => {
+    if (char && char.classResources && char.classResources[type]) {
+      const res = char.classResources[type];
+      if (action === 'set') res.current = parseInt(amount);
+      else if (action === 'spend') res.current = Math.max(0, res.current - parseInt(amount));
+      saveCharacter();
+      updateClassResourcesUI();
+    }
+    return '';
+  });
+
+  // ── Accept level= as alias for value= in char_level ──
+  result = result.replace(/<!--\s*char_level\s+level="(\d+)"\s*-->/g, (match, level) => {
+    return `<!-- char_level value="${level}" -->`;
+  });
+
+  // ── Generic property storage: key="value" ──
+  result = result.replace(/<!--\s*char_set_property\s+key="([^"]+)"\s+value="([^"]*)"\s*-->/g, (match, key, value) => {
+    if (char) {
+      if (!char.customProperties) char.customProperties = {};
+      char.customProperties[key] = value;
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') {
+        populateDetailsTab();
+      }
+    }
+    return '';
+  });
+
+  // ── Append a free‑text note ──
+  result = result.replace(/<!--\s*char_add_note\s+text="([^"]*)"\s*-->/g, (match, text) => {
+    if (char) {
+      if (!char.notes) char.notes = [];
+      char.notes.push(text);
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') {
+        populateDetailsTab();
+      }
+    }
+    return '';
+  });
+
+  // ── Add invocation (Eldritch Invocation) with optional description ──
+  result = result.replace(/<!--\s*char_add_invocation\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.invocations) char.invocations = [];
+      if (!char.invocations.includes(name)) char.invocations.push(name);
+      if (description && char.classFeatures) char.classFeatures.push({ name, description, level: null });
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add spell (known) ──
+  result = result.replace(/<!--\s*char_add_spell\s+name="([^"]+)"(?:\s+level="(\d+)")?\s*-->/g, (match, name, level) => {
+    if (char) {
+      if (!char.spells) char.spells = [];
+      if (!char.spells.includes(name)) char.spells.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add feat ──
+  result = result.replace(/<!--\s*char_feat\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.feats) char.feats = "";
+      const featLine = description ? `${name}: ${description}` : name;
+      if (char.feats) char.feats += "\n" + featLine;
+      else char.feats = featLine;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add racial trait ──
+  result = result.replace(/<!--\s*char_race_trait\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.racialTraits) char.racialTraits = [];
+      char.racialTraits.push({ name, description });
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Alternative pact boon tag (char_pact_boon) ──
+  result = result.replace(/<!--\s*char_pact_boon\s+name="([^"]+)"\s*-->/g, (match, name) => {
+    if (char) {
+      char.pactBoon = name;
+      saveCharacter();
     }
     return '';
   });
@@ -6052,7 +6849,23 @@ function applyShortRest() {
   } else {
     appendSystemMessage("\uD83C\uDFD4\uFE0F Short rest taken. No hit dice remaining.");
   }
+  // Restore short rest resources
+  if (currentCharacter.class === "Warlock") {
+    const slots = getSpellSlotsForClass("Warlock", currentCharacter.level);
+    if (currentCharacter.spellSlots) {
+      for (let k in slots) {
+        if (currentCharacter.spellSlots[k]) currentCharacter.spellSlots[k].used = 0;
+      }
+    }
+  }
+  if (currentCharacter.classResources) {
+    if (currentCharacter.classResources.ChannelDivinity) currentCharacter.classResources.ChannelDivinity.current = currentCharacter.classResources.ChannelDivinity.max;
+    if (currentCharacter.classResources.ActionSurge) currentCharacter.classResources.ActionSurge.current = currentCharacter.classResources.ActionSurge.max;
+    if (currentCharacter.classResources.SecondWind) currentCharacter.classResources.SecondWind.current = currentCharacter.classResources.SecondWind.max;
+  }
   saveCharacter();
+  updateSpellSlotsUI();
+  updateClassResourcesUI();
 }
 
 function applyLongRest() {
@@ -6239,6 +7052,16 @@ function getClassResources(className, subclass, level) {
   } else if (className === "Druid") {
     resources.WildShape = { max: 2, current: 2 };
   }
+  // Missing class resources
+  if (className === "Paladin") {
+    resources.LayOnHands = { max: level * 5, current: level * 5 };
+    resources.ChannelDivinity = { max: 1, current: 1 };
+  } else if (className === "Cleric") {
+    resources.ChannelDivinity = { max: 1, current: 1 };
+  } else if (className === "Fighter") {
+    resources.ActionSurge = { max: 1, current: 1 };
+    resources.SecondWind = { max: 1, current: 1 };
+  }
   return resources;
 }
 
@@ -6403,6 +7226,39 @@ function processLevelUp() {
       }
     }
   }
+  // Add selected spells from level up
+  if (tempLevelUpSpells && tempLevelUpSpells.size > 0) {
+    if (!currentCharacter.spells) currentCharacter.spells = [];
+    for (let spellName of tempLevelUpSpells) {
+      if (!currentCharacter.spells.includes(spellName)) {
+        currentCharacter.spells.push(spellName);
+      }
+    }
+    tempLevelUpSpells.clear();
+  }
+  // Add selected feat (only if feat radio is checked)
+  const asiOrFeatRadio = document.querySelector('input[name="asiOrFeat"]:checked');
+  const featSelect = document.getElementById("featSelect");
+  if (asiOrFeatRadio && asiOrFeatRadio.value === 'feat' && featSelect && featSelect.value) {
+    if (!currentCharacter.feats) currentCharacter.feats = "";
+    if (currentCharacter.feats) {
+      currentCharacter.feats += "\n" + featSelect.value;
+    } else {
+      currentCharacter.feats = featSelect.value;
+    }
+    // Apply feat ability increase if applicable
+    const featDb = featDatabase || (typeof window.featDatabase !== 'undefined' ? window.featDatabase : null);
+    if (featDb) {
+      const feat = Object.values(featDb).find(f => f.name === featSelect.value);
+      if (feat && feat.abilityIncrease) {
+        const ab = feat.abilityIncrease.ability;
+        if (currentCharacter.abilityScores[ab] < 20) {
+          currentCharacter.abilityScores[ab] += feat.abilityIncrease.amount;
+        }
+      }
+    }
+  }
+  // Apply ASI from buttons (handled directly in openLevelUpModal via click handlers, already saved)
   saveCharacter();
   updateHPDisplay();
   updateSpellSlotsUI();
@@ -6421,6 +7277,8 @@ function openLevelUpModal() {
     "<p><strong>HP Increase:</strong> +" + prop.hpIncrease + " (new max: " + prop.newMaxHp + ")</p>" +
     "<p><strong>Hit Dice:</strong> " + prop.hitDice.total + " " + prop.hitDice.type + "</p>" +
     (prop.features.length ? "<p><strong>New Features:</strong> " + prop.features.join(", ") + "</p>" : "");
+  
+  // ASI / Feat section
   const asiSection = document.getElementById("levelUpAsiSection");
   if (prop.asiAvailable) {
     asiSection.style.display = "block";
@@ -6443,14 +7301,78 @@ function openLevelUpModal() {
         }
       });
     });
+    // Feat radio toggle
+    document.querySelectorAll('input[name="asiOrFeat"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        document.getElementById('asiGrid').style.display = this.value === 'asi' ? '' : 'none';
+        document.getElementById('featSelectionDiv').style.display = this.value === 'feat' ? '' : 'none';
+      });
+    });
+    document.getElementById('asiGrid').style.display = '';
+    document.getElementById('featSelectionDiv').style.display = 'none';
+    // Populate feat dropdown
+    const featSelect = document.getElementById("featSelect");
+    if (featSelect) {
+      if (window.featDatabase) {
+        featSelect.innerHTML = '<option value="">— Select a feat —</option>';
+        for (let key in window.featDatabase) {
+          const feat = window.featDatabase[key];
+          featSelect.innerHTML += '<option value="' + feat.name + '">' + feat.name + '</option>';
+        }
+      } else if (typeof featDatabase !== 'undefined' && featDatabase) {
+        featSelect.innerHTML = '<option value="">— Select a feat —</option>';
+        for (let key in featDatabase) {
+          const feat = featDatabase[key];
+          featSelect.innerHTML += '<option value="' + feat.name + '">' + feat.name + '</option>';
+        }
+      } else {
+        featSelect.innerHTML = '<option value="">Feats not loaded</option>';
+      }
+    }
   } else {
     asiSection.style.display = "none";
   }
-  const spellsSection = document.getElementById("levelUpSpellsSection");
+  
+  // Spell selection for known-spell classes
+  const spellSelectionDiv = document.getElementById("levelUpSpellSelection");
   const cls = classes[currentCharacter.class];
-  if (cls && cls.spellcasting) {
+  const isKnownCaster = ["Bard","Sorcerer","Warlock","Ranger"].includes(currentCharacter.class) || 
+    (currentCharacter.class === "Fighter" && currentCharacter.subclass === "Eldritch Knight") ||
+    (currentCharacter.class === "Rogue" && currentCharacter.subclass === "Arcane Trickster");
+  
+  if (cls && cls.spellcasting && isKnownCaster && prop.newLevel) {
+    const oldLevel = prop.newLevel - 1;
+    // Calculate new spells known at this level
+    let newSpellsCount = 0;
+    if (currentCharacter.class === "Sorcerer") newSpellsCount = 1;
+    else if (currentCharacter.class === "Bard") newSpellsCount = 1;
+    else if (currentCharacter.class === "Warlock") newSpellsCount = 1;
+    else if (currentCharacter.class === "Ranger") newSpellsCount = 1;
+    else if (currentCharacter.class === "Fighter" || currentCharacter.class === "Rogue") newSpellsCount = 1;
+    
+    if (newSpellsCount > 0) {
+      spellSelectionDiv.style.display = "block";
+      document.getElementById("levelUpNewSpellsCount").innerText = newSpellsCount;
+      
+      if (!tempLevelUpSpells) tempLevelUpSpells = new Set();
+      const availableSpells = getSpellArray().filter(s =>
+        s.level > 0 && s.level <= Math.min(5, Math.floor((prop.newLevel+1)/2)) &&
+        s.classes && s.classes.includes(currentCharacter.class)
+      );
+      renderSpellGrid("levelUpSpellGrid", availableSpells, false, newSpellsCount, tempLevelUpSpells, function(newSet) {
+        tempLevelUpSpells = newSet;
+      });
+    } else {
+      spellSelectionDiv.style.display = "none";
+    }
+  } else {
+    spellSelectionDiv.style.display = "none";
+  }
+  
+  const spellsSection = document.getElementById("levelUpSpellsSection");
+  if (cls && cls.spellcasting && !isKnownCaster) {
     spellsSection.style.display = "block";
-    document.getElementById("levelUpSpellChoices").innerHTML = "<p class=\"death-subtitle\">Spell slots updated. Check your Spells tab to add new spells.</p>";
+    document.getElementById("levelUpSpellChoices").innerHTML = "<p class=\"death-subtitle\">Spell slots updated. Check your Spells tab to prepare new spells.</p>";
   } else {
     spellsSection.style.display = "none";
   }
@@ -6459,6 +7381,13 @@ function openLevelUpModal() {
 }
 
 function confirmLevelUp() {
+  // Save current feat/asi choice before processing
+  const featSelect = document.getElementById("featSelect");
+  const asiRadio = document.querySelector('input[name="asiOrFeat"]:checked');
+  if (asiRadio && asiRadio.value === 'feat' && featSelect && !featSelect.value) {
+    alert('Please select a feat or switch to Ability Score Improvement.');
+    return;
+  }
   const modal = document.getElementById("levelUpModal");
   if (modal) {
     modal.classList.remove("show");

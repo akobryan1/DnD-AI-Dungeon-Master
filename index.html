@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="main_page.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
 </head>
 <body>
 
@@ -275,7 +277,7 @@
     <div class="npc-search">
       <input type="text" id="npcSearchInput" placeholder="Search by name or location..." class="sheet-input">
     </div>
-    <div id="npcList" class="npc-list"></div>
+    <div id="npcGrid" class="npc-grid"></div>
     <div class="modal-divider"></div>
     <div class="npc-footer">
       <button class="btn-primary" id="addNpcBtn">+ Add NPC</button>
@@ -295,6 +297,14 @@
     <div class="modal-divider"></div>
     <div class="modal-body">
       <div class="form-field"><label>Name</label><input type="text" id="npcFormName" class="sheet-input" placeholder="e.g., Elara the Wise"></div>
+      <div class="form-field"><label>Portrait</label>
+        <div class="npc-portrait-upload">
+          <img id="npcPortraitPreview" class="npc-preview-img" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; display: none;">
+          <div id="npcPortraitPlaceholder" class="portrait-placeholder-small">🎭</div>
+          <button type="button" id="uploadNpcPortraitBtn" class="small-btn">Upload Image</button>
+          <input type="file" id="npcPortraitFileInput" accept="image/*" style="display: none;">
+        </div>
+      </div>
       <div class="form-field"><label>Role / Title</label><input type="text" id="npcFormRole" class="sheet-input" placeholder="Village elder, healer"></div>
       <div class="form-field"><label>Location</label><input type="text" id="npcFormLocation" class="sheet-input" placeholder="Oakhaven"></div>
       <div class="form-field"><label>Description</label><textarea id="npcFormDesc" rows="3" class="sheet-input" placeholder="A kind elderly elf with silver hair..."></textarea></div>
@@ -428,8 +438,72 @@
     <div class="selection-list" id="campaignList">
       <!-- dynamic cards will be injected -->
     </div>
+    <div class="selection-footer" style="margin-top: 20px; text-align: center;">
+      <button class="btn-primary" id="createCustomCampaignBtn" style="width: auto; padding: 8px 24px;">✍️ Create Custom Campaign</button>
+    </div>
     <div class="modal-footer selection-footer">
       <div class="footer-note">Story campaigns have pre‑written main plots. Open World is AI‑driven sandbox.</div>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── CUSTOM CAMPAIGN MODAL ── -->
+<div id="customCampaignModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container config-container" style="width: 600px;">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Create Custom Campaign</h2>
+        <div class="modal-subtitle">Design your own adventure</div>
+      </div>
+      <button class="modal-close" id="closeCustomCampaignBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="config-form">
+      <div class="form-field">
+        <label>Campaign Name *</label>
+        <input type="text" id="customCampaignName" placeholder="e.g., Shadows of the Old Empire" maxlength="50">
+        <div class="field-error" id="customCampaignNameError" style="display:none;">Name is required.</div>
+      </div>
+      <div class="form-field">
+        <label>Campaign Type</label>
+        <div style="display: flex; gap: 20px;">
+          <label><input type="radio" name="campaignType" value="story" checked> Story Campaign (linear)</label>
+          <label><input type="radio" name="campaignType" value="openworld"> Open World (sandbox)</label>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Starting Location (optional)</label>
+        <input type="text" id="customCampaignLocation" placeholder="e.g., Neverwinter, Forest of Allanar">
+      </div>
+      <div class="form-field">
+        <label>World Description</label>
+        <textarea id="customWorldDescription" rows="3" placeholder="Describe the setting, factions, key features..."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Theme / Tone</label>
+        <select id="customCampaignTone">
+          <option>Heroic</option><option>Grimdark</option><option>Lighthearted</option><option>Mystery</option><option>Political</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Main Plot Hook</label>
+        <textarea id="customMainPlotHook" rows="3" placeholder="What starts the adventure?"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Tags (comma separated)</label>
+        <input type="text" id="customCampaignTags" placeholder="e.g., Horror, Heist">
+      </div>
+      <div class="form-field">
+        <label>House Rules</label>
+        <textarea id="customHouseRules" rows="2" placeholder="e.g., No flying races, potions as bonus action"></textarea>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer config-footer">
+      <button class="btn-secondary" id="cancelCustomCampaignBtn">Cancel</button>
+      <button class="btn-primary" id="submitCustomCampaignBtn">Begin Adventure</button>
     </div>
     <div class="rune-corner rune-tl"></div>
     <div class="rune-corner rune-br"></div>
@@ -514,12 +588,19 @@
     <div class="sheet-layout">
       <!-- Left sidebar - will be populated by JS -->
       <div class="sheet-sidebar" id="sheetSidebar">
-        <div class="portrait-circle" id="portraitPlaceholder" title="Click to add portrait">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C8A96E">
-            <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.2"/>
-            <path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" stroke-width="1.2"/>
-          </svg>
+        <div class="portrait-wrapper">
+          <div class="portrait-container" id="charPortraitContainer">
+            <img id="charPortraitImg" class="character-portrait" src="" alt="Portrait" style="display: none;">
+            <div id="charPortraitPlaceholder" class="portrait-placeholder" style="display: flex;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C8A96E">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M5 20v-2a7 7 0 0 1 14 0v2" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+            </div>
+            <button id="uploadCharPortraitBtn" class="small-btn" style="margin-top: 8px;">📷 Upload Portrait</button>
+          </div>
         </div>
+        <input type="file" id="charPortraitFileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
         <div id="conditionIcons"></div>
         <div class="sidebar-section-title">Basic Info</div>
         <div class="sheet-input" id="sheetRace">Race</div>
@@ -619,6 +700,21 @@
           <textarea id="classFeaturesList" rows="4"></textarea>
           <div class="subsection-title">Racial Traits</div>
           <textarea id="racialTraitsList" rows="4"></textarea>
+          <!-- Pact Boon (Warlock) -->
+          <div id="sheetPactBoonArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Pact Boon</span></div>
+            <div id="sheetPactBoonDisplay" class="readonly-skill-list"></div>
+          </div>
+          <!-- Patron Expanded Spells (Warlock) -->
+          <div id="sheetPatronSpellsArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Patron Expanded Spells (Always Prepared)</span></div>
+            <div id="sheetPatronSpellsList" class="spell-readonly-list"></div>
+          </div>
+          <!-- Patron Features (Warlock) -->
+          <div id="sheetPatronFeaturesArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Patron Features</span></div>
+            <div id="sheetPatronFeaturesList" class="feature-list"></div>
+          </div>
           <div id="sheetMetamagicArea" class="feature-category" style="display:none;">
             <div class="feature-header"><span>Metamagic</span></div>
             <div id="sheetMetamagicList" class="feature-list"></div>
@@ -649,6 +745,10 @@
             <div id="detailsBackgroundFeature" class="readonly-skill-list"></div>
           </div>
           <div class="form-field"><label>Proficiencies</label><textarea id="detailsProficiencies" rows="3" class="sheet-input" placeholder="Armor, weapons, tools..."></textarea></div>
+          <div class="subsection-title">Custom Properties (AI‑managed)</div>
+          <div id="customPropertiesDisplay" class="readonly-skill-list"></div>
+          <div class="subsection-title">DM / AI Notes</div>
+          <div id="characterNotesDisplay" class="readonly-skill-list"></div>
         </div>
       </div>
     </div>
@@ -893,12 +993,25 @@
       <div class="levelup-summary" id="levelUpSummary"></div>
       <div class="levelup-asi" id="levelUpAsiSection" style="display:none;">
         <h3 class="combat-col-title">Ability Score Improvement</h3>
-        <p class="death-subtitle">You can increase one ability score by 2 or two ability scores by 1.</p>
-        <div class="asi-grid" id="asiGrid"></div>
+        <p class="death-subtitle">You can increase one ability score by 2 or two ability scores by 1, OR choose a feat.</p>
+        <div>
+          <label><input type="radio" name="asiOrFeat" value="asi" checked> Increase Ability Scores</label>
+          <label><input type="radio" name="asiOrFeat" value="feat"> Gain a Feat</label>
+        </div>
+        <div id="asiGrid"></div>
+        <div id="featSelectionDiv" style="display:none;">
+          <label>Choose a feat:</label>
+          <select id="featSelect" class="sheet-input"></select>
+        </div>
       </div>
       <div class="levelup-spells" id="levelUpSpellsSection" style="display:none;">
         <h3 class="combat-col-title">New Spells</h3>
         <div id="levelUpSpellChoices"></div>
+      </div>
+      <div id="levelUpSpellSelection" class="levelup-spells" style="display:none;">
+        <h3 class="combat-col-title">New Spells / Cantrips</h3>
+        <div id="levelUpSpellGrid" class="spell-grid-container"></div>
+        <div class="field-note">Select up to <span id="levelUpNewSpellsCount">0</span> spells.</div>
       </div>
       <div class="levelup-features" id="levelUpFeaturesSection" style="display:none;">
         <h3 class="combat-col-title">New Class Features</h3>
@@ -914,13 +1027,36 @@
   </div>
 </div>
 
+<!-- ========== CROP PORTRAIT MODAL ========== -->
+<div id="cropModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container crop-container">
+    <div class="modal-header">
+      <h2 class="modal-title">Crop Portrait</h2>
+      <button class="modal-close" id="closeCropModalBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="crop-body">
+      <div class="img-container" style="max-height: 60vh; overflow: hidden;">
+        <img id="cropImage" src="" alt="Crop preview" style="max-width: 100%; display: block;">
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="cancelCropBtn">Cancel</button>
+      <button class="btn-primary" id="applyCropBtn">Apply</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
 <!-- ========== CHARACTER CREATION WIZARD (step by step) ========== -->
 <div id="charCreationWizard" class="modal-overlay" style="display: none;">
   <div class="modal-container wizard-container">
     <div class="modal-header">
       <div>
         <h2 class="modal-title">Create Your Hero</h2>
-        <div class="step-indicator" id="stepIndicator">Step 1 of 5</div>
+        <div class="step-indicator" id="stepIndicator">Step 1 of 6</div>
       </div>
       <button class="modal-close" id="closeWizardBtn" aria-label="Close">&times;</button>
     </div>
@@ -930,7 +1066,8 @@
       <div class="step" data-step="2">2. Appearance</div>
       <div class="step" data-step="3">3. Ability Scores</div>
       <div class="step" data-step="4">4. Equipment & Spells</div>
-      <div class="step" data-step="5">5. Review</div>
+      <div class="step" data-step="5">5. Subclass Features</div>
+      <div class="step" data-step="6">6. Review</div>
     </div>
 
     <!-- Step 1: Identity -->
@@ -962,6 +1099,12 @@
         <div class="form-field">
           <label>Subclass</label>
           <select id="wizardSubclass"></select>
+        </div>
+        <!-- Pact Boon (Warlock only) -->
+        <div class="form-field" id="pactBoonField" style="display:none;">
+          <label>Pact Boon</label>
+          <select id="wizardPactBoon"></select>
+          <div class="field-help">A supernatural gift granted by your patron at 3rd level.</div>
         </div>
         <div class="form-field">
           <label>Background</label>
@@ -1336,7 +1479,23 @@
         <div class="field-note">These spells are granted by your subclass and do not count against your spells known/prepared.</div>
       </div>
 
-      <!-- ══ SUBCLASS FEATURES PANEL ══ -->
+      <!-- ══ SUBCLASS FEATURES (hint in step 4) ══ -->
+      <div id="subclassFeaturesWizardStep" class="eq-panel" style="margin-top:20px; display:none;">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M5 3h10v3L12 8v9H8V8L5 6V3z" stroke="currentColor"/>
+          </svg>
+          <h3 class="eq-section-title">Subclass Features</h3>
+        </div>
+        <div id="wizardSubclassFeaturesContainer">
+          <!-- dynamically populated -->
+        </div>
+      </div>
+
+    </div><!-- /wizard-step-4 -->
+
+    <!-- Step 5: Subclass Features (new) -->
+    <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
       <div id="subclassFeaturesSection" class="eq-panel" style="display:none;">
         <div class="eq-section-header" style="margin-top:8px;">
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
@@ -1394,10 +1553,10 @@
         </div>
       </div>
 
-    </div><!-- /wizard-step-4 -->
+    </div><!-- /wizard-step-5 -->
 
-    <!-- Step 5: Review -->
-    <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
+    <!-- Step 6: Review -->
+    <div class="wizard-step-content" id="wizard-step-6" style="display:none;">
       <div class="review-card" id="reviewCard"></div>
     </div>
 
@@ -1537,6 +1696,43 @@ Key locations: Leskyir Palace, Leskyir Bazaar, The Sandstone Inn, The Iron Oasis
 **Emberden:** Margie (tavern owner), Yavin (cook and fence), Doldren Brumvar (hidden master blacksmith).
 
 **Leskyir:** The Merchant Princess, The Desert Guide, The Blacksmith, The Nomadic Chieftain, The Oasis Guardian, The Tavern Keepers, The Head of the Caravan House, The Tribal Elder, The Sphinx (madame of Oasis of Delights).`;
+
+const FAERUN_WORLDBUILDING = `## 1. The Forgotten Realms – Faerûn Overview
+
+Faerûn is a vast continent of diverse landscapes, from the frozen Spine of the World to the steaming jungles of Chult. Magic ebbs and flows. Empires rise and fall. Adventurers are born in every village.
+
+### Key Regions
+
+**The Sword Coast** – A bustling stretch of cities: Waterdeep, Baldur's Gate, Neverwinter. Centre of trade, intrigue, and adventure.
+
+**The North** – Savage wilderness, orc hordes, ancient dwarven holds. Silverymoon, Mirabar, the High Forest.
+
+**The Dalelands** – Rural farmlands, ancient forests, and forgotten ruins. The Elven Court, Shadowdale, Hillsfar.
+
+**The Western Heartlands** – Rolling hills, trade routes, and the ruins of old Netheril. Elturel, Scornubel, Berdusk.
+
+**The Underdark** – A vast network of caverns beneath the surface. Home to drow, duergar, mind flayers, and worse.
+
+### Major Factions
+
+- **The Harpers** – Secret network of spies and rangers fighting for balance.
+- **The Lord's Alliance** – Coalition of cities for mutual defence.
+- **The Emerald Enclave** – Druids and rangers protecting nature.
+- **The Order of the Gauntlet** – Holy warriors against evil.
+- **The Zhentarim** – Shadowy mercenary company seeking power.
+
+### Deities Commonly Worshipped
+
+Tyr (justice), Torm (duty), Ilmater (compassion), Mystra (magic), Oghma (knowledge), Lathander (dawn), Selûne (moon), Kelemvor (death), Mask (thieves), Tempus (war), Umberlee (sea), Talos (storms), Bane (tyranny), Myrkul (death), Shar (darkness).
+
+### Adventure Hooks (examples)
+
+- A caravan master in Baldur's Gate seeks guards for a dangerous journey north.
+- A strange meteor lands near the High Forest; druids ask for investigation.
+- A Harper agent has gone missing in Waterdeep; last seen near the Dock Ward.
+- Orc raiders are gathering in the Spine of the World – but who leads them?
+
+The AI Dungeon Master will generate dynamic scenes, quests, and encounters based on Faerûn's lore. The player's choices shape the story. No main plot is pre-written.`;
 
 // Store worldbuilding on page load
 if (typeof saveWorldbuilding === 'function' && !localStorage.getItem('dnd_worldbuilding')) {
