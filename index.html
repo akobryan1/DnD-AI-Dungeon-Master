@@ -530,11 +530,11 @@
       <div class="form-field">
         <label>Starting Location</label>
         <select id="owStartLocation">
-          <option value="Forest of Allanar">Forest of Allanar</option>
-          <option value="Khigvorda Mountains">Khigvorda Mountains</option>
-          <option value="The Fading Swamp">The Fading Swamp</option>
-          <option value="Starview Plains">Starview Plains</option>
-          <option value="The Merchant's Pass">The Merchant's Pass</option>
+          <option value="Baldur's Gate">Baldur's Gate</option>
+          <option value="Waterdeep">Waterdeep</option>
+          <option value="Neverwinter">Neverwinter</option>
+          <option value="Silverymoon">Silverymoon</option>
+          <option value="Menzoberranzan">Menzoberranzan</option>
           <option value="Random" selected>Random</option>
           <option value="random town">random town</option>
           <option value="random village">random village</option>
@@ -1021,6 +1021,27 @@
     <div class="modal-divider"></div>
     <div class="modal-footer">
       <button class="btn-primary" id="confirmLevelUpBtn">Confirm Level Up</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== FEATURE CHOICE MODAL ========== -->
+<div id="featureChoiceModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container" style="max-width: 700px;">
+    <div class="modal-header">
+      <h2 class="modal-title" id="featureChoiceTitle">Choose Features</h2>
+      <button class="modal-close" id="closeFeatureChoiceBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <p id="featureChoiceDescription" style="color:#C8A96E;margin-bottom:16px;"></p>
+      <div id="featureChoiceGrid" class="feature-choice-grid"></div>
+      <div class="modal-footer" style="padding:16px 0 0 0;">
+        <button id="cancelFeatureChoiceBtn" class="btn-secondary" style="margin-right:8px;">Cancel</button>
+        <button id="confirmFeatureChoiceBtn" class="btn-primary">Confirm</button>
+      </div>
     </div>
     <div class="rune-corner rune-tl"></div>
     <div class="rune-corner rune-br"></div>
