@@ -82,7 +82,8 @@ const classes = {
   "Rogue": { hitDie: "d8", primaryAbility: "Dexterity", savingThrows: ["Dexterity","Intelligence"], armorProficiencies: ["Light armor"], weaponProficiencies: ["Simple","hand crossbows","longswords","rapiers","shortswords"], skillChoices: 4, skillOptions: ["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"], spellcasting: false, subclassLevel: 3, subclasses: ["Thief","Assassin","Arcane Trickster","Swashbuckler","Soulknife"] },
   "Sorcerer": { hitDie: "d6", primaryAbility: "Charisma", savingThrows: ["Constitution","Charisma"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","Deception","Insight","Intimidation","Persuasion","Religion"], spellcasting: true, spellcastingAbility: "Charisma", spellList: "Sorcerer", subclassLevel: 1, subclasses: ["Draconic Bloodline","Wild Magic","Divine Soul","Shadow Magic","Storm Sorcery"] },
   "Warlock": { hitDie: "d8", primaryAbility: "Charisma", savingThrows: ["Wisdom","Charisma"], armorProficiencies: ["Light armor"], weaponProficiencies: ["Simple"], skillChoices: 2, skillOptions: ["Arcana","Deception","History","Intimidation","Investigation","Nature","Religion"], spellcasting: true, spellcastingAbility: "Charisma", spellList: "Warlock", subclassLevel: 1, subclasses: ["The Archfey","The Fiend","The Great Old One","The Hexblade","The Fathomless"] },
-  "Wizard": { hitDie: "d6", primaryAbility: "Intelligence", savingThrows: ["Intelligence","Wisdom"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","History","Insight","Investigation","Medicine","Religion"], spellcasting: true, spellcastingAbility: "Intelligence", spellList: "Wizard", subclassLevel: 2, subclasses: ["School of Abjuration","School of Conjuration","School of Divination","School of Enchantment","School of Evocation","School of Illusion","School of Necromancy","School of Transmutation","Bladesinging"] }
+  "Wizard": { hitDie: "d6", primaryAbility: "Intelligence", savingThrows: ["Intelligence","Wisdom"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","History","Insight","Investigation","Medicine","Religion"], spellcasting: true, spellcastingAbility: "Intelligence", spellList: "Wizard", subclassLevel: 2, subclasses: ["School of Abjuration","School of Conjuration","School of Divination","School of Enchantment","School of Evocation","School of Illusion","School of Necromancy","School of Transmutation","Bladesinging"] },
+  "Blood Hunter": { hitDie: "d10", primaryAbility: "Dexterity or Intelligence", savingThrows: ["Dexterity","Intelligence"], armorProficiencies: ["Light armor","Medium armor","Shields"], weaponProficiencies: ["Simple","Martial"], skillChoices: 3, skillOptions: ["Acrobatics","Arcana","Athletics","History","Insight","Investigation","Religion","Survival"], spellcasting: false, subclassLevel: 3, subclasses: ["Order of the Ghostslayer","Order of the Lycan","Order of the Mutant","Order of the Profane Soul"] }
 };
 
 // Backgrounds
@@ -102,94 +103,517 @@ const backgrounds = {
   "Urchin": { skillProficiencies: ["Sleight of Hand","Stealth"], toolProficiencies: ["Disguise kit","Thieves' tools"], languages: [], equipment: ["small knife","map of city","pet mouse","token of parents","common clothes","10 gp"], feature: { name: "City Secrets", description: "You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would miss. When you are not in combat, you (and companions you lead) can travel between any two locations in the city twice as fast as your speed would normally allow." } }
 };
 
-// Spells (subset)
 const spellsDatabase = {
   "Cantrips": [
-    { name: "Acid Splash", level: 0, school: "Conjuration", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V","S"], duration: "Instantaneous", description: "You hurl a bubble of acid. Choose one creature within range, or choose two creatures within range that are within 5 feet of each other. A target must succeed on a Dexterity saving throw or take 1d6 acid damage." },
-    { name: "Blade Ward", level: 0, school: "Abjuration", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "Self", components: ["V","S"], duration: "1 round", description: "You extend your hand and trace a sigil of warding in the air. Until the end of your next turn, you have resistance against bludgeoning, piercing, and slashing damage dealt by weapon attacks." },
-    { name: "Dancing Lights", level: 0, school: "Evocation", classes: ["Bard","Sorcerer","Wizard"], castingTime: "1 action", range: "120 ft", components: ["V","S","M (a bit of phosphorus or wychwood or a glowworm)"], duration: "Concentration, up to 1 minute", description: "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. As a bonus action, you can move the lights up to 60 feet." },
-    { name: "Eldritch Blast", level: 0, school: "Evocation", classes: ["Warlock"], castingTime: "1 action", range: "120 ft", components: ["V","S"], duration: "Instantaneous", description: "A beam of crackling energy streaks toward a creature within range. Make a ranged spell attack. On a hit, the target takes 1d10 force damage. The spell creates more than one beam when you reach higher levels: two beams at 5th level, three at 11th, four at 17th." },
-    { name: "Fire Bolt", level: 0, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "120 ft", components: ["V","S"], duration: "Instantaneous", description: "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried." },
-    { name: "Guidance", level: 0, school: "Divination", classes: ["Cleric","Druid"], castingTime: "1 action", range: "Touch", components: ["V","S"], duration: "Concentration, up to 1 minute", description: "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check." },
-    { name: "Light", level: 0, school: "Evocation", classes: ["Bard","Cleric","Sorcerer","Wizard"], castingTime: "1 action", range: "Touch", components: ["V","M (a firefly or phosphorescent moss)"], duration: "1 hour", description: "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like." },
-    { name: "Mage Hand", level: 0, school: "Conjuration", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "30 ft", components: ["V","S"], duration: "1 minute", description: "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. You can use your action to control the hand. The hand can manipulate an object, open an unlocked door or container, stow or retrieve an item, but it can't attack, activate magic items, or carry more than 10 pounds." },
-    { name: "Mending", level: 0, school: "Transmutation", classes: ["Bard","Cleric","Druid","Sorcerer","Wizard"], castingTime: "1 minute", range: "Touch", components: ["V","S","M (two lodestones)"], duration: "Instantaneous", description: "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage." },
-    { name: "Message", level: 0, school: "Transmutation", classes: ["Bard","Sorcerer","Wizard"], castingTime: "1 action", range: "120 ft", components: ["V","S","M (a short piece of copper wire)"], duration: "1 round", description: "You point your finger toward a creature within range and whisper a message. The target (and only the target) hears the message and can reply in a whisper that only you can hear. You can cast this spell through solid objects if you are familiar with the target and know it is beyond the barrier." },
-    { name: "Minor Illusion", level: 0, school: "Illusion", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "30 ft", components: ["S","M (a bit of fleece)"], duration: "1 minute", description: "You create a sound or an image of an object within range that lasts for the duration. If you create a sound, its volume can range from a whisper to a scream. If you create an image, it must be no larger than a 5-foot cube. Physical interaction with the image reveals it to be an illusion." },
-    { name: "Poison Spray", level: 0, school: "Conjuration", classes: ["Druid","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "10 ft", components: ["V","S"], duration: "Instantaneous", description: "You extend your hand toward a creature you can see within range and project a puff of noxious gas from your palm. The creature must succeed on a Constitution saving throw or take 1d12 poison damage." },
-    { name: "Prestidigitation", level: 0, school: "Transmutation", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "10 ft", components: ["V","S"], duration: "Up to 1 hour", description: "This spell is a minor magical trick. You can create one of the following effects: an instantaneous harmless sensory effect, light or snuff out a candle, clean or soil an object, chill/warm/flavor up to 1 cubic foot of nonliving material, make a color or mark appear, or create a nonmagical trinket that lasts until the end of your next turn." },
-    { name: "Ray of Frost", level: 0, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V","S"], duration: "Instantaneous", description: "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn." },
-    { name: "Sacred Flame", level: 0, school: "Evocation", classes: ["Cleric"], castingTime: "1 action", range: "60 ft", components: ["V","S"], duration: "Instantaneous", description: "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 radiant damage. The target gains no benefit from cover for this saving throw." },
-    { name: "Shillelagh", level: 0, school: "Transmutation", classes: ["Druid"], castingTime: "1 bonus action", range: "Touch", components: ["V","S","M (mistletoe, a shamrock leaf, and a club or quarterstaff)"], duration: "1 minute", description: "The wood of a club or quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls, and the weapon's damage die becomes a d8." },
-    { name: "Shocking Grasp", level: 0, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "Touch", components: ["V","S"], duration: "Instantaneous", description: "Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack. You have advantage on the attack roll if the target is wearing armor made of metal. On a hit, the target takes 1d8 lightning damage, and it can't take reactions until the start of its next turn." },
-    { name: "Spare the Dying", level: 0, school: "Necromancy", classes: ["Cleric"], castingTime: "1 action", range: "Touch", components: ["V","S"], duration: "Instantaneous", description: "You touch a living creature that has 0 hit points. The creature becomes stable. This spell has no effect on undead or constructs." },
-    { name: "Thaumaturgy", level: 0, school: "Transmutation", classes: ["Cleric"], castingTime: "1 action", range: "30 ft", components: ["V"], duration: "Up to 1 minute", description: "You manifest a minor wonder, a sign of supernatural power. You can create one of the following effects: your voice booms up to three times as loud, flames flicker/brighten/dim/change color, cause harmless tremors, create an instantaneous sound, cause an unlocked door to fly open or slam shut, or alter the appearance of your eyes." },
-    { name: "True Strike", level: 0, school: "Divination", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "30 ft", components: ["S"], duration: "Concentration, up to 1 round", description: "You extend your hand and point a finger at a target in range. Your magic grants you a brief insight into the target's defenses. On your next turn, you gain advantage on your first attack roll against the target, provided that this spell hasn't ended." },
-    { name: "Vicious Mockery", level: 0, school: "Enchantment", classes: ["Bard"], castingTime: "1 action", range: "60 ft", components: ["V"], duration: "Instantaneous", description: "You unleash a string of insults laced with subtle enchantments at a creature you can see within range. If the target can hear you (though it need not understand you), it must succeed on a Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn." },
-    { name: "Green-Flame Blade", level: 0, school: "Evocation", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "Self (5-foot radius)", components: ["S","M (a melee weapon worth at least 1 sp)"], duration: "Instantaneous", description: "You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within 5 feet of you. On a hit, the target suffers the weapon attack's normal effects, and you can cause green fire to leap from the target to a different creature of your choice that you can see within 5 feet of it. The second creature takes fire damage equal to your spellcasting ability modifier. This spell's damage increases when you reach certain levels. At 5th level, the melee attack deals an extra 1d8 fire damage to the target on a hit, and the fire damage to the second creature increases to 1d8 + your spellcasting ability modifier. Both damage rolls increase by 1d8 at 11th level (2d8 and 2d8) and 17th level (3d8 and 3d8)." },
-    { name: "Lightning Lure", level: 0, school: "Evocation", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "Self (15-foot radius)", components: ["V"], duration: "Instantaneous", description: "You create a lash of lightning energy that strikes at one creature of your choice that you can see within 15 feet of you. The target must succeed on a Strength saving throw or be pulled up to 10 feet in a straight line toward you and then take 1d8 lightning damage if it is within 5 feet of you. This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8)." },
-    { name: "Mind Sliver", level: 0, school: "Enchantment", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V"], duration: "1 round", description: "You drive a disorienting spike of psychic energy into the mind of one creature you can see within range. The target must succeed on an Intelligence saving throw or take 1d6 psychic damage and subtract 1d4 from the next saving throw it makes before the end of your next turn. This spell's damage increases by 1d6 when you reach certain levels: 5th level (2d6), 11th level (3d6), and 17th level (4d6)." }
+    { name: "Acid Splash", level: 0, school: "Conjuration", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You hurl a bubble of acid. Choose one creature within range, or choose two creatures within range that are within 5 feet of each other. A target must succeed on a Dexterity saving throw or take 1d6 acid damage." },
+    { name: "Blade Ward", level: 0, school: "Abjuration", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "1 round", description: "You extend your hand and trace a sigil of warding in the air. Until the end of your next turn, you have resistance against bludgeoning, piercing, and slashing damage dealt by weapon attacks." },
+    { name: "Booming Blade", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self (5-foot radius)", components: ["S", "M (a melee weapon worth at least 1 sp)"], duration: "1 round", description: "You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within 5 feet of you. On a hit, the target suffers the weapon attack's normal effects and then becomes sheathed in booming energy until the start of your next turn. If the target willingly moves 5 feet or more before then, the target takes 1d8 thunder damage, and the spell ends." },
+    { name: "Chill Touch", level: 0, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "1 round", description: "You create a ghostly, skeletal hand in the space of a creature within range. Make a ranged spell attack against the creature to assail it with the chill of the grave. On a hit, the target takes 1d8 necrotic damage, and it can't regain hit points until the start of your next turn. Until then, the hand clings to the target. If you hit an undead target, it also has disadvantage on attack rolls against you until the end of your next turn." },
+    { name: "Control Flames", level: 0, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S"], duration: "Instantaneous or 1 hour", description: "You choose nonmagical flame that you can see within range and that fits within a 5-foot cube. You affect it in one of the following ways:" },
+    { name: "Create Bonfire", level: 0, school: "Conjuration", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You create a bonfire on ground that you can see within range. Until the spell ends, the bonfire fills a 5-foot cube. Any creature in the bonfire's space when you cast the spell must succeed on a Dexterity saving throw or take 1d8 fire damage. A creature must also make the saving throw when it enters the bonfire's space for the first time on a turn or ends its turn there." },
+    { name: "Dancing Lights", level: 0, school: "Evocation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a bit of phosphorus or wychwood, or a glowworm)"], duration: "Concentration, up to 1 minute", description: "You create up to four torch-sized lights within range, making them appear as torches, lanterns, or glowing orbs that hover in the air for the duration. You can also combine the four lights into one glowing vaguely humanoid form of Medium size. Whichever form you choose, each light sheds dim light in a 10-foot radius." },
+    { name: "Druidcraft", level: 0, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Whispering to the spirits of nature, you create one of the following effects within range:" },
+    { name: "Eldritch Blast", level: 0, school: "Evocation", classes: ["Warlock"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A beam of crackling energy streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 force damage." },
+    { name: "Fire Bolt", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried." },
+    { name: "Friends", level: 0, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["S", "M (a small amount of makeup applied to the face as this spell is cast)"], duration: "Concentration, up to 1 minute", description: "For the duration, you have advantage on all Charisma checks directed at one creature of your choice that isn't hostile toward you. When the spell ends, the creature realizes that you used magic to influence its mood and becomes hostile toward you. A creature prone to violence might attack you. Another creature might seek retribution in other ways (at the DM's discretion), depending on the nature of your interaction with it." },
+    { name: "Frostbite", level: 0, school: "Evocation", classes: ["Artificer", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You cause numbing frost to form on one creature that you can see within range. The target must make a Constitution saving throw. On a failed save, the target takes 1d6 cold damage, and it has disadvantage on the next weapon attack roll it makes before the end of its next turn." },
+    { name: "Green-Flame Blade", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self (5-foot radius)", components: ["S", "M (a melee weapon worth at least 1 sp)"], duration: "Instantaneous", description: "You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within 5 feet of you. On a hit, the target suffers the weapon attack's normal effects, and you can cause green fire to leap from the target to a different creature of your choice that you can see within 5 feet of it. The second creature takes fire damage equal to your spellcasting ability modifier." },
+    { name: "Guidance", level: 0, school: "Divination", classes: ["Artificer", "Cleric", "Druid"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one ability check of its choice. It can roll the die before or after making the ability check. The spell then ends." },
+    { name: "Gust", level: 0, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You seize the air and compel it to create one of the following effects at a point you can see within range:" },
+    { name: "Infestation", level: 0, school: "Conjuration", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a living flea)"], duration: "Instantaneous", description: "You cause a cloud of mites, fleas, and other parasites to appear momentarily on one creature you can see within range. The target must succeed on a Constitution saving throw, or it takes 1d6 poison damage and moves 5 feet in a random direction if it can move and its speed is at least 5 feet. Roll a d4 for the direction: 1, north; 2, south; 3, east; or 4, west. This movement doesn't provoke opportunity attacks, and if the direction rolled is blocked, the target doesn't move." },
+    { name: "Light", level: 0, school: "Evocation", classes: ["Artificer", "Bard", "Cleric", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "M (a firefly or phosphorescent moss)"], duration: "1 hour", description: "You touch one object that is no larger than 10 feet in any dimension. Until the spell ends, the object sheds bright light in a 20-foot radius and dim light for an additional 20 feet. The light can be colored as you like. Completely covering the object with something opaque blocks the light. The spell ends if you cast it again or dismiss it as an action." },
+    { name: "Lightning Lure", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self (15-foot radius)", components: ["V"], duration: "Instantaneous", description: "You create a lash of lightning energy that strikes at one creature of your choice that you can see within 15 feet of you. The target must succeed on a Strength saving throw or be pulled up to 10 feet in a straight line toward you and then take 1d8 lightning damage if it is within 5 feet of you." },
+    { name: "Mage Hand", level: 0, school: "Conjuration", classes: ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "1 minute", description: "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration or until you dismiss it as an action. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again." },
+    { name: "Magic Stone", level: 0, school: "Transmutation", classes: ["Druid", "Warlock", "Artificer"], castingTime: "1 Bonus Action", range: "Touch", components: ["V", "S"], duration: "1 minute", description: "You touch one to three pebbles and imbue them with magic. You or someone else can make a ranged spell attack with one of the pebbles by throwing it or hurling it with a sling. If thrown, it has a range of 60 feet. If someone else attacks with the pebble, that attacker adds your spellcasting ability modifier, not the attacker's, to the attack roll. On a hit, the target takes bludgeoning damage equal to 1d6 + your spellcasting ability modifier. Hit or miss, the spell then ends on the stone." },
+    { name: "Mending", level: 0, school: "Transmutation", classes: ["Artificer", "Bard", "Cleric", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (two lodestones)"], duration: "Instantaneous", description: "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage." },
+    { name: "Message", level: 0, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a short piece of copper wire)"], duration: "1 round", description: "You point your finger toward a creature within range and whisper a message. The target (and only the target) hears the message and can reply in a whisper that only you can hear." },
+    { name: "Mind Sliver", level: 0, school: "Enchantment", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "1 round", description: "You drive a disorienting spike of psychic energy into the mind of one creature you can see within range. The target must succeed on an Intelligence saving throw or take 1d6 psychic damage and subtract 1d4 from the next saving throw it makes before the end of your next turn." },
+    { name: "Minor Illusion", level: 0, school: "Illusion", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S", "M (A bit of fleece)"], duration: "1 minute", description: "You create a sound or an image of an object within range that lasts for the duration. The illusion also ends if you dismiss it as an action or cast this spell again." },
+    { name: "Mold Earth", level: 0, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S"], duration: "Instantaneous or 1 hour", description: "You choose a portion of dirt or stone that you can see within range and that fits within a 5-foot cube. You manipulate it in one of the following ways:" },
+    { name: "Poison Spray", level: 0, school: "Conjuration", classes: ["Artificer", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "10 feet", components: ["V", "S"], duration: "Instantaneous", description: "You extend your hand toward a creature you can see within range and project a puff of noxious gas from your palm. The creature must succeed on a Constitution saving throw or take 1d12 poison damage." },
+    { name: "Prestidigitation", level: 0, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "10 feet", components: ["V", "S"], duration: "Up to 1 hour", description: "This spell is a minor magical trick that novice spellcasters use for practice. You create one of the following magical effects within range:" },
+    { name: "Primal Savagery", level: 0, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "Self", components: ["S"], duration: "Instantaneous", description: "You channel primal magic to cause your teeth or fingernails to sharpen, ready to deliver a corrosive attack. Make a melee spell attack against one creature within 5 feet of you. On a hit, the target takes 1d10 acid damage. After you make the attack, your teeth or fingernails return to normal." },
+    { name: "Produce Flame", level: 0, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "10 minutes", description: "A flickering flame appears in your hand. The flame remains there for the duration and harms neither you nor your equipment. The flame sheds bright light in a 10-foot radius and dim light for an additional 10 feet. The spell ends if you dismiss it as an action or if you cast it again." },
+    { name: "Ray of Frost", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A frigid beam of blue-white light streaks toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 1d8 cold damage, and its speed is reduced by 10 feet until the start of your next turn." },
+    { name: "Resistance", level: 0, school: "Abjuration", classes: ["Artificer", "Cleric", "Druid"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a miniatrue cloak)"], duration: "Concentration, up to 1 minute", description: "You touch one willing creature. Once before the spell ends, the target can roll a d4 and add the number rolled to one saving throw of its choice. It can roll the die before or after the saving throw. The spell then ends." },
+    { name: "Sacred Flame", level: 0, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 radiant damage. The target gains no benefit from cover for this saving throw." },
+    { name: "Shape Water", level: 0, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S"], duration: "Instantaneous or 1 hour", description: "You choose an area of water that you can see within range and that fits within a 5-foot cube. You manipulate it in one of the following ways:" },
+    { name: "Shillelagh", level: 0, school: "Transmutation", classes: ["Druid"], castingTime: "1 Bonus Action", range: "Touch", components: ["V", "S", "M (mistletoe, a shamrock leaf, and a club or quarterstaff)"], duration: "1 minute", description: "The wood of a club or quarterstaff you are holding is imbued with nature's power. For the duration, you can use your spellcasting ability instead of Strength for the attack and damage rolls of melee attacks using that weapon, and the weapon's damage die becomes a d8. The weapon also becomes magical, if it isn't already. The spell ends if you cast it again or if you let go of the weapon." },
+    { name: "Shocking Grasp", level: 0, school: "Evocation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "Lightning springs from your hand to deliver a shock to a creature you try to touch. Make a melee spell attack against the target. You have advantage on the attack roll if the target is wearing armor made of metal. On a hit, the target takes 1d8 lightning damage, and it can't take reactions until the start of its next turn." },
+    { name: "Spare the Dying", level: 0, school: "Necromancy", classes: ["Artificer", "Cleric"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "You touch a living creature that has 0 hit points. The creature becomes stable. This spell has no effect on undead or constructs." },
+    { name: "Sword Burst", level: 0, school: "Conjuration", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self (5-foot radius)", components: ["V"], duration: "Instantaneous", description: "You create a momentary circle of spectral blades that sweep around you. All other creatures within 5 feet of you must succeed on a Dexterity saving throw or take 1d6 force damage." },
+    { name: "Thaumaturgy", level: 0, school: "Transmutation", classes: ["Cleric"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "Up to 1 minute", description: "You manifest a minor wonder, a sign of supernatural power, within range. You create one of the following magical effects within range:" },
+    { name: "Thorn Whip", level: 0, school: "Transmutation", classes: ["Artificer", "Druid"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (the stem of a plant with thorns)"], duration: "Instantaneous", description: "You create a long, vine-like whip covered in thorns that lashes out at your command toward a creature in range. Make a melee spell attack against the target. If the attack hits, the creature takes 1d6 piercing damage, and if the creature is Large or smaller, you pull the creature up to 10 feet closer to you." },
+    { name: "Thunderclap", level: 0, school: "Evocation", classes: ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard", "Artificer"], castingTime: "1 Action", range: "Self (5-foot radius)", components: ["S"], duration: "Instantaneous", description: "You create a burst of thunderous sound, which can be heard 100 feet away. Each creature other than you within 5 feet of you must make a Constitution saving throw. On a failed save, the creature takes 1d6 thunder damage." },
+    { name: "Toll the Dead", level: 0, school: "Necromancy", classes: ["Cleric", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You point at one creature you can see within range, and the sound of a dolorous bell fills the air around it for a moment. The target must succeed on a Wisdom saving throw or take 1d8 necrotic damage. If the target is missing any of its hit points, it instead takes 1d12 necrotic damage." },
+    { name: "True Strike", level: 0, school: "Divination", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S"], duration: "Concentration up to 1 round", description: "You extend your hand and point a finger at a target in range. Your magic grants you a brief insight into the target's defenses. On your next turn, you gain advantage on your first attack roll against the target, provided that this spell hasn't ended." },
+    { name: "Vicious Mockery", level: 0, school: "Enchantment", classes: ["Bard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "You unleash a string of insults laced with subtle enchantments at a creature you can see within range. If the target can hear you (though it need not understand you), it must succeed on a Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn." },
+    { name: "Word of Radiance", level: 0, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "5 feet", components: ["V", "M (a holy symbol)"], duration: "Instantaneous", description: "You utter a divine word, and burning radiance erupts from you. Each creature of your choice that you can see within range must succeed on a Constitution saving throw or take 1d6 radiant damage." }
   ],
   "1st": [
-    { name: "Bless", level: 1, school: "Enchantment", classes: ["Cleric","Paladin"], castingTime: "1 action", range: "30 ft", components: ["V","S","M (a sprinkling of holy water)"], duration: "Concentration, up to 1 minute", description: "You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw." },
-    { name: "Burning Hands", level: 1, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "Self (15-foot cone)", components: ["V","S"], duration: "Instantaneous", description: "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much on a successful one." },
-    { name: "Charm Person", level: 1, school: "Enchantment", classes: ["Bard","Druid","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "30 ft", components: ["V","S"], duration: "1 hour", description: "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails, it is charmed by you until the spell ends or until you or your companions do anything harmful to it." },
-    { name: "Cure Wounds", level: 1, school: "Evocation", classes: ["Bard","Cleric","Druid","Paladin","Ranger"], castingTime: "1 action", range: "Touch", components: ["V","S"], duration: "Instantaneous", description: "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
-    { name: "Detect Magic", level: 1, school: "Divination", classes: ["Bard","Cleric","Druid","Paladin","Ranger","Sorcerer","Wizard"], castingTime: "1 action", range: "Self", components: ["V","S"], duration: "Concentration, up to 10 minutes", description: "For the duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any." },
-    { name: "Faerie Fire", level: 1, school: "Evocation", classes: ["Bard","Druid"], castingTime: "1 action", range: "60 ft", components: ["V"], duration: "Concentration, up to 1 minute", description: "Each object in a 20-foot cube within range is outlined in colored light. Any creature in the area when the spell is cast is also outlined in light if it fails a Dexterity saving throw. Attack rolls against an affected creature or object have advantage if the attacker can see it, and the affected creature can't benefit from being invisible." },
-    { name: "Guiding Bolt", level: 1, school: "Evocation", classes: ["Cleric"], castingTime: "1 action", range: "120 ft", components: ["V","S"], duration: "1 round", description: "A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack. On a hit, the target takes 4d6 radiant damage, and the next attack roll made against this target before the end of your next turn has advantage." },
-    { name: "Healing Word", level: 1, school: "Evocation", classes: ["Bard","Cleric","Druid"], castingTime: "1 bonus action", range: "60 ft", components: ["V"], duration: "Instantaneous", description: "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
-    { name: "Magic Missile", level: 1, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "120 ft", components: ["V","S"], duration: "Instantaneous", description: "You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4+1 force damage. The darts all strike simultaneously, and you can direct them to hit one creature or several." },
-    { name: "Shield", level: 1, school: "Abjuration", classes: ["Sorcerer","Wizard"], castingTime: "1 reaction, which you take when you are hit by an attack or targeted by the magic missile spell", range: "Self", components: ["V","S"], duration: "1 round", description: "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from magic missile." },
-    { name: "Sleep", level: 1, school: "Enchantment", classes: ["Bard","Sorcerer","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (a pinch of fine sand, rose petals, or a cricket)"], duration: "1 minute", description: "This spell sends creatures into a magical slumber. Roll 5d8; the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points. Undead and creatures immune to being charmed aren't affected." },
-    { name: "Thunderwave", level: 1, school: "Evocation", classes: ["Bard","Druid","Sorcerer","Wizard"], castingTime: "1 action", range: "Self (15-foot cube)", components: ["V","S"], duration: "Instantaneous", description: "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, it takes half as much damage and isn't pushed." }
+    { name: "Absorb Elements", level: 1, school: "Abjuration", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Reaction", range: "Self", components: ["S"], duration: "1 round", description: "The spell captures some of the incoming energy, lessening its effect on you and storing it for your next melee attack. You have resistance to the triggering damage type until the start of your next turn. Also, the first time you hit with a melee attack on your next turn, the target takes an extra 1d6 damage of the triggering type, and the spell ends." },
+    { name: "Alarm", level: 1, school: "Abjuration", classes: ["Artificer", "Ranger", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a tiny bell and a piece of fine silver wire)"], duration: "8 hours", description: "You set an alarm against unwanted intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot cube. Until the spell ends, an alarm alerts you whenever a tiny or larger creature touches or enters the warded area. When you cast the spell, you can designate creatures that won't set off the alarm. You also choose whether the alarm is mental or audible." },
+    { name: "Animal Friendship", level: 1, school: "Enchantment", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a cup of water)"], duration: "24 hours", description: "This spell lets you convince a beast that you mean it no harm. Choose a beast that you can see within range. It must see and hear you. If the beast's Intelligence is 4 or higher, the spell fails. Otherwise, the beast must succeed on a Wisdom saving throw or be charmed by you for the spell's duration. If you or one of your companions harms the target, the spell ends." },
+    { name: "Armor of Agathys", level: 1, school: "Abjuration", classes: ["Warlock"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a morsel of food)"], duration: "1 hour", description: "A protective magical force surrounds you, manifesting as a spectral frost that covers you and your gear. You gain 5 temporary hit points for the duration. If a creature hits you with a melee attack while you have these hit points, the creature takes 5 cold damage." },
+    { name: "Arms of Hadar", level: 1, school: "Conjuration", classes: ["Warlock"], castingTime: "1 Action", range: "Self (10-foot radius)", components: ["V", "S"], duration: "Instantaneous", description: "You invoke the power of Hadar, the Dark Hunger. Tendrils of dark energy erupt from you and batter all creatures within 10 feet of you. Each creature in that area must make a Strength saving throw. On a failed save, a target takes 2d6 necrotic damage and can't take reactions until its next turn. On a successful save, the creature takes half damage, but suffers no other effect." },
+    { name: "Bane", level: 1, school: "Enchantment", classes: ["Bard", "Cleric"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a drop of blood)"], duration: "Concentration, up to 1 minute", description: "Up to three creatures of your choice that you can see within range must make Charisma saving throws. Whenever a target that fails this saving throw makes an attack roll or a saving throw before the spell ends, the target must roll a d4 and subtract the number rolled from the attack roll or saving throw." },
+    { name: "Beast Bond", level: 1, school: "Divination", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a bit of fur wrapped in cloth)"], duration: "Concentration, up to 1 minute", description: "You establish a telepathic link with one beast you touch that is friendly to you or charmed by you. The spell fails if the beast's Intelligence is 4 or higher. Until the spell ends, the link is active while you and the beast are within line of sight of each other. Through the link, the beast can understand your telepathic messages to it, and it can telepathically communicate simple emotions and concepts back to you. While the link is active, the beast gains advantage on attack rolls against any creature within 5 feet of you that you can see." },
+    { name: "Bless", level: 1, school: "Enchantment", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a sprinkling of holy water)"], duration: "Concentration, up to 1 minute", description: "You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw." },
+    { name: "Burning Hands", level: 1, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (15-foot cone)", components: ["V", "S"], duration: "Instantaneous", description: "As you hold your hands with thumbs touching and fingers spread, a thin sheet of flames shoots forth from your outstretched fingertips. Each creature in a 15-foot cone must make a Dexterity saving throw. A creature takes 3d6 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Catapult", level: 1, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S"], duration: "Instantaneous", description: "Choose one object weighing 1 to 5 pounds within range that isn't being worn or carried. The object flies in a straight line up to 90 feet in a direction you choose before falling to the ground, stopping early if it impacts against a solid surface. If the object would strike a creature, that creature must make a Dexterity saving throw. On a failed save, the object strikes the target and stops moving. When the object strikes something, the object and what it strikes each take 3d8 bludgeoning damage." },
+    { name: "Cause Fear", level: 1, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You awaken the sense of mortality in one creature you can see within range. A construct or an undead is immune to this effect. The target must succeed on a Wisdom saving throw or become frightened of you until the spell ends. The frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success." },
+    { name: "Ceremony", level: 1, school: "Evocation", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (25 gp worth of powdered silver, which the spell consumes)"], duration: "Instantaneous", description: "You perform one of several religious ceremonies. When you cast the spell, choose one of the following ceremonies, the target of which must be within 10 feet of you throughout the casting." },
+    { name: "Chaos Bolt", level: 1, school: "Evocation", classes: ["Sorcerer"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You hurl an undulating, warbling mass of chaotic energy at one creature in range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 + 1d6 damage. Choose one of the d8s. The number rolled on that die determines the attack's damage type, as shown below." },
+    { name: "Charm Person", level: 1, school: "Enchantment", classes: ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "1 hour", description: "You attempt to charm a humanoid you can see within range. It must make a Wisdom saving throw, and does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature regards you as a friendly acquaintance. When the spell ends, the creature knows it was charmed by you." },
+    { name: "Chromatic Orb", level: 1, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a diamond worth at least 50 gp)"], duration: "Instantaneous", description: "You hurl a 4-inch-diameter sphere of energy at a creature that you can see within range. You choose acid, cold, fire, lightning, poison, or thunder for the type of orb you create, and then make a ranged spell attack against the target. If the attack hits, the creature takes 3d8 damage of the type you chose." },
+    { name: "Color Spray", level: 1, school: "Illusion", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (15-foot cone)", components: ["V", "S", "M (A pinch of powder or sand that is colored red, yellow, and blue)"], duration: "1 round", description: "A dazzling array of flashing, colored light springs from your hand. Roll 6d10, the total is how many hit points of creatures this spell can effect. Creatures in a 15-foot cone originating from you are affected in ascending order of their current hit points (ignoring unconscious creatures and creatures that can't see)." },
+    { name: "Command", level: 1, school: "Enchantment", classes: ["Bard", "Cleric", "Paladin"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "1 round", description: "You speak a one-word command to a creature you can see within range. The target must succeed on a Wisdom saving throw or follow the command on its next turn. The spell has no effect if the target is undead, if it doesn't understand your language, or if your command is directly harmful to it. Some typical commands and their effects follow. You might issue a command other than one described here. If you do so, the DM determines how the target behaves. If the target can't follow your command, the spell ends." },
+    { name: "Compelled Duel", level: 1, school: "Enchantment", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "30 Feet", components: ["V"], duration: "Concentration, up to 1 minute", description: "You attempt to compel a creature into a duel. One creature that you can see within range must make a Wisdom saving throw. On a failed save, the creature is drawn to you, compelled by your divine demand. For the duration, it has disadvantage on attack rolls against creatures other than you, and must make a Wisdom saving throw each time it attempts to move to a space that is more than 30 feet away from you; if it succeeds on this saving throw, this spell doesn't restrict the target's movement for that turn." },
+    { name: "Comprehend Languages", level: 1, school: "Divination", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a pinch of soot and salt)"], duration: "1 hour", description: "For the duration, you understand the literal meaning of any spoken language that you hear. You also understand any written language that you see, but you must be touching the surface on which the words are written. It takes about 1 minute to read one page of text." },
+    { name: "Create or Destroy Water", level: 1, school: "Transmutation", classes: ["Cleric", "Druid"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a drop of water if creating water or a few grains of sand if destroying it)"], duration: "Instantaneous", description: "You either create or destroy water." },
+    { name: "Cure Wounds", level: 1, school: "Evocation", classes: ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "A creature you touch regains a number of hit points equal to 1d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
+    { name: "Detect Evil and Good", level: 1, school: "Divination", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "For the duration, you know if there is an aberration, celestial, elemental, fey, fiend, or undead within 30 feet of you, as well as where the creature is located. Similarly, you know if there is a place or object within 30 feet of you that has been magically consecrated or desecrated." },
+    { name: "Detect Magic", level: 1, school: "Divination", classes: ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "For the duration, you sense the presence of magic within 30 feet of you. If you sense magic in this way, you can use your action to see a faint aura around any visible creature or object in the area that bears magic, and you learn its school of magic, if any." },
+    { name: "Detect Poison and Disease", level: 1, school: "Divination", classes: ["Cleric", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a yew leaf)"], duration: "Concentration, up to 10 minutes", description: "For the duration, you can sense the presence and location of poisons, poisonous creatures, and diseases within 30 feet of you. You also identify the kind of poison, poisonous creature, or disease in each case." },
+    { name: "Disguise Self", level: 1, school: "Illusion", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "1 hour", description: "You make yourself - including your clothing, armor, weapons, and other belongings on your person - look different until the spell ends or until you use your action to dismiss it. You can seem 1 foot shorter or taller and can appear thin, fat, or in between. You can't change your body type, so you must adopt a form that has the same basic arrangement of limbs. Otherwise, the extent of the illusion is up to you." },
+    { name: "Dissonant Whispers", level: 1, school: "Enchantment", classes: ["Bard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "You whisper a discordant melody that only one creature of your choice within range can hear, wracking it with terrible pain. The target must make a Wisdom saving throw. On a failed save, it takes 3d6 psychic damage and must immediately use its reaction, if available, to move as far as its speed allows away from you. The creature doesn't move into obviously dangerous ground, such as a fire or a pit. On a successful save, the target takes half as much damage and doesn't have to move away. A deafened creature automatically succeeds on the save." },
+    { name: "Divine Favor", level: 1, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Your prayer empowers you with divine radiance. Until the spell ends, your weapon attacks deal an extra 1d4 radiant damage on a hit." },
+    { name: "Earth Tremor", level: 1, school: "Evocation", classes: ["Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (10-foot radius)", components: ["V", "S"], duration: "Instantaneous", description: "You cause a tremor in the ground in a 10-foot radius. Each creature other than you in that area must make a Dexterity saving throw. On a failed save, a creature takes 1d6 bludgeoning damage and is knocked prone. If the ground in that area is loose earth or stone, it becomes difficult terrain until cleared." },
+    { name: "Ensnaring Strike", level: 1, school: "Conjuration", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a weapon attack before this spell ends, a writhing mass of thorny vines appears at the point of impact, and the target must succeed on a Strength saving throw or be restrained by the magical vines until the spell ends. A Large or larger creature has advantage on this saving throw. If the target succeeds on the save, the vines shrivel away." },
+    { name: "Entangle", level: 1, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Grasping weeds and vines sprout from the ground in a 20-foot square starting from a point within range. For the duration, these plants turn the ground in the area into difficult terrain." },
+    { name: "Expeditious Retreat", level: 1, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "This spell allows you to move at an incredible pace. When you cast this spell, and then as a bonus action on each of your turns until the spell ends, you can take the Dash action." },
+    { name: "Faerie Fire", level: 1, school: "Evocation", classes: ["Artificer", "Bard", "Druid"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Concentration, up to 1 minute", description: "Each object in a 20-foot cube within range is outlined in blue, green, or violet light (your choice)." },
+    { name: "False Life", level: 1, school: "Necromancy", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a small amount of alcohol or distilled spirits)"], duration: "1 hour", description: "Bolstering yourself with a necromantic facsimile of life, you gain 1d4 + 4 temporary hit points for the duration." },
+    { name: "Feather Fall", level: 1, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Reaction", range: "60 Feet", components: ["V", "M (a small feather or piece of down)"], duration: "1 minute", description: "Choose up to five falling creatures within range. A falling creature's rate of descent slows to 60 feet per round until the spell ends. If the creature lands before the spell ends, it takes no falling damage and can land on its feet, and the spell ends for that creature." },
+    { name: "Find Familiar", level: 1, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Hour", range: "10 feet", components: ["V", "S", "M (10 gp worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier)"], duration: "Instantaneous", description: "You gain the service of a familiar, a spirit that takes an animal form you choose: bat, cat, crab, frog (toad), hawk, lizard, octopus, owl, poisonous snake, fish (quipper), rat, raven, sea horse, spider, or weasel. Appearing in an unoccupied space within range, the familiar has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of a beast." },
+    { name: "Fog Cloud", level: 1, school: "Conjuration", classes: ["Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You create a 20-foot-radius sphere of fog centered on a point within range. The sphere spreads around corners, and its area is heavily obscured. It lasts for the duration or until a wind of moderate or greater speed (at least 10 miles per hour) disperses it." },
+    { name: "Goodberry", level: 1, school: "Transmutation", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a sprig of mistletoe)"], duration: "Instantaneous", description: "Up to ten berries appear in your hand and are infused with magic for the duration. A creature can use its action to eat one berry. Eating a berry restores 1 hit point, and the berry provides enough nourishment to sustain a creature for one day." },
+    { name: "Grease", level: 1, school: "Conjuration", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a bit of pork rind or butter)"], duration: "1 minute", description: "Slick grease covers the ground in a 10-foot square centered on a point within range and turns it into difficult terrain for the duration." },
+    { name: "Guiding Bolt", level: 1, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "1 round", description: "A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack against the target. On a hit, the target takes 4d6 radiant damage, and the next attack roll made against this target before the end of your next turn has advantage, thanks to the mystical dim light glittering on the target until then." },
+    { name: "Hail of Thorns", level: 1, school: "Conjuration", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a ranged weapon attack before the spell ends, this spell creates a rain of thorns that sprouts from your ranged weapon or ammunition. In addition to the normal effect of the attack, the target of the attack and each creature within 5 feet of it must make a Dexterity saving throw. A creature takes 1d10 piercing damage on a failed save, or half as much damage on a successful one." },
+    { name: "Healing Word", level: 1, school: "Evocation", classes: ["Bard", "Cleric", "Druid"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "A creature of your choice that you can see within range regains hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
+    { name: "Hellish Rebuke", level: 1, school: "Evocation", classes: ["Warlock"], castingTime: "1 Reaction", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You point your finger, and the creature that damaged you is momentarily surrounded by hellish flames. The creature must make a Dexterity saving throw. It takes 2d10 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Heroism", level: 1, school: "Enchantment", classes: ["Bard", "Paladin"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A willing creature you touch is imbued with bravery. Until the spell ends, the creature is immune to being frightened and gains temporary hit points equal to your spellcasting ability modifier at the start of each of its turns. When the spell ends, the target loses any remaining temporary hit points from this spell." },
+    { name: "Hex", level: 1, school: "Enchantment", classes: ["Warlock"], castingTime: "1 Bonus Action", range: "90 feet", components: ["V", "S", "M (the petrified eye of a newt)"], duration: "Concentration, up to 1 hour", description: "You place a curse on a creature that you can see within range. Until the spell ends, you deal an extra 1d6 necrotic damage to the target whenever you hit it with an attack. Also, choose one ability when you cast the spell. The target has disadvantage on ability checks made with the chosen ability." },
+    { name: "Hunter's Mark", level: 1, school: "Divination", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "90 feet", components: ["V"], duration: "Concentration, up to 1 hour", description: "You choose a creature you can see within range and mystically mark it as your quarry. Until the spell ends, you deal an extra 1d6 damage to the target whenever you hit it with a weapon attack, and you have advantage on any Wisdom (Perception) or Wisdom (Survival) check you make to find it." },
+    { name: "Ice Knife", level: 1, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S", "M (a drop of water or piece of ice)"], duration: "Instantaneous", description: "You create a shard of ice and fling it at one creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 piercing damage. Hit or miss, the shard then explodes. The target and each creature within 5 feet of the point where the ice exploded must succeed on a Dexterity saving throw or take 2d6 cold damage." },
+    { name: "Identify", level: 1, school: "Divination", classes: ["Artificer", "Bard", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (a pearl worth at least 100 gp and an owl feather)"], duration: "Instantaneous", description: "You choose one object that you must touch throughout the casting of the spell. If it is a magic item or some other magic-imbued object, you learn its properties and how to use them, whether it requires attunement to use, and how many charges it has, if any. You learn whether any spells are affecting the item and what they are. If the item was created by a spell, you learn which spell created it." },
+    { name: "Illusory Script", level: 1, school: "Illusion", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["S", "M (a lead-based ink worth at least 10 gp, which the spell consumes)"], duration: "10 days", description: "You write on parchment, paper, or some other suitable writing material and imbue it with a potent illusion that lasts for the duration." },
+    { name: "Inflict Wounds", level: 1, school: "Necromancy", classes: ["Cleric"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "Make a melee spell attack against a creature you can reach. On a hit, the target takes 3d10 necrotic damage." },
+    { name: "Jump", level: 1, school: "Transmutation", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a grasshopper's hind leg)"], duration: "1 minute", description: "You touch a creature. The creature's jump distance is tripled until the spell ends." },
+    { name: "Longstrider", level: 1, school: "Transmutation", classes: ["Artificer", "Bard", "Druid", "Ranger", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a pinch of dirt)"], duration: "1 hour", description: "You touch a creature. The target's speed increases by 10 feet until the spell ends." },
+    { name: "Mage Armor", level: 1, school: "Abjuration", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a piece of cured leather)"], duration: "8 hours", description: "You touch a willing creature who isn't wearing armor, and a protective magical force surrounds it until the spell ends. The target's base AC becomes 13 + its Dexterity modifier. The spell ends if the target dons armor or if you dismiss the spell as an action." },
+    { name: "Magic Missile", level: 1, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You create three glowing darts of magical force. Each dart hits a creature of your choice that you can see within range. A dart deals 1d4 + 1 force damage to its target. The darts all strike simultaneously and you can direct them to hit one creature or several." },
+    { name: "Protection from Evil and Good", level: 1, school: "Abjuration", classes: ["Cleric", "Druid", "Paladin", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (holy water or powdered silver and iron, which the spell consumes)"], duration: "Concentration, up to 10 minutes", description: "Until the spell ends, one willing creature you touch is protected against certain types of creatures: aberrations, celestials, elementals, fey, fiends, and undead." },
+    { name: "Purify Food and Drink", level: 1, school: "Transmutation", classes: ["Artificer", "Cleric", "Druid", "Paladin"], castingTime: "1 Action", range: "10 feet", components: ["V", "S"], duration: "Instantaneous", description: "All nonmagical food and drink within a 5-foot-radius sphere centered on a point of your choice within range is purified and rendered free of poison and disease." },
+    { name: "Ray of Sickness", level: 1, school: "Necromancy", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A ray of sickening greenish energy lashes out toward a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 2d8 poison damage and must make a Constitution saving throw. On a failed save, it is also poisoned until the end of your next turn." },
+    { name: "Sanctuary", level: 1, school: "Abjuration", classes: ["Artificer", "Cleric"], castingTime: "1 Bonus Action", range: "30 Feet", components: ["V", "S", "M (a small silver mirror)"], duration: "1 minute", description: "You ward a creature within range against attack. Until the spell ends, any creature who targets the warded creature with an attack or a harmful spell must first make a Wisdom saving throw. On a failed save, the creature must choose a new target or lose the attack or spell. This spell doesn't protect the warded creature from area effects, such as the explosion of a fireball." },
+    { name: "Searing Smite", level: 1, school: "Evocation", classes: ["Paladin", "Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a melee weapon attack during the spell's duration, your weapon flares with white-hot intensity, and the attack deals an extra 1d6 fire damage to the target and causes the target to ignite in flames." },
+    { name: "Shield", level: 1, school: "Abjuration", classes: ["Sorcerer", "Wizard"], castingTime: "1 Reaction", range: "Self", components: ["V", "S"], duration: "1 round", description: "An invisible barrier of magical force appears and protects you. Until the start of your next turn, you have a +5 bonus to AC, including against the triggering attack, and you take no damage from Magic Missile." },
+    { name: "Shield of Faith", level: 1, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V", "S", "M (a small parchment with a bit of holy text written on it)"], duration: "Concentration, up to 1 minute", description: "A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration." },
+    { name: "Silent Image", level: 1, school: "Illusion", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a bit of fleece)"], duration: "Concentration, up to 10 minutes", description: "You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 15-foot cube. The image appears at a spot within range and lasts for the duration. The image is purely visual; it isn't accompanied by sound, smell, or other sensory effects." },
+    { name: "Sleep", level: 1, school: "Enchantment", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a pinch of fine sand, rose petals, or a cricket)"], duration: "1 minute", description: "This spell sends creatures into a magical slumber. Roll 5d8, the total is how many hit points of creatures this spell can affect. Creatures within 20 feet of a point you choose within range are affected in ascending order of their current hit points (ignoring unconscious creatures)." },
+    { name: "Snare", level: 1, school: "Abjuration", classes: ["Artificer", "Druid", "Ranger", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (30 feet of cord or rope, which is consumed by the spell)"], duration: "Until dispelled or triggered", description: "While you cast this spell, you use the cord or rope to create a circle with a 5-foot radius on a flat surface within your reach. When you finish casting, the cord or rope disappears to become a magical trap." },
+    { name: "Speak with Animals", level: 1, school: "Divination", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "10 minutes", description: "You gain the ability to comprehend and verbally communicate with beasts for the duration. The knowledge and awareness of many beasts is limited by their intelligence, but at minimum, beasts can give you information about nearby locations and monsters, including whatever they can perceive or have perceived within the past day. You might be able to persuade a beast to perform a small favor for you, at the DM's discretion." },
+    { name: "Tasha's Caustic Brew", level: 1, school: "Evocation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (30-foot line)", components: ["V", "S", "M (a bit of rotten food)"], duration: "Concentration, up to 1 minute", description: "A stream of acid emanates from you in a line 30 feet long and 5 feet wide in a direction you choose. Each creature in the line must succeed on a Dexterity saving throw or be covered in acid for the spell's duration or until a creature uses its action to scrape or wash the acid off itself or another creature. A creature covered in the acid takes 2d4 acid damage at start of each of its turns." },
+    { name: "Tasha's Hideous Laughter", level: 1, school: "Enchantment", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (tiny tarts and a feather that is waved in the air)"], duration: "Concentration, up to 1 minute", description: "A creature of your choice that you can see within range perceives everything as hilariously funny and falls into fits of laughter if this spell affects it. The target must succeed on a Wisdom saving throw or fall prone, becoming incapacitated and unable to stand up for the duration. A creature with an Intelligence score of 4 or less isn't affected." },
+    { name: "Tenser's Floating Disk", level: 1, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a drop of mercury)"], duration: "1 hour", description: "This spell creates a circular, horizontal plane of force, 3 feet in diameter and 1 inch thick, that floats 3 feet above the ground in an unoccupied space of your choice that you can see within range. The disk remains for the duration, and can hold up to 500 pounds. If more weight is placed on it, the spell ends, and everything on the disk falls to the ground." },
+    { name: "Thunderous Smite", level: 1, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The first time you hit with a melee weapon attack during this spell's duration, your weapon rings with thunder that is audible within 300 feet of you, and the attack deals an extra 2d6 thunder damage to the target. Additionally, if the target is a creature, it must succeed on a Strength saving throw or be pushed 10 feet away from you and knocked prone." },
+    { name: "Thunderwave", level: 1, school: "Evocation", classes: ["Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (15-foot cube)", components: ["V", "S"], duration: "Instantaneous", description: "A wave of thunderous force sweeps out from you. Each creature in a 15-foot cube originating from you must make a Constitution saving throw. On a failed save, a creature takes 2d8 thunder damage and is pushed 10 feet away from you. On a successful save, the creature takes half as much damage and isn't pushed." },
+    { name: "Unseen Servant", level: 1, school: "Conjuration", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a piece of string and a bit of wood)"], duration: "1 hour", description: "This spell creates an invisible, mindless, shapeless, Medium force that performs simple tasks at your command until the spell ends. The servant springs into existence in an unoccupied space on the ground within range. It has AC 10, 1 hit point, and a Strength of 2, and it can't attack. If it drops to 0 hit points, the spell ends." },
+    { name: "Witch Bolt", level: 1, school: "Evocation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a twig from a tree that has been struck by lightning)"], duration: "Concentration, up to 1 minute", description: "A beam of crackling, blue energy lances out toward a creature within range, forming a sustained arc of lightning between you and the target. Make a ranged spell attack against that creature. On a hit, the target takes 1d12 lightning damage, and on each of your turns for the duration, you can use your action to deal 1d12 lightning damage to the target automatically. The spell ends if you use your action to do anything else. The spell also ends if the target is ever outside the spell's range or if it has total cover from you." },
+    { name: "Wrathful Smite", level: 1, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit with a melee weapon attack during this spell's duration, your attack deals an extra 1d6 psychic damage. Additionally, if the target is a creature, it must make a Wisdom saving throw or be frightened of you until the spell ends. As an action, the creature can make a Wisdom check against your spell save DC to steel its resolve and end this spell." },
+    { name: "Zephyr Strike", level: 1, school: "Transmutation", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "You move like the wind. For the duration, your movement doesn't provoke opportunity attacks." }
   ],
   "2nd": [
-    { name: "Hold Person", level: 2, school: "Enchantment", classes: ["Bard","Cleric","Druid","Paladin","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V","S","M (a small, straight piece of iron)"], duration: "Concentration, up to 1 minute", description: "Choose a humanoid that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends." },
-    { name: "Invisibility", level: 2, school: "Illusion", classes: ["Bard","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "Touch", components: ["V","S","M (an eyelash encased in gum arabic)"], duration: "Concentration, up to 1 hour", description: "A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person. The spell ends for a target that attacks or casts a spell." },
-    { name: "Misty Step", level: 2, school: "Conjuration", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 bonus action", range: "Self", components: ["V"], duration: "Instantaneous", description: "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see." },
-    { name: "Scorching Ray", level: 2, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "120 ft", components: ["V","S"], duration: "Instantaneous", description: "You create three rays of fire and hurl them at targets within range. You can hurl them at one target or several. Make a ranged spell attack for each ray. On a hit, the target takes 2d6 fire damage." },
-    { name: "Summon Beast", level: 2, school: "Conjuration", classes: ["Druid","Ranger"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (a feather, tuft of fur, and fish tail inside a gilded acorn worth at least 200 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a bestial spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Bestial Spirit stat block. When you cast the spell, choose an environment: Air, Land, or Water. The creature resembles an animal of your choice that is native to the chosen environment. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." }
+    { name: "Aganazzar's Scorcher", level: 2, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a red dragon's scale)"], duration: "Instantaneous", description: "A line of roaring flame 30 feet long and 5 feet wide emanates from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes 3d8 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Aid", level: 2, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Paladin", "Ranger"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a tiny strip of white cloth)"], duration: "8 hours", description: "Your spell bolsters your allies with toughness and resolve. Choose up to three creatures within range. Each target's hit point maximum and current hit points increase by 5 for the duration." },
+    { name: "Alter Self", level: 2, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You assume a different form. When you cast the spell, choose one of the following options, the effects of which last for the duration of the spell. While the spell lasts, you can end one option as an action to gain the benefits of a different one." },
+    { name: "Animal Messenger", level: 2, school: "Enchantment", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a morsel of food)"], duration: "24 hours", description: "By means of this spell, you use an animal to deliver a message. Choose a Tiny beast you can see within range, such as a squirrel, a blue jay, or a bat. You specify a location, which you must have visited, and a recipient who matches a general description, such as \"a man or woman dressed in the uniform of the town guard\" or \"a red-haired dwarf wearing a pointed hat.\" You also speak a message of up to twenty-five words. The target beast travels for the duration of the spell toward the specified location, covering about 50 miles per 24 hours for a flying messenger, or 25 miles for other animals." },
+    { name: "Arcane Lock", level: 2, school: "Abjuration", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (gold dust worth at least 25 gp, which the spell consumes)"], duration: "Until dispelled", description: "You touch a closed door, window, gate, chest, or other entryway, and it becomes locked for the duration." },
+    { name: "Augury", level: 2, school: "Divination", classes: ["Cleric", "Druid", "Wizard"], castingTime: "1 Minute", range: "Self", components: ["V", "S", "M (specially marked sticks, bones, or similar tokens worth at least 25 gp)"], duration: "Instantaneous", description: "By casting gem-inlaid sticks, rolling dragon bones, laying out ornate cards, or employing some other divining tool, you receive an omen from an otherworldly entity about the results of a specific course of action that you plan to take within the next 30 minutes. The DM chooses from the following possible omens:" },
+    { name: "Barkskin", level: 2, school: "Transmutation", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a handful of oak bark)"], duration: "Concentration, up to 1 hour", description: "You touch a willing creature. Until the spell ends, the target's skin has a rough, bark-like appearance, and the target's AC can't be less than 16, regardless of what kind of armor it is wearing." },
+    { name: "Beast Sense", level: 2, school: "Divination", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["S"], duration: "Concentration, up to 1 hour", description: "You touch a willing beast. For the duration of the spell, you can use your action to see through the beast's eyes and hear what it hears, and continue to do so until you use your action to return to your normal senses." },
+    { name: "Blindness/Deafness", level: 2, school: "Necromancy", classes: ["Bard", "Cleric", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "1 minute", description: "You can blind or deafen a foe. Choose one creature that you can see within range to make a Constitution saving throw. If it fails, the target is either blinded or deafened (your choice) for the duration. At the end of each of its turns, the target can make a Constitution saving throw. On a success, the spell ends." },
+    { name: "Blur", level: 2, school: "Illusion", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "Your body becomes blurred, shifting and wavering to all who can see you. For the duration, any creature has disadvantage on attack rolls against you. An attacker is immune to this effect if it doesn't rely on sight, as with blindsight, or can see through illusions, as with truesight." },
+    { name: "Branding Smite", level: 2, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a weapon attack before this spell ends, the weapon gleams with astral radiance as you strike. The attack deals an extra 2d6 radiant damage to the target, which becomes visible if it is invisible, and the target sheds dim light in a 5-foot radius and can't become invisible until the spell ends." },
+    { name: "Calm Emotions", level: 2, school: "Enchantment", classes: ["Bard", "Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You attempt to suppress strong emotions in a group of people. Each humanoid in a 20-foot-radius sphere centered on a point you choose within range must make a Charisma saving throw; a creature can choose to fail this saving throw if it wishes. If a creature fails its saving throw, choose one of the following two effects. You can suppress any effect causing a target to be charmed or frightened. When this spell ends, any suppressed effect resumes, provided that its duration has not expired in the meantime." },
+    { name: "Cloud of Daggers", level: 2, school: "Conjuration", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a sliver of glass)"], duration: "Concentration, up to 1 minute", description: "You fill the air with spinning daggers in a cube 5 feet on each side, centered on a point you choose within range. A creature takes 4d4 slashing damage when it enters the spell's area for the first time on a turn or starts its turn there." },
+    { name: "Continual Flame", level: 2, school: "Evocation", classes: ["Artificer", "Cleric", "Druid", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (ruby dust worth 50 gp, which the spell consumes)"], duration: "Until dispelled", description: "A flame, equivalent in brightness to a torch, springs forth from an object that you touch. The effect looks like a regular flame, but it creates no heat and doesn't use oxygen. A continual flame can be covered or hidden but not smothered or quenched." },
+    { name: "Cordon of Arrows", level: 2, school: "Transmutation", classes: ["Ranger"], castingTime: "1 Action", range: "5 feet", components: ["V", "S", "M (four or more arrows or bolts)"], duration: "8 hours", description: "You plant four pieces of nonmagical ammunition - arrows or crossbow bolts - in the ground within range and lay magic upon them to protect an area. Until the spell ends, whenever a creature other than you comes within 30 feet of the ammunition for the first time on a turn or ends its turn there, one piece of ammunition flies up to strike it. The creature must succeed on a Dexterity saving throw or take 1d6 piercing damage. The piece of ammunition is then destroyed. The spell ends when no ammunition remains." },
+    { name: "Crown of Madness", level: 2, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "One humanoid of your choice that you can see within range must succeed on a Wisdom saving throw or become charmed by you for the duration. While the target is charmed in this way, a twisted crown of jagged iron appears on its head, and a madness glows in its eyes." },
+    { name: "Darkness", level: 2, school: "Evocation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "M (bat fur and a drop of pitch or piece of coal)"], duration: "Concentration, up to 10 minutes", description: "Magical darkness spreads from a point you choose within range to fill a 15-foot radius sphere for the duration. The darkness spreads around corners. A creature with darkvision can't see through this darkness, and nonmagical light can't illuminate it." },
+    { name: "Darkvision", level: 2, school: "Transmutation", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (either a pinch of dried carrot or an agate)"], duration: "8 hours", description: "You touch a willing creature to grant it the ability to see in the dark. For the duration, that creature has darkvision out to a range of 60 feet." },
+    { name: "Detect Thoughts", level: 2, school: "Divination", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a copper piece)"], duration: "Concentration, up to 1 minute", description: "For the duration, you can read the thoughts of certain creatures. When you cast the spell and as your action on each turn until the spell ends, you can focus your mind on any one creature that you can see within 30 feet of you. If the creature you choose has an Intelligence of 3 or lower or doesn't speak any language, the creature is unaffected." },
+    { name: "Dragon's Breath", level: 2, school: "Transmutation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a hot pepper)"], duration: "Concentration, up to 1 minute", description: "You touch one willing creature and imbue it with the power to spew magical energy from its mouth, provided it has one. Choose acid, cold, fire, lightning, or poison. Until the spell ends, the creature can use an action to exhale energy of the chosen type in a 15-foot cone. Each creature in that area must make a Dexterity saving throw, taking 3d6 damage of the chosen type on a failed save, or half as much damage on a successful one." },
+    { name: "Dust Devil", level: 2, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a pinch of dust)"], duration: "Concentration, up to 1 minute", description: "Choose an unoccupied 5-foot cube of air that you can see within range. An elemental force that resembles a dust devil appears in the cube and lasts for the spell's duration." },
+    { name: "Earthbind", level: 2, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V"], duration: "Concentration, up to 1 minute", description: "Choose one creature you can see within range. Yellow strips of magical energy loop around the creature. The target must succeed on a Strength saving throw or its flying speed (if any) is reduced to 0 feet for the spell's duration. An airborne creature affected by this spell descends at 60 feet per round until it reaches the ground or the spell ends." },
+    { name: "Enhance Ability", level: 2, school: "Transmutation", classes: ["Artificer", "Bard", "Cleric", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (fur or a feather from a beast)"], duration: "Concentration, up to 1 hour", description: "You touch a creature and bestow upon it a magical enhancement. Choose one of the following effects; the target gains the effect until the spell ends." },
+    { name: "Enlarge/Reduce", level: 2, school: "Transmutation", classes: ["Artificer", "Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M ((a pinch of powdered iron)"], duration: "Concentration, up to 1 minute", description: "You cause a creature or an object you can see within range to grow larger or smaller for the duration. Choose either a creature or an object that is neither worn nor carried. If the target is unwilling, it can make a Constitution saving throw. On a success, the spell has no effect." },
+    { name: "Enthrall", level: 2, school: "Enchantment", classes: ["Bard", "Warlock"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "1 minute", description: "You weave a distracting string of words, causing creatures of your choice that you can see within range and that can hear you to make a Wisdom saving throw. Any creature that can't be charmed succeeds on this saving throw automatically, and if you or your companions are fighting a creature, it has advantage on the save. On a failed save, the target has disadvantage on Wisdom (Perception) checks made to perceive any creature other than you until the spell ends or until the target can no longer hear you. The spell ends if you are incapacitated or can no longer speak." },
+    { name: "Find Steed", level: 2, school: "Conjuration", classes: ["Paladin"], castingTime: "10 Minutes", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You summon a spirit that assumes the form of an unusually intelligent, strong, and loyal steed, creating a long-lasting bond with it. Appearing in an unoccupied space within range, the steed takes on a form that you choose: a warhorse, a pony, a camel, an elk, or a mastiff. (Your DM might allow other animals to be summoned as steeds.) The steed has the statistics of the chosen form, though it is a celestial, fey, or fiend (your choice) instead of its normal type. Additionally, if your steed has an Intelligence of 5 or less, its Intelligence becomes 6, and it gains the ability to understand one language of your choice that you speak." },
+    { name: "Find Traps", level: 2, school: "Divination", classes: ["Cleric", "Druid", "Ranger"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You sense the presence of any trap within range that is within line of sight." },
+    { name: "Flame Blade", level: 2, school: "Evocation", classes: ["Druid", "Sorcerer"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S", "M (a leaf of sumac)"], duration: "Concentration, up to 10 minutes", description: "You evoke a fiery blade in your free hand. The blade is similar in size and shape to a scimitar, and it lasts for the duration. If you let go of the blade, it disappears, but you can evoke the blade again as a bonus action." },
+    { name: "Flaming Sphere", level: 2, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a bit of tallow, a pinch of brimstone, and a dusting of powdered iron)"], duration: "Concentration, up to 1 minute", description: "A 5-foot-diameter sphere of fire appears in an unoccupied space of your choice within range and lasts for the duration. Any creature that ends its turn within 5 feet of the sphere must make a Dexterity saving throw. The creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Gentle Repose", level: 2, school: "Necromancy", classes: ["Cleric", "Paladin", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a pinch of salt and one copper piece placed on each of the corpse's eyes, which must remain there for the duration)"], duration: "10 days", description: "You touch a corpse or other remains. For the duration, the target is protected from decay and can't become undead." },
+    { name: "Gust of Wind", level: 2, school: "Evocation", classes: ["Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (60-foot line)", components: ["V", "S", "M (a legume seed)"], duration: "Concentration, up to 1 minute", description: "A line of strong wind 60 feet long and 10 feet wide blasts from you in a direction you choose for the spell's duration. Each creature that starts its turn in the line must succeed on a Strength saving throw or be pushed 15 feet away from you in a direction following the line." },
+    { name: "Healing Spirit", level: 2, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You call forth a nature spirit to soothe the wounded. The intangible spirit appears in a space that is a 5-foot cube you can see within range. The spirit looks like a transparent beast or fey (your choice). Until the spell ends, whenever you or a creature you can see moves into the spirits space for the first time on a turn or starts its turn there, you can cause the spirit to restore 1d6 hit points to that creature (no action required). The spirit can't heal constructs or undead. As a bonus action on your turn, you can move the Spirit up to 30 feet to a space you can see. The spirit can heal a number of times equal to 1 + your spellcasting ability modifier (minimum of twice). After healing that number of times, the spirit disappears." },
+    { name: "Heat Metal", level: 2, school: "Transmutation", classes: ["Artificer", "Bard", "Druid"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a piece of iron and a flame)"], duration: "Concentration, up to 1 minute", description: "Choose a manufactured metal object, such as a metal weapon or a suit of heavy or medium metal armor, that you can see within range. You cause the object to glow red-hot. Any creature in physical contact with the object takes 2d8 fire damage when you cast the spell. Until the spell ends, you can use a bonus action on each of your subsequent turns to cause this damage again." },
+    { name: "Hold Person", level: 2, school: "Enchantment", classes: ["Bard", "Cleric", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a small, straight piece of iron)"], duration: "Concentration, up to 1 minute", description: "Choose a humanoid that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target." },
+    { name: "Invisibility", level: 2, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (an eyelash encased in gum arabic)"], duration: "Concentration, up to 1 hour", description: "A creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person. The spell ends for a target that attacks or casts a spell." },
+    { name: "Knock", level: 2, school: "Transmutation", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "Choose an object that you can see within range. The object can be a door, a box, a chest, a set of manacles, a padlock, or another object that contains a mundane or magical means that prevents access." },
+    { name: "Lesser Restoration", level: 2, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "You touch a creature and can end either one disease or one condition afflicting it. The condition can be blinded, deafened, paralyzed, or poisoned." },
+    { name: "Levitate", level: 2, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (either a small leather loop or a piece of golden wire bent into a cup shape with a long shank on one end)"], duration: "Concentration, up to 10 minutes", description: "One creature or object of your choice that you can see within range rises vertically, up to 20 feet, and remains suspended there for the duration. The spell can levitate a target that weighs up to 500 pounds. An unwilling creature that succeeds on a Constitution saving throw is unaffected." },
+    { name: "Locate Animals or Plants", level: 2, school: "Divination", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a bit of fur from a bloodhound)"], duration: "Instantaneous", description: "Describe or name a specific kind of beast or plant. Concentrating on the voice of nature in your surroundings, you learn the direction and distance to the closest creature or plant of that kind within 5 miles, if any are present." },
+    { name: "Locate Object", level: 2, school: "Divination", classes: ["Bard", "Cleric", "Druid", "Paladin", "Ranger", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a forked twig)"], duration: "Concentration, up to 10 minutes", description: "Describe or name an object that is familiar to you. You sense the direction to the object's location, as long as that object is within 1,000 feet of you. If the object is in motion, you know the direction of its movement." },
+    { name: "Magic Mouth", level: 2, school: "Illusion", classes: ["Artificer", "Bard", "Wizard"], castingTime: "1 Minute", range: "30 Feet", components: ["V", "S", "M (a small bit of honeycomb and jade dust worth at least 10 gp, which the spell consumes)"], duration: "Until dispelled", description: "You implant a message within an object in range, a message that is uttered when a trigger condition is met. Choose an object that you can see and that isn't being worn or carried by another creature. Then speak the message, which must be 25 words or less, though it can be delivered over as long as 10 minutes. Finally, determine the circumstance that will trigger the spell to deliver your message." },
+    { name: "Magic Weapon", level: 2, school: "Transmutation", classes: ["Artificer", "Paladin", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Bonus Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls." },
+    { name: "Maximillian's Earthen Grasp", level: 2, school: "Transmutation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a miniature hand sculpted from clay)"], duration: "Concentration, up to 1 minute", description: "You choose a 5-foot-square unoccupied space on the ground that you can see within range. A Medium hand made from compacted soil rises there and reaches for one creature you can see within 5 feet of it. The target must make a Strength saving throw. On a failed save, the target takes 2d6 bludgeoning damage and is restrained for the spell's duration." },
+    { name: "Melf's Acid Arrow", level: 2, school: "Evocation", classes: ["Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (powdered rhubarb leaf and an adder's stomach)"], duration: "Instantaneous", description: "A shimmering green arrow streaks toward a target within range and bursts in a spray of acid. Make a ranged spell attack against the target. On a hit, the target takes 4d4 acid damage immediately and 2d4 acid damage at the end of its next turn. On a miss, the arrow splashes the target with acid for half as much of the initial damage and no damage at the end of its next turn." },
+    { name: "Mind Spike", level: 2, school: "Divination", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S"], duration: "Concentration, up to 1 hour", description: "You reach into the mind of one creature you can see within range. The target must make a Wisdom saving throw, taking 3d8 psychic damage on a failed save, or half as much damage on a successful one. On a failed save, you also always know the target's location until the spell ends, but only while the two of you are on the same plane of existence. While you have this knowledge, the target can't become hidden from you, and if it's invisible, it gains no benefit from that condition against you." },
+    { name: "Mirror Image", level: 2, school: "Illusion", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "1 minute", description: "Three illusory duplicates of yourself appear in your space. Until the spell ends, the duplicates move with you and mimic your actions, shifting position so it's impossible to track which image is real. You can use your action to dismiss the illusory duplicates." },
+    { name: "Misty Step", level: 2, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Instantaneous", description: "Briefly surrounded by silvery mist, you teleport up to 30 feet to an unoccupied space that you can see." },
+    { name: "Moonbeam", level: 2, school: "Evocation", classes: ["Druid"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (several seeds of any moonseed plant and a piece of opalescent feldspar)"], duration: "Concentration, up to 1 minute", description: "A silvery beam of pale light shines down in a 5-foot radius, 40-foot-high cylinder centered on a point within range. Until the spell ends, dim light fills the cylinder." },
+    { name: "Nystul's Magic Aura", level: 2, school: "Illusion", classes: ["Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a small square of silk)"], duration: "24 hours", description: "You place an illusion on a creature or an object you touch so that divination spells reveal false information about it. The target can be a willing creature or an object that isn't being carried or worn by another creature." },
+    { name: "Pass Without Trace", level: 2, school: "Abjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (ashes from a burned leaf of mistletoe and a sprig of spruce)"], duration: "Concentration, up to 1 hour", description: "A veil of shadows and silence radiates from you, masking you and your companions from detection. For the duration, each creature you choose within 30 feet of you (including you) has a +10 bonus to Dexterity (Stealth) checks and can't be tracked except by magical means. A creature that receives this bonus leaves behind no tracks or other traces of its passage." },
+    { name: "Phantasmal Force", level: 2, school: "Illusion", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a bit of fleece)"], duration: "Concentration, up to 1 minute", description: "You craft an illusion that takes root in the mind of a creature that you can see within range. The target must make an Intelligence saving throw. On a failed save, you create a phantasmal object, creature, or other visible phenomenon of your choice that is no larger than a 10-foot cube and that is perceivable only to the target for the duration. This spell has no effect on undead or constructs." },
+    { name: "Prayer of Healing", level: 2, school: "Evocation", classes: ["Cleric", "Paladin"], castingTime: "10 Minutes", range: "Touch", components: ["V"], duration: "Instantaneous", description: "Up to six creatures of your choice that you can see within range each regain hit points equal to 2d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
+    { name: "Protection from Poison", level: 2, school: "Abjuration", classes: ["Artificer", "Cleric", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "1 hour", description: "You touch a creature. If it is poisoned, you neutralize the poison. If more than one poison afflicts the target, you neutralize one poison that you know is present, or you neutralize one at random." },
+    { name: "Pyrotechnics", level: 2, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Choose an area of flame that you can see and that can fit within a 5-foot cube within range. You can extinguish the fire in that area, and you create either fireworks or smoke." },
+    { name: "Ray of Enfeeblement", level: 2, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A black beam of enervating energy springs from your finger toward a creature within range." },
+    { name: "Rope Trick", level: 2, school: "Transmutation", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (powdered corn extract and a twisted loop of parchment)"], duration: "1 hour", description: "You touch a length of rope that is up to 60 feet long. One end of the rope then rises into the air until the whole rope hangs perpendicular to the ground. At the upper end of the rope, an invisible entrance opens to an extradimensional space that lasts until the spell ends." },
+    { name: "Scorching Ray", level: 2, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You create three rays of fire and hurl them at targets within range. You can hurl them at one target or several. Make a ranged spell attack for each ray. On a hit, the target takes 2d6 fire damage." },
+    { name: "See Invisibility", level: 2, school: "Divination", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (pinch of talc and a small sprinkling of powdered silver)"], duration: "1 hour", description: "For the duration, you see invisible creatures and objects as if they were visible, and you can see into the Ethereal Plane. Ethereal creatures and objects appear ghostly and translucent." },
+    { name: "Shadow Blade", level: 2, school: "Illusion", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You weave together threads of shadow to create a sword of solidified gloom in your hand. This magic sword lasts until the spell ends. It counts as a simple melee weapon with which you are proficient. It deals 2d8 psychic damage on a hit and has the finesse, light, and thrown properties (range 20/60). In addition, when you use the sword to attack a target that is in dim light or darkness, you make the attack roll with advantage." },
+    { name: "Shatter", level: 2, school: "Evocation", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a chip of mica)"], duration: "Instantaneous", description: "A sudden loud ringing noise, painfully intense, erupts from a point of your choice within range. Each creature in a 10-foot-radius sphere centered on that point must make a Constitution saving throw. A creature takes 3d8 thunder damage on a failed save, or half as much damage on a successful one. A creature made of inorganic material such as stone, crystal, or metal has disadvantage on this saving throw." },
+    { name: "Silence", level: 2, school: "Illusion", classes: ["Bard", "Cleric", "Ranger"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "For the duration, no sound can be created within or pass through a 20-foot-radius sphere centered on a point you choose within range. Any creature or object entirely inside the sphere is immune to thunder damage, and creatures are deafened while entirely inside it. Casting a spell that includes a verbal component is impossible there." },
+    { name: "Skywrite", level: 2, school: "Transmutation", classes: ["Bard", "Druid", "Wizard", "Artificer"], castingTime: "1 Action", range: "Sight", components: ["V", "S"], duration: "Concentration, up to 1 day", description: "You cause up to ten words to form in a part of the sky you can see. The words appear to be made of cloud and remain in place for the spell's duration. The words dissipate when the spell ends. A strong wind can disperse the clouds and end the spell early." },
+    { name: "Snilloc's Snowball Storm", level: 2, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a piece of ice or a small white rock chip)"], duration: "Instantaneous", description: "A flurry of magic snowballs erupts from a point you choose within range. Each creature in a 5-foot-radius sphere centered on that point must make a Dexterity saving throw. A creature takes 3d6 cold damage on a failed save, or half as much damage on a successful one." },
+    { name: "Spider Climb", level: 2, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a drop of bitumen and a spider)"], duration: "Concentration, up to 1 hour", description: "Until the spell ends, one willing creature you touch gains the ability to move up, down, and across vertical surfaces and upside down along ceilings, while leaving its hands free. The target also gains a climbing speed equal to its walking speed." },
+    { name: "Spike Growth", level: 2, school: "Transmutation", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (seven sharp thorns or seven small twigs, each sharpened to a point)"], duration: "Concentration, up to 10 minutes", description: "The ground in a 20-foot radius centered on a point within range twists and sprouts hard spikes and thorns. The area becomes difficult terrain for the duration. When a creature moves into or within the area, it takes 2d4 piercing damage for every 5 feet it travels." },
+    { name: "Spiritual Weapon", level: 2, school: "Evocation", classes: ["Cleric"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V", "S"], duration: "1 minute", description: "You create a floating, spectral weapon within range that lasts for the duration or until you cast this spell again." },
+    { name: "Suggestion", level: 2, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "M (a snake's tongue and either a bit of honeycomb or a drop of sweet oil)"], duration: "Concentration, up to 8 hours", description: "You suggest a course of activity (limited to a sentence or two) and magically influence a creature you can see within range that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act ends the spell." },
+    { name: "Summon Beast", level: 2, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a feather, tuft of fur, and fish tail inside a gilded acorn worth at least 200 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a bestial spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Bestial Spirit stat block. When you cast the spell, choose an environment: Air, Land, or Water. The creature resembles an animal of your choice that is native to the chosen environment, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Tasha's Mind Whip", level: 2, school: "Enchantment", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V"], duration: "1 round", description: "You psychically lash out at one creature you can see within range. The target must make an Intelligence saving throw. On a failed save, the target takes 3d6 psychic damage, and it can't take a reaction until the end of its next turn. Moreover, on its next turn, it must choose whether it gets a move, an action, or a bonus action; it gets only one of the three. On a successful save, the target takes half as much damage and suffers none of the spell's other effects." },
+    { name: "Warding Bond", level: 2, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a pair of platinum rings worth at least 50 gp each, which you and target must wear for the duration)"], duration: "1 hour", description: "This spell wards a willing creature you touch and creates a mystic connection between you and the target until the spell ends." },
+    { name: "Warding Wind", level: 2, school: "Evocation", classes: ["Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "Concentration, up to 10 minutes", description: "A strong wind (20 miles per hour) blows around you in a 10-foot radius and moves with you, remaining centered on you. The wind lasts for the spell's duration." },
+    { name: "Web", level: 2, school: "Conjuration", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a bit of spiderweb)"], duration: "Concentration, up to 1 hour", description: "You conjure a mass of thick, sticky webbing at a point of your choice within range. The webs fill a 20-foot cube from that point for the duration. The webs are difficult terrain and lightly obscure their area." },
+    { name: "Zone of Truth", level: 2, school: "Enchantment", classes: ["Bard", "Cleric", "Paladin"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "10 minutes", description: "You create a magical zone that guards against deception in a 15-foot-radius sphere centered on a point of your choice within range. Until the spell ends, a creature that enters the spell's area for the first time on a turn or starts its turn there must make a Charisma saving throw. On a failed save, a creature can't speak a deliberate lie while in the radius. You know whether each creature succeeds or fails on its saving throw." }
   ],
   "3rd": [
-    { name: "Fireball", level: 3, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "150 ft", components: ["V","S","M (a tiny ball of bat guano and sulfur)"], duration: "Instantaneous", description: "A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much on a successful one." },
-    { name: "Fly", level: 3, school: "Transmutation", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "Touch", components: ["V","S","M (a wing feather from any bird)"], duration: "Concentration, up to 10 minutes", description: "You touch a willing creature. The target gains a flying speed of 60 feet for the duration. When the spell ends, the target falls if it is still aloft, unless it can stop the fall." },
-    { name: "Haste", level: 3, school: "Transmutation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "30 ft", components: ["V","S","M (a shaving of licorice root)"], duration: "Concentration, up to 1 minute", description: "Choose a willing creature that you can see within range. Until the spell ends, the target's speed is doubled, it gains a +2 bonus to AC, it has advantage on Dexterity saving throws, and it gains an additional action on each of its turns (one weapon attack only). When the spell ends, the target can't move or take actions until after its next turn." },
-    { name: "Lightning Bolt", level: 3, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "Self (100-foot line)", components: ["V","S","M (a bit of fur and a rod of amber, crystal, or glass)"], duration: "Instantaneous", description: "A stroke of lightning forming a line 100 feet long and 5 feet wide blasts out from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes 8d6 lightning damage on a failed save, or half as much on a successful one." },
-    { name: "Intellect Fortress", level: 3, school: "Abjuration", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "30 ft", components: ["V"], duration: "Concentration, up to 1 hour", description: "For the duration, you or one willing creature you can see within range has resistance to psychic damage, as well as advantage on Intelligence, Wisdom, and Charisma saving throws. At Higher Levels: When you cast this spell using a spell slot of 4th level or higher, you can target one additional creature for each slot level above 3rd. The creatures must be within 30 feet of each other when you target them." },
-    { name: "Spirit Shroud", level: 3, school: "Necromancy", classes: ["Paladin","Sorcerer","Warlock","Wizard"], castingTime: "1 bonus action", range: "Self", components: ["V","S"], duration: "Concentration, up to 1 minute", description: "You call forth spirits of the dead, which flit around you for the spell's duration. Until the spell ends, any attack you make deals 1d8 extra damage when you hit a creature within 10 feet of you. This damage is radiant, necrotic, or cold (your choice when you cast the spell). Any creature that takes this damage can't regain hit points until the start of your next turn. In addition, any creature of your choice that you can see that starts its turn within 10 feet of you has its speed reduced by 10 feet until the start of your next turn. At Higher Levels: When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d8 for every two slot levels above 3rd." },
-    { name: "Summon Fey", level: 3, school: "Conjuration", classes: ["Druid","Ranger","Warlock","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (a gilded flower worth at least 300 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a fey spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Fey Spirit stat block. When you cast the spell, choose a mood: Fuming, Mirthful, or Tricksy. The creature resembles a fey creature of your choice marked by the chosen mood. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." }
+    { name: "Animate Dead", level: 3, school: "Necromancy", classes: ["Cleric", "Wizard"], castingTime: "1 Minute", range: "10 feet", components: ["V", "S", "M (a drop of blood, a piece of flesh, and a pinch of bone dust)"], duration: "Instantaneous", description: "This spell creates an undead servant. Choose a pile of bones or a corpse of a Medium or Small humanoid within range. Your spell imbues the target with a foul mimicry of life, raising it as an undead creature. The target becomes a skeleton if you chose bones or a zombie if you chose a corpse (the DM has the creature's game statistics)." },
+    { name: "Aura of Vitality", level: 3, school: "Evocation", classes: ["Cleric", "Druid", "Paladin"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V"], duration: "Concentration, up to 1 minute", description: "Healing energy radiates from you in an aura with a 30-foot radius. Until the spell ends, the aura moves with you, centered on you. You can use a bonus action to cause one creature in the aura (including you) to regain 2d6 hit points." },
+    { name: "Beacon of Hope", level: 3, school: "Abjuration", classes: ["Cleric"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "This spell bestows hope and vitality. Choose any number of creatures within range. For the duration, each target has advantage on Wisdom saving throws and death saving throws, and regains the maximum number of hit points possible from any healing." },
+    { name: "Bestow Curse", level: 3, school: "Necromancy", classes: ["Bard", "Cleric", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You touch a creature, and that creature must succeed on a Wisdom saving throw or become cursed for the duration of the spell. When you cast this spell, choose the nature of the curse from the following options:" },
+    { name: "Blinding Smite", level: 3, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a melee weapon attack during this spell's duration, you weapon flares with a bright light, and the attack deals an extra 3d8 radiant damage to the target. Additionally, the target must succeed on a Constitution saving throw or be blinded until the spell ends." },
+    { name: "Blink", level: 3, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "1 minute", description: "Roll a d20 at the end of each of your turns for the duration of the spell. On a roll of 11 or higher, you vanish from your current plane of existence and appear in the Ethereal Plane (the spell fails and the casting is wasted if you were already on that plane)." },
+    { name: "Call Lightning", level: 3, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "A storm cloud appears in the shape of a cylinder that is 10 feet tall with a 60-foot radius, centered on a point you can see 100 feet directly above you. The spell fails if you can't see a point in the air where the storm cloud could appear (for example, if you are in a room that can't accommodate the cloud)." },
+    { name: "Catnap", level: 3, school: "Enchantment", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S", "M (a pinch of sand)"], duration: "10 minutes", description: "You make a calming gesture, and up to three willing creatures of your choice that you can see within range fall unconscious for the spell's duration. The spell ends on a target early if it takes damage or someone uses an action to shake or slap it awake. If a target remains unconscious for the full duration, that target gains the benefit of a short rest, and it can't be affected by this spell again until it finishes a long rest." },
+    { name: "Clairvoyance", level: 3, school: "Divination", classes: ["Bard", "Cleric", "Sorcerer", "Wizard"], castingTime: "10 Minutes", range: "1 mile", components: ["V", "S", "M (a focus worth at least 100 gp, either a jeweled horn for hearing or a glass eye for seeing)"], duration: "Concentration, up to 10 minutes", description: "You create an invisible sensor within range in a location familiar to you (a place you have visited or seen before) or in an obvious location that is unfamiliar to you (such as behind a door, around a corner, or in a grove of trees). The sensor remains in place for the duration, and it can't be attacked or otherwise interacted with." },
+    { name: "Conjure Animals", level: 3, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You summon fey spirits that take the form of beasts and appear in unoccupied spaces that you can see within range." },
+    { name: "Conjure Barrage", level: 3, school: "Conjuration", classes: ["Ranger"], castingTime: "1 Action", range: "Self (60-foot cone)", components: ["V", "S", "M (one piece of ammunition or a thrown weapon)"], duration: "Instantaneous", description: "You throw a nonmagical weapon or fire a piece of nonmagical ammunition into the air to create a cone of identical weapons that shoot forward and then disappear. Each creature in a 60-foot cone must succeed on a Dexterity saving throw. A creature takes 3d8 damage on a failed save, or half as much damage on a successful one. The damage type is the same as that of the weapon or ammunition used as a component." },
+    { name: "Counterspell", level: 3, school: "Abjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Reaction", range: "60 Feet", components: ["S"], duration: "Instantaneous", description: "You attempt to interrupt a creature in the process of casting a spell. If the creature is casting a spell of 3rd level or lower, its spell fails and has no effect. If it is casting a spell of 4th level or higher, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a success, the creature's spell fails and has no effect." },
+    { name: "Create Food and Water", level: 3, school: "Conjuration", classes: ["Artificer", "Cleric", "Paladin"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You create 45 pounds of food and 30 gallons of water on the ground or in containers within range, enough to sustain up to fifteen humanoids or five steeds for 24 hours. The food is bland but nourishing, and spoils if uneaten after 24 hours. The water is clean and doesn't go bad." },
+    { name: "Crusader's Mantle", level: 3, school: "Evocation", classes: ["Paladin"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "Holy power radiates from you in an aura with a 30-foot radius, awakening boldness in friendly creatures. Until the spell ends, the aura moves with you, centered on you. While in the aura, each non-hostile creature in the aura (including you) deals an extra 1d4 radiant damage when it hits with a weapon attack." },
+    { name: "Daylight", level: 3, school: "Evocation", classes: ["Cleric", "Druid", "Paladin", "Ranger", "Sorcerer"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "1 hour", description: "A 60-foot-radius sphere of light spreads out from a point you choose within range. The sphere is bright light and sheds dim light for an additional 60 feet." },
+    { name: "Dispel Magic", level: 3, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Druid", "Paladin", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Choose any creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spell's level. On a successful check, the spell ends." },
+    { name: "Elemental Weapon", level: 3, school: "Transmutation", classes: ["Artificer", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "A nonmagical weapon you touch becomes a magic weapon. Choose one of the following damage types: acid, cold, fire, lightning, or thunder. For the duration, the weapon has a +1 bonus to attack rolls and deals an extra 1d4 damage of the chosen type when it hits." },
+    { name: "Enemies Abound", level: 3, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You reach into the mind of one creature you can see and force it to make an Intelligence saving throw. A creature automatically succeeds if it is immune to being frightened. On a failed save, the target loses the ability to distinguish friend from foe, regarding all creatures it can see as enemies until the spell ends. Each time the target takes damage, it can repeat the saving throw, ending the effect on itself on a success." },
+    { name: "Erupting Earth", level: 3, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a piece of obsidian)"], duration: "Instantaneous", description: "Choose a point you can see on the ground within range. A fountain of churned earth and stone erupts in a 20-foot cube centered on that point. Each creature in that area must make a Dexterity saving throw. A creature takes 3d12 bludgeoning damage on a failed save, or half as much damage on a successful one. Additionally, the ground in that area becomes difficult terrain until cleared away. Each 5-foot-square portion of the area requires at least 1 minute to clear by hand." },
+    { name: "Fear", level: 3, school: "Illusion", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self (30-foot cone)", components: ["V", "S", "M (a white feather or the heart of a hen)"], duration: "Concentration, up to 1 minute", description: "You project a phantasmal image of a creature's worst fears. Each creature in a 30-foot cone must succeed on a Wisdom saving throw or drop whatever it is holding and become frightened for the duration." },
+    { name: "Feign Death", level: 3, school: "Necromancy", classes: ["Bard", "Cleric", "Druid", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a pinch of graveyard dirt)"], duration: "1 hour", description: "You touch a willing creature and put it into a cataleptic state that is indistinguishable from death." },
+    { name: "Fireball", level: 3, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a tiny ball of bat guano and sulfur)"], duration: "Instantaneous", description: "A bright streak flashes from your pointing finger to a point you choose within range then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot radius must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one. The fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried." },
+    { name: "Flame Arrows", level: 3, school: "Transmutation", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You touch a quiver containing arrows or bolts. When a target is hit by a ranged weapon attack using a piece of ammunition drawn from the quiver, the target takes an extra 1d6 fire damage. The spell's magic ends on the piece of ammunition when it hits or misses, and the spell ends when twelve pieces of ammunition have been drawn from the quiver." },
+    { name: "Fly", level: 3, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a wing feather from any bird)"], duration: "Concentration, up to 10 minute", description: "You touch a willing creature. The target gains a flying speed of 60 feet for the duration. When the spell ends, the target falls if it is still aloft, unless it can stop the fall." },
+    { name: "Gaseous Form", level: 3, school: "Transmutation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a bit of gauze and a wisp of smoke)"], duration: "Concentration, up to 1 hour", description: "You transform a willing creature you touch, along with everything it's wearing and carrying, into a misty cloud for the duration. The spell ends if the creature drops to 0 hit points. An incorporeal creature isn't affected." },
+    { name: "Glyph of Warding", level: 3, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Wizard"], castingTime: "1 Hour", range: "Touch", components: ["V", "S", "M (incense and powdered diamond worth at least 200 gp, which the spell consumes)"], duration: "Until dispelled or triggered", description: "When you cast this spell, you inscribe a glyph that harms other creatures, either upon a surface (such as a table or a section of floor or wall) or within an object that can be closed (such as a book, a scroll, or a treasure chest) to conceal the glyph." },
+    { name: "Haste", level: 3, school: "Transmutation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a shaving of licorice root)"], duration: "Concentration, up to 1 minute", description: "Choose a willing creature that you can see within range. Until the spell ends, the target's speed is doubled, it gains a +2 bonus to AC, it has advantage on Dexterity saving throws, and it gains an additional action on each of its turns. That action can be used only to take the Attack (one weapon attack only), Dash, Disengage, Hide, or Use an Object action." },
+    { name: "Hunger Of Hadar", level: 3, school: "Conjuration", classes: ["Warlock"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a pickled octopus tentacle)"], duration: "Concentration, up to 1 minute", description: "You open a gateway to the dark between the stars, a region infested with unknown horrors. A 20-foot-radius sphere of blackness and bitter cold appears, centered on a point with range and lasting for the duration. This void is filled with a cacophony of soft whispers and slurping noises that can be heard up to 30 feet away. No light, magical or otherwise, can illuminate the area, and creatures fully within the area are blinded." },
+    { name: "Hypnotic Pattern", level: 3, school: "Illusion", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["S", "M (a glowing stick of incense or a crystal vial filled with phosphorescent material)"], duration: "Concentration, up to 1 minute", description: "You create a twisting pattern of colors that weaves through the air inside a 30-foot cube within range. The pattern appears for a moment and vanishes. Each creature in the area who sees the pattern must make a Wisdom saving throw. On a failed save, the creature becomes charmed for the duration. While charmed by this spell, the creature is incapacitated and has a speed of 0." },
+    { name: "Intellect Fortress", level: 3, school: "Abjuration", classes: ["Artificer", "Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "Concentration, up to 1 hour", description: "For the duration, you or one willing creature you can see within range has resistance to psychic damage, as well as advantage on Intelligence, Wisdom, and Charisma saving throws." },
+    { name: "Leomund's Tiny Hut", level: 3, school: "Evocation", classes: ["Bard", "Wizard"], castingTime: "1 Minute", range: "Self (10-foot radius hemisphere)", components: ["V", "S", "M (a small crystal bead)"], duration: "8 hours", description: "A 10-foot-radius immobile dome of force springs into existence around and above you and remains stationary for the duration. The spell ends if you leave its area." },
+    { name: "Life Transference", level: 3, school: "Evocation", classes: ["Cleric", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You sacrifice some of your health to mend another creature's injuries. You take 4d8 necrotic damage, which can't be reduced in any way, and one creature of your choice that you can see within range regains a number of hit points equal to twice the necrotic damage you take." },
+    { name: "Lightning Arrow", level: 3, school: "Transmutation", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "The next time you make a ranged weapon attack during the spell's duration, the weapon's ammunition, or the weapon itself if it's a thrown weapon, transforms into a bolt of lightning. Make the attack roll as normal. The target takes 4d8 lightning damage on a hit, or half as much damage on a miss, instead of the weapon's normal damage." },
+    { name: "Lightning Bolt", level: 3, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (100-foot line)", components: ["V", "S", "M (a bit of fur and a rod of amber, crystal, or glass)"], duration: "Instantaneous", description: "A stroke of lightning forming a line of 100 feet long and 5 feet wide blasts out from you in a direction you choose. Each creature in the line must make a Dexterity saving throw. A creature takes 8d6 lightning damage on a failed save, or half as much damage on a successful one." },
+    { name: "Magic Circle", level: 3, school: "Abjuration", classes: ["Cleric", "Paladin", "Warlock", "Wizard"], castingTime: "1 Minute", range: "10 feet", components: ["V", "S", "M (holy water or powdered silver and iron worth at least 100 gp, which the spell consumes)"], duration: "1 hour", description: "You create a 10-foot-radius, 20-foot-tall cylinder of magical energy centered on a point on the ground that you can see within range. Glowing runes appear wherever the cylinder intersects with the floor or other surface." },
+    { name: "Major Image", level: 3, school: "Illusion", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a bit of fleece)"], duration: "Concentration, up to 10 minutes", description: "You create the image of an object, a creature, or some other visible phenomenon that is no larger than a 20-foot cube. The image appears at a spot that you can see within range and lasts for the duration. It seems completely real, including sounds, smells, and temperature appropriate to the thing depicted. You can't create sufficient heat or cold to cause damage, a sound loud enough to deal thunder damage or deafen a creature, or a smell that might sicken a creature (like a troglodyte's stench)." },
+    { name: "Mass Healing Word", level: 3, school: "Evocation", classes: ["Bard", "Cleric"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "As you call out words of restoration, up to six creatures of your choice that you can see within range regain hit points equal to 1d4 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
+    { name: "Meld into Stone", level: 3, school: "Transmutation", classes: ["Cleric", "Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "8 hours", description: "You step into a stone object or surface large enough to fully contain your body, melding yourself and all the equipment you carry with the stone for the duration. Using your movement, you step into the stone at a point you can touch. Nothing of your presence remains visible or otherwise detectable by nonmagical senses." },
+    { name: "Melf's Minute Meteors", level: 3, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (niter, sulfur, and pine tar formed into a bead)"], duration: "Concentration, up to 10 minutes", description: "You create six tiny meteors in your space. They float in the air and orbit you for the spell's duration. When you cast the spell -- and as a bonus action on each of your turns thereafter -- you can expend one or two of the meteors, sending them streaking toward a point or points you choose within 120 feet of you. Once a meteor reaches its destination or impacts against a solid surface, the meteor explodes. Each creature within 5 feet of the point where the meteor explodes must make a Dexterity saving throw. A creature takes 2d6 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Nondetection", level: 3, school: "Abjuration", classes: ["Bard", "Ranger", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a pinch of diamond dust worth 25 gp sprinkled over the target, which the spell consumes)"], duration: "8 hours", description: "For the duration, you hide a target that you touch from divination magic. The target can be a willing creature or a place or an object no larger than 10 feet in any dimension. The target can't be targeted by any divination magic or perceived through magical scrying sensors." },
+    { name: "Phantom Steed", level: 3, school: "Illusion", classes: ["Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "1 hour", description: "A Large quasi-real, horselike creature appears on the ground in an unoccupied space of your choice within range. You decide the creature's appearance, but it is equipped with a saddle, bit, and bridle. Any of the equipment created by the spell vanishes in a puff of smoke if it is carried more than 10 feet away from the steed." },
+    { name: "Plant Growth", level: 3, school: "Transmutation", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S"], duration: "Instantaneous", description: "This spell channels vitality into plants within a specific area. There are two possible uses for the spell, granting either immediate or long-term benefits." },
+    { name: "Protection from Energy", level: 3, school: "Abjuration", classes: ["Artificer", "Cleric", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "For the duration, the willing creature you touch has resistance to one damage type of your choice: acid, cold, fire, lightning, or thunder." },
+    { name: "Remove Curse", level: 3, school: "Abjuration", classes: ["Cleric", "Paladin", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "At your touch, all curses affecting one creature or object end. If the object is a cursed magic item, its curse remains, but the spell breaks its owner's attunement to the object so it can be removed or discarded." },
+    { name: "Revivify", level: 3, school: "Necromancy", classes: ["Artificer", "Cleric", "Druid", "Paladin", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (diamonds worth 300 gp, which the spell consumes)"], duration: "Instantaneous", description: "You touch a creature that has died within the last minute. That creature returns to life with 1 hit point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts." },
+    { name: "Sending", level: 3, school: "Evocation", classes: ["Bard", "Cleric", "Wizard"], castingTime: "1 Action", range: "Unlimited", components: ["V", "S", "M (a short piece of fine copper wire)"], duration: "1 round", description: "You send a short message of twenty-five words or less to a creature with which you are familiar. The creature hears the message in its mind, recognizes you as the sender if it knows you, and can answer in a like manner immediately. The spell enables creatures with Intelligence scores of at least 1 to understand the meaning of your message." },
+    { name: "Sleet Storm", level: 3, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a pinch of dust and a few drops of water)"], duration: "Concentration, up to 1 minute", description: "Until the spell ends, freezing rain and sleet fall in a 20-foot-tall cylinder with a 40-foot radius centered on a point you choose within range. The area is heavily obscured, and exposed flames in the area are doused." },
+    { name: "Slow", level: 3, school: "Transmutation", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a drop of molasses)"], duration: "Concentration, up to 1 minute", description: "You alter time around up to six creatures of your choice in a 40-foot cube within range. Each target must succeed on a Wisdom saving throw or be affected by this spell for the duration." },
+    { name: "Speak with Dead", level: 3, school: "Necromancy", classes: ["Bard", "Cleric", "Wizard"], castingTime: "1 Action", range: "10 feet", components: ["V", "S", "M (burning incense)"], duration: "10 minutes", description: "You grant the semblance of life and intelligence to a corpse of your choice within range, allowing it to answer the questions you pose. The corpse must still have a mouth and can't be undead. The spell fails if the corpse was the target of this spell within the last 10 days." },
+    { name: "Speak with Plants", level: 3, school: "Transmutation", classes: ["Bard", "Druid", "Ranger"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V", "S"], duration: "10 minutes", description: "You imbue plants within 30 feet of you with limited sentience and animation, giving them the ability to communicate with you and follow your simple commands. You can question plants about events in the spell's area within the past day, gaining information about creatures that have passed, weather, and other circumstances." },
+    { name: "Spirit Guardians", level: 3, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Action", range: "Self (15-foot radius)", components: ["V", "S", "M (a holy symbol)"], duration: "Concentration, up to 10 minutes", description: "You call forth spirits to protect you. They flit around you to a distance of 15 feet for the duration. If you are good or neutral, their spectral form appears angelic or fey (your choice). If you are evil, they appear fiendish." },
+    { name: "Spirit Shroud", level: 3, school: "Necromancy", classes: ["Cleric", "Paladin", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You call forth spirits of the dead, which flit around you for the spell's duration. The spirits are intangible and invulnerable." },
+    { name: "Stinking Cloud", level: 3, school: "Conjuration", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a rotten egg or several skunk cabbage leaves)"], duration: "Concentration, up to 1 minute", description: "You create a 20-foot-radius sphere of yellow, nauseating gas centered on a point within range. The cloud spreads around corners, and its area is heavily obscured. The cloud lingers in the air for the duration." },
+    { name: "Summon Fey", level: 3, school: "Conjuration", classes: ["Druid", "Ranger", "Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a gilded flower worth at least 300 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a fey spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Fey Spirit stat block. When you cast the spell, choose a mood. Fuming, Mirthful, or Tricksy. The creature resembles a fey creature of your choice marked by the chosen mood, which determines one of the traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Summon Lesser Demons", level: 3, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a vial of blood from a humanoid killed within the past 24 hours)"], duration: "Concentration, up to 1 hour", description: "You utter foul words, summoning one demon from the chaos of the Abyss. Roll on the following table to determine what appears." },
+    { name: "Summon Shadowspawn", level: 3, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (tears inside a crystal vial worth at least 300 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a shadowy spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Shadow Spirit stat block. When you cast the spell, choose an emotion: Fury, Despair, or Fear. The creature resembles a misshapen biped marked by the chosen emotion, which determines certain traits in its stat block. The creature disappears when it drop to 0 hit points or when the spell ends." },
+    { name: "Summon Undead", level: 3, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a gilded skull worth at least 300 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth an undead spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Undead Spirit stat block. When you cast the spell, choose the creature's form: Ghostly, Putrid, or Skeletal. The spirit resembles an undead creature with the chosen form, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Thunder Step", level: 3, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V"], duration: "Instantaneous", description: "You teleport yourself to an unoccupied space you can see within range. Immediately after you disappear, a thunderous boom sounds, and each creature within 10 feet of the space you left must make a Constitution saving throw, taking 3d10 thunder damage on a failed save, or half as much damage on a successful one. The thunder can be heard from up to 300 feet away." },
+    { name: "Tidal Wave", level: 3, school: "Conjuration", classes: ["Druid", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a drop of water)"], duration: "Instantaneous", description: "You conjure up a wave of water that crashes down on an area within range. The area can be up to 30 feet long, up to 10 feet wide, and up to 10 feet tall. Each creature in that area must make a Dexterity saving throw. On a failure, a creature takes 4d8 bludgeoning damage and is knocked prone. On a success, a creature takes half as much damage and isn't knocked prone. The water then spreads out across the ground in all directions, extinguishing unprotected flames in its area and within 30 feet of it." },
+    { name: "Tiny Servant", level: 3, school: "Transmutation", classes: ["Artificer", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S"], duration: "8 hours", description: "You touch one Tiny, nonmagical object that isn't attached to another object or a surface and isn't being carried by another creature. The target animates and sprouts little arms and legs, becoming a creature under your control until the spell ends or the creature drops to 0 hit points. See the stat block for its statistics." },
+    { name: "Tongues", level: 3, school: "Divination", classes: ["Bard", "Cleric", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "M (a small clay model of a ziggurat)"], duration: "1 hour", description: "This spell grants the creature you touch the ability to understand any spoken language it hears. Moreover, when the target speaks, any creature that knows at least one language and can hear the target understands what it says." },
+    { name: "Vampiric Touch", level: 3, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "The touch of your shadow-wreathed hand can siphon force from others to heal your wounds. Make a melee spell attack against a creature within your reach. On a hit, the target takes 3d6 necrotic damage, and you regain hit points equal to half the amount of necrotic damage dealt. Until the spell ends, you can make the attack again on each of your turns as an action." },
+    { name: "Wall of Sand", level: 3, school: "Evocation", classes: ["Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a handful of sand)"], duration: "Concentration, up to 10 minutes", description: "You conjure up a wall of swirling sand on the ground at a point you can see within range. You can make the wall up to 30 feet long, 10 feet high, and 10 feet thick, and it vanishes when the spell ends. It blocks line of sight but not movement. A creature is blinded while in the wall's space and must spend 3 feet of movement for every 1 foot it moves there." },
+    { name: "Wall of Water", level: 3, school: "Evocation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a drop of water)"], duration: "Concentration, up to 10 minutes", description: "You conjure up a wall of water on the ground at a point you can see within range. You can make the wall up to 30 feet long, 10 feet high, and 1 foot thick, or you can make a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall vanishes when the spell ends. The wall's space is difficult terrain." },
+    { name: "Water Breathing", level: 3, school: "Transmutation", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a short reed or piece of straw)"], duration: "24 hours", description: "This spell grants up to ten willing creatures you can see within range the ability to breathe underwater until the spell ends. Affected creatures also retain their normal mode of respiration." },
+    { name: "Water Walk", level: 3, school: "Transmutation", classes: ["Artificer", "Cleric", "Druid", "Ranger", "Sorcerer"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a piece of cork)"], duration: "1 hour", description: "This spell grants the ability to move across any liquid surface - such as water, acid, mud, snow, quicksand, or lava - as if it were harmless solid ground (creatures crossing molten lava can still take damage from the heat). Up to ten willing creatures you can see within range gain this ability for the duration." },
+    { name: "Wind Wall", level: 3, school: "Evocation", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a tiny fan and a feather of exotic origin)"], duration: "Concentration, up to 1 minute", description: "A wall of strong wind rises from the ground at a point you choose within range. You can make the wall up to 50 feet long, 15 feet high, and 1 foot thick. You can shape the wall in any way you choose so long as it makes one continuous path along the ground. The wall lasts for the duration." }
   ],
   "4th": [
-    { name: "Banishment", level: 4, school: "Abjuration", classes: ["Cleric","Paladin","Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V","S","M (an item distasteful to the target)"], duration: "Concentration, up to 1 minute", description: "You attempt to send one creature that you can see within range to another plane of existence. The target must succeed on a Charisma saving throw or be banished. If the target is native to your current plane, it is banished to a harmless demiplane. If it is native to a different plane, it is banished to its home plane." },
-    { name: "Polymorph", level: 4, school: "Transmutation", classes: ["Bard","Druid","Sorcerer","Wizard"], castingTime: "1 action", range: "60 ft", components: ["V","S","M (a caterpillar cocoon)"], duration: "Concentration, up to 1 hour", description: "This spell transforms a creature that you can see within range into a new form. An unwilling creature must make a Wisdom saving throw to avoid the effect. The new form can be any beast whose challenge rating is equal to or less than the target's (or level). The target's game statistics are replaced by the statistics of the chosen beast." },
-    { name: "Summon Aberration", level: 4, school: "Conjuration", classes: ["Sorcerer","Warlock","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (a pickled tentacle and an eyeball in a platinum-inlaid vial worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth an aberrant spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Aberrant Spirit stat block. When you cast the spell, choose Beholderkin, Slaad, or Star Spawn. The creature resembles an aberration of that kind. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." },
-    { name: "Summon Construct", level: 4, school: "Conjuration", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (an ornate stone and metal lockbox worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth the spirit of a construct. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Construct Spirit stat block. When you cast the spell, choose a material: Clay, Metal, or Stone. The creature resembles a golem or a modron (your choice) made of the chosen material. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." },
-    { name: "Summon Elemental", level: 4, school: "Conjuration", classes: ["Druid","Sorcerer","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (air, a pebble, ash, and water inside a gold-inlaid vial worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth an elemental spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Elemental Spirit stat block. When you cast the spell, choose an element: Air, Earth, Fire, or Water. The creature resembles a bipedal form wreathed in the chosen element. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." }
+    { name: "Arcane Eye", level: 4, school: "Divination", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a bit of bat fur)"], duration: "Concentration, up to 1 hour", description: "You create an invisible, magical eye within range that hovers in the air for the duration. You mentally receive visual information from the eye, which has normal vision and darkvision out to 30 feet. The eye can look in every direction." },
+    { name: "Aura of Life", level: 4, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V"], duration: "Concentration, up to 10 minutes", description: "Life-preserving energy radiates from you in an aura with a 30-foot radius. Until the spell ends, the aura moves with you, centered on you. Each non-hostile creature in the aura (including you) has resistance to necrotic damage, and its hit point maximum can't be reduced. In addition, a non-hostile, living creature regains 1 hit point when it starts its turn in the aura with 0 hit points." },
+    { name: "Aura of Purity", level: 4, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V"], duration: "Concentration, up to 10 minutes", description: "Purifying energy radiates from you in an aura with a 30-foot radius. Until the spell ends, the aura moves with you, centered on you. Each non-hostile creature in the aura (including you) can't become diseased, has resistance to poison damage, and has advantage on saving throws against effects that cause any of the following conditions: blinded, charmed, deafened, frightened, paralyzed, poisoned, and stunned." },
+    { name: "Banishment", level: 4, school: "Abjuration", classes: ["Cleric", "Paladin", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (an item distasteful to the target)"], duration: "Concentration, up to 1 minutes", description: "You attempt to send one creature that you can see within range to another place of existence. The target must succeed on a Charisma saving throw or be banished." },
+    { name: "Blight", level: 4, school: "Necromancy", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Necromantic energy washes over a creature of your choice that you can see within range, draining moisture and vitality from it. The target must make a Constitution saving throw. The target takes 8d8 necrotic damage on a failed save, or half as much damage on a successful one. This spell has no effect on undead or constructs." },
+    { name: "Charm Monster", level: 4, school: "Enchantment", classes: ["Bard", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "1 hour", description: "You attempt to charm a creature you can see within range. It must make a Wisdom saving throw, and it does so with advantage if you or your companions are fighting it. If it fails the saving throw, it is charmed by you until the spell ends or until you or your companions do anything harmful to it. The charmed creature is friendly to you. When the spell ends, the creature knows it was charmed by you." },
+    { name: "Compulsion", level: 4, school: "Enchantment", classes: ["Bard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Creatures of your choice that you can see within range and that can hear you must make a Wisdom saving throw. A target automatically succeeds on this saving throw if it can't be charmed. On a failed save, a target is affected by this spell. Until the spell ends, you can use a bonus action on each of your turns to designate a direction that is horizontal to you. Each affected target must use as much of its movement as possible to move in that direction on its next turn. It can take its action before it moves. After moving in this way, it can make another Wisdom saving throw to try to end the effect." },
+    { name: "Confusion", level: 4, school: "Enchantment", classes: ["Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (three nut shells)"], duration: "Concentration, up to 1 minute", description: "This spell assaults and twists creatures' minds, spawning delusions and provoking uncontrolled actions. Each creature in a 10-foot-radius sphere centered on a point you choose within range must succeed on a Wisdom saving throw when you cast this spell or be affected by it." },
+    { name: "Conjure Minor Elementals", level: 4, school: "Conjuration", classes: ["Druid", "Wizard"], castingTime: "1 Minute", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You summon elementals that appear in unoccupied spaces that you can see within range. You choose one the following options for what appears:" },
+    { name: "Conjure Woodland Beings", level: 4, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (one holly berry per creature summoned)"], duration: "Concentration, up to 1 hour", description: "You summon fey creatures that appear in unoccupied spaces that you can see within range. Choose one of the following options for what appears:" },
+    { name: "Control Water", level: 4, school: "Transmutation", classes: ["Cleric", "Druid", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V", "S", "M (a drop of water and a pinch of dust)"], duration: "Concentration, up to 10 minutes", description: "Until the spell ends, you control any freestanding water inside an area you choose that is a cube up to 100 feet on a side. You can choose from any of the following effects when you cast this spell. As an action on your turn, you can repeat the same effect or choose a different one." },
+    { name: "Death Ward", level: 4, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "8 hours", description: "You touch a creature and grant it a measure of protection from death. The first time the target would drop to 0 hit points as a result of taking damage, the target instead drops to 1 hit point, and the spell ends. If the spell is still in effect when the target is subjected to an effect that would kill it instantaneously without dealing damage, that effect is instead negated against the target, and the spells ends." },
+    { name: "Dimension Door", level: 4, school: "Conjuration", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "500 feet", components: ["V"], duration: "Instantaneous", description: "You teleport yourself from your current location to any other spot within range. You arrive at exactly the spot desired. It can be a place you can see, one you can visualize, or one you can describe by stating distance and direction, such as \"200 feet straight downward\" or \"upward to the northwest at a 45-degree angle, 300 feet\"." },
+    { name: "Divination", level: 4, school: "Divination", classes: ["Cleric", "Druid", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (incense and a sacrificial offering appropriate to your religion, together worth at least 25 gp, which the spell consumes)"], duration: "Instantaneous", description: "Your magic and an offering put you in contact with a god or a god's servants. You ask a single question concerning a specific goal, event, or activity to occur within 7 days. The DM offers a truthful reply. The reply might be a short phrase, a cryptic rhyme, or an omen." },
+    { name: "Dominate Beast", level: 4, school: "Enchantment", classes: ["Druid", "Ranger", "Sorcerer"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You attempt to beguile a beast that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw." },
+    { name: "Elemental Bane", level: 4, school: "Transmutation", classes: ["Druid", "Warlock", "Wizard", "Artificer"], castingTime: "1 Action", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Choose one creature you can see within range, and choose one of the following damage types: acid, cold, fire, lightning, or thunder. The target must succeed on a Constitution saving throw or be affected by the spell for its duration. The first time each turn the affected target takes damage of the chosen type, the target takes an extra 2d6 damage of that type. Moreover, the target loses any resistance to that damage type until the spell ends." },
+    { name: "Evard's Black Tentacles", level: 4, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a piece of tentacle from a giant octopus or a giant squid)"], duration: "Concentration, up to 1 minute", description: "Squirming, ebony tentacles fill a 20-foot square on ground that you can see within range. For the duration, these tentacles turn the ground in the area into difficult terrain." },
+    { name: "Fabricate", level: 4, school: "Transmutation", classes: ["Artificer", "Wizard"], castingTime: "10 Minutes", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You convert raw materials into products of the same material. For example, you can fabricate a wooden bridge from a clump of trees, a rope from a patch of hemp, and clothes from flax or wool." },
+    { name: "Find Greater Steed", level: 4, school: "Conjuration", classes: ["Paladin"], castingTime: "10 Minutes", range: "30 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You summon a spirit that assumes the form of a loyal, majestic mount. Appearing in an unoccupied space within range, the spirit takes on a form you choose: a griffon, a pegasus, a peryton, a dire wolf, a rhinoceros, or a saber--toothed tiger. The creature has the statistics provided in the Monster Manual for the chosen form, though it is a celestial, a fey, or a fiend (your choice) instead of its normal creature type. Additionally, if it has an Intelligence score of 5 or lower, its Intelligence becomes 6, and it gains the ability to understand one language of your choice that you speak. You control the mount in combat. While the mount is within 1 mile of you, you can communicate with it telepathically. While mounted on it, you can make any spell you cast that targets only you also target the mount. The mount disappears temporarily when it drops to 0 hit points or when you dismiss it as an action. Casting this spell again re--summons the bonded mount, with all its hit points restored and any conditions removed. You can't have more than one mount bonded by this spell or find steed at the same time. As an action, you can release a mount from its bond, causing it to disappear permanently. Whenever the mount disappears, it leaves behind any objects it was wearing or carrying." },
+    { name: "Fire Shield", level: 4, school: "Evocation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a bit of phosphorus or a firefly)"], duration: "10 minutes", description: "Thin and wispy flames wreathe your body for the duration, shedding bright light in a 10-foot radius and dim light for an additional 10 feet. You can end the spell early by using an action to dismiss it." },
+    { name: "Freedom of Movement", level: 4, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a leather strap, bound around the arm or a similar appendage)"], duration: "1 hour", description: "You touch a willing creature. For the duration, the target's movement is unaffected by difficult terrain, and spells and other magical effects can neither reduce the target's speed nor cause the target to be paralyzed or restrained." },
+    { name: "Giant Insect", level: 4, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You transform up to ten centipedes, three spiders, five wasps, or one scorpion within range into giant versions of their natural forms for the duration. A centipede becomes a giant centipede, a spider becaomes a giant spider, a wasp becomes a giant wasp, and a scorpion becomes a giant scorpion." },
+    { name: "Grasping Vine", level: 4, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Bonus Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You conjure a vine that sprouts from the ground in an unoccupied space of your choice that you can see within range. When you cast this spell, you can direct the vine to lash out at a creature within 30 feet of it that you can see. That creature must succeed on a Dexterity saving throw or be pulled 20 feet directly toward the vine." },
+    { name: "Greater Invisibility", level: 4, school: "Illusion", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You or a creature you touch becomes invisible until the spell ends. Anything the target is wearing or carrying is invisible as long as it is on the target's person." },
+    { name: "Guardian of Faith", level: 4, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "8 hours", description: "A Large spectral guardian appears and hovers for the duration in an unoccupied space of your choice that you can see within range. The guardian occupies that space and is indistinct except for a gleaming sword and shield emblazoned with the symbol of your deity." },
+    { name: "Guardian of Nature", level: 4, school: "Transmutation", classes: ["Druid", "Ranger"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "A nature spirit answers your call and transforms you into a powerful guardian. The transformation lasts until the spell ends. You choose one of the following forms to assume: Primal Beast or Great Tree." },
+    { name: "Hallucinatory Terrain", level: 4, school: "Illusion", classes: ["Bard", "Druid", "Warlock", "Wizard"], castingTime: "10 Minutes", range: "300 feet", components: ["V", "S", "M (a stone, a twig, and a bit of green plant)"], duration: "24 hours", description: "You make natural terrain in a 150-foot cube in range look, sound, and smell like some other sort of natural terrain. Thus, open fields or a road can be made to resemble a swamp, hill, crevasse, or some other difficult or impassable terrain. A pond can be made to seem like a grassy meadow, a precipice like a gentle slope, or a rock-strewn gully like a wide and smooth road. Manufactured structures, equipment, and creatures within the area aren't changed in appearance." },
+    { name: "Ice Storm", level: 4, school: "Evocation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V", "S", "M (a pinch of dust and a few drops of water)"], duration: "Instantaneous", description: "A hail of rock-hard ice pounds to the ground in a 20-foot-radius, 40-foot-high cylinder centered on a point within range. Each creature in the cylinder must make a Dexterity saving throw. A creature takes 2d8 bludgeoning damage and 4d6 cold damage on a failed save, or half as much damage on a successful one." },
+    { name: "Leomund's Secret Chest", level: 4, school: "Conjuration", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (an exquisite chest, 3 feet by 2 feet by 2 feet, constructed from rare materials worth at least 5,000 gp, and a Tiny replica made from the same materials worth at least 50 gp)"], duration: "Instantaneous", description: "You hide a chest, and all its contents, on the Ethereal Plane. You must touch the chest and the miniature replica that serves as a material component for the spell. The chest can contain up to 12 cubic feet of nonliving material (3 feet by 2 feet by 2 feet)." },
+    { name: "Locate Creature", level: 4, school: "Divination", classes: ["Bard", "Cleric", "Druid", "Paladin", "Ranger", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a bit of fur from a bloodhound)"], duration: "Concentration, up to 1 hour", description: "Describe or name a creature that is familiar to you. You sense the direction to the creature's location, as long as that creature is within 1,000 feet of you. If the creature is moving, you know the direction of its movement." },
+    { name: "Mordenkainen's Faithful Hound", level: 4, school: "Conjuration", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a tiny silver whistle, a piece of bone, and a thread)"], duration: "8 hours", description: "You conjure a phantom watchdog in an unoccupied space that you can see within range, where it remains for the duration, until you dismiss it as an action, or until you move more than 100 feet away from it." },
+    { name: "Mordenkainen's Private Sanctum", level: 4, school: "Abjuration", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a thin sheet of lead, a piece of opaque glass, a wad of cotton or cloth, and powdered chrysolite)"], duration: "24 hours", description: "You make an area within range magically secure. The area is a cube that can be as small as 5 feet to as large as 100 feet on each side. The spell lasts for the duration or until you use an action to dismiss it." },
+    { name: "Otiluke's Resilient Sphere", level: 4, school: "Evocation", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a hemispherical piece of clear crystal and a matching hemispherical piece of gum arabic)"], duration: "Concentration, up to 1 minute", description: "A sphere of shimmering force encloses a creature or object of Large size or smaller within range. An unwilling creature must make a Dexterity saving throw. On a failed save, the creature is enclosed for the duration." },
+    { name: "Phantasmal Killer", level: 4, school: "Illusion", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You tap into the nightmares of a creature you can see within range and create an illusory manifestation of its deepest fears, visible only to that creature." },
+    { name: "Polymorph", level: 4, school: "Transmutation", classes: ["Bard", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a caterpillar cocoon)"], duration: "Concentration, up to 1 hour", description: "This spell transforms a creature that you can see within range into a new form. An unwilling creature must make a Wisdom saving throw to avoid the effect. A shapechanger automatically succeeds on this saving throw." },
+    { name: "Shadow Of Moil", level: 4, school: "Necromancy", classes: ["Warlock"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (an undead eyeball encased in a gem worth at least 150 gp)"], duration: "Concentration, up to 1 minute", description: "Flame-like shadows wreathe your body until the spell ends, causing you to become heavily obscured to others. The shadows turn dim light within 10 feet of you into darkness, and bright light in the same area to dim light." },
+    { name: "Sickening Radiance", level: 4, school: "Evocation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "Dim, greenish light spreads within a 30-foot-radius sphere centered on a point you choose within range. The light spreads around corners, and it lasts until the spell ends." },
+    { name: "Staggering Smite", level: 4, school: "Evocation", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a melee weapon attack during this spell's duration, your weapon pierces both body and mind, and the attack deals an extra 4d6 psychic damage to the target. The target must make a Wisdom saving throw. On a failed save, it has disadvantage on attack rolls and ability checks, and can't take reactions, until the end of its next turn." },
+    { name: "Stone Shape", level: 4, school: "Transmutation", classes: ["Artificer", "Cleric", "Druid", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (soft clay, which must be worked into roughly the desired shape of the stone object)"], duration: "Instantaneous", description: "You touch a stone object of Medium size or smaller or a section of stone no more than 5 feet in any dimension and form it into any shape that suits your purpose. So, for example, you could shape a large rock into a weapon, idol, or coffer, or make a small passage through a wall, as long as the wall is less than 5 feet thick. You could also shape a stone door or its frame to seal the door shut. The object you create can have up to two hinges and a latch, but finer mechanical detail isn't possible." },
+    { name: "Stoneskin", level: 4, school: "Abjuration", classes: ["Artificer", "Druid", "Ranger", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (diamond dust worth 100 gp, which the spell consumes)"], duration: "Concentration, up to 1 hour", description: "This spell turns the flesh of a willing creature you touch as hard as stone. Until the spell ends, the target has resistance to nonmagical bludgeoning, piercing, and slashing damage." },
+    { name: "Storm Sphere", level: 4, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A 20-foot-radius sphere of whirling air springs into existence centered on a point you choose within range. The sphere remains for the spell's duration. Each creature in the sphere when it appears or that ends its turn there must succeed on a Strength saving throw or take 2d6 bludgeoning damage. The sphere's space is difficult terrain." },
+    { name: "Summon Aberration", level: 4, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a pickled tentacle and an eyeball in a platinum inlaid vial worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth an aberrant spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Aberrant Spirit stat block. When you cast the spell, choose Beholderkin, Slaad, or Star Spawn. The creature resembles an aberration of that kind, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Summon Construct", level: 4, school: "Conjuration", classes: ["Artificer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (an ornate stone and metal lockbox worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth the spirit of a construct. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Construct Spirit stat block. When you cast the spell, choose a material: Clay, Metal, or Stone. The creature resembles a golem or a modron (your choice) made of the chosen material, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Summon Elemental", level: 4, school: "Conjuration", classes: ["Druid", "Ranger", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (air, a pebble, ash, and water inside a gold-inlaid vial worth at least 400 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth an elemental spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Elemental Spirit stat block. When you cast the spell, choose an element: Air, Earth, Fire, or Water. The creature resembles a bipedal form wreathed in the chosen element, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Summon Greater Demon", level: 4, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a vial of blood from a humanoid killed within the past 24 hours)"], duration: "Concentration, up to 1 hour", description: "You utter foul words, summoning one demon from the chaos of the Abyss. You choose the demon's type, which must be one of challenge rating 5 or lower, such as a shadow demon or a barlgura. The demon appears in an unoccupied space you can see within range, and the demon disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Vitriolic Sphere", level: 4, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a drop of giant slug bile)"], duration: "Instantaneous", description: "You point at a place within range, and a glowing 1-foot ball of emerald acid streaks there and explodes in a 20-foot radius. Each creature in that area must make a Dexterity saving throw. On a failed save, a creature takes 10d4 acid damage and 5d4 acid damage at the end of its next turn. On a successful save, a creature takes half the initial damage and no damage at the end of its next turn." },
+    { name: "Wall of Fire", level: 4, school: "Evocation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a small piece of phosphorus)"], duration: "Concentration, up to 1 minute", description: "You create a wall of fire on a solid surface within range. You can make the wall up to 60 feet long, 20 feet high, and 1 foot thick, or a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration." },
+    { name: "Watery Sphere", level: 4, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a droplet of water)"], duration: "Concentration, up to 1 minute", description: "You conjure up a sphere of water with a 5-foot radius on a point you can see within range. The sphere can hover in the air, but no more than 10 feet off the ground. The sphere remains for the spell's duration." }
   ],
   "5th": [
-    { name: "Cone of Cold", level: 5, school: "Evocation", classes: ["Sorcerer","Wizard"], castingTime: "1 action", range: "Self (60-foot cone)", components: ["V","S","M (a small crystal or glass cone)"], duration: "Instantaneous", description: "A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much on a successful one. A creature killed by this spell becomes a frozen statue until it thaws." },
-    { name: "Raise Dead", level: 5, school: "Necromancy", classes: ["Cleric","Paladin"], castingTime: "1 hour", range: "Touch", components: ["V","S","M (a diamond worth at least 500 gp, which the spell consumes)"], duration: "Instantaneous", description: "You return a dead creature you touch to life, provided that it has been dead no longer than 10 days. If the creature's soul is both willing and at liberty to rejoin the body, the creature returns to life with 1 hit point. This spell also neutralizes any poisons and cures nonmagical diseases that affected the creature at the time it died." },
-    { name: "Summon Celestial", level: 5, school: "Conjuration", classes: ["Cleric","Paladin"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (a golden reliquary worth at least 500 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a celestial spirit. It manifests in an angelic form in an unoccupied space that you can see within range. This corporeal form uses the Celestial Spirit stat block. When you cast the spell, choose Avenger or Defender. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." }
+    { name: "Animate Objects", level: 5, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Objects come to life at your command. Choose up to ten nonmagical objects within range that are not being worn or carried. Medium targets count as two objects, Large targets count as four objects, Huge targets count as eight objects. You can't animate any object larger than Huge. Each target animates and becomes a creature under your control until the spell ends or until reduced to 0 hit points." },
+    { name: "Antilife Shell", level: 5, school: "Abjuration", classes: ["Druid"], castingTime: "1 Action", range: "Self (10-foot radius)", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "A shimmering barrier extends out from you in a 10-foot radius and moves with you, remaining centered on you and hedging out creatures other than undead and constructs." },
+    { name: "Awaken", level: 5, school: "Transmutation", classes: ["Bard", "Druid"], castingTime: "8 Hours", range: "Touch", components: ["V", "S", "M (an agate worth at least 1,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "After spending the casting time tracing magical pathways within a precious gemstone, you touch a huge or smaller beast or plant. The target must have either no Intelligence score or an Intelligence of 3 or less." },
+    { name: "Banishing Smite", level: 5, school: "Abjuration", classes: ["Paladin"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "The next time you hit a creature with a weapon attack before this spell ends, your weapon crackles with force, and the attack deals an extra 5d10 force damage to the target. Additionally, if this attack reduces the target to 50 hit points of fewer, you banish it. If the target is native to a different plane of existence than the on you're on, the target disappears, returning to its home plane. If the target is native to the plane you're on, the creature vanishes into a harmless demiplane. While there, the target is incapacitated. It remains there until the spell ends, at which point the target reappears in the space it left or in the nearest unoccupied space if that space is occupied." },
+    { name: "Bigby's Hand", level: 5, school: "Evocation", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (an eggshell and a snakeskin glove)"], duration: "Concentration, up to 1 minute", description: "You create a Large hand of shimmering, translucent force in an unoccupied space that you can see within range. The hand lasts for the spell's duration, and it moves at your command, mimicking the movements of your own hand." },
+    { name: "Circle of Power", level: 5, school: "Abjuration", classes: ["Paladin"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V"], duration: "Concentration, up to 10 minutes", description: "Divine energy radiates from you, distorting and diffusing magical energy within 30 feet of you. Until the spell ends, the sphere moves with you, centered on you. For the duration, each friendly creature in the area (including you) has advantage on saving throws against spells and other magical effects." },
+    { name: "Cloudkill", level: 5, school: "Conjuration", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You create a 20-foot-radius sphere of poisonous, yellow-green fog centered on a point you choose within range. The fog spreads around corners. It lasts for the duration or until strong wind disperses the fog, ending the spell. Its area is heavily obscured." },
+    { name: "Commune", level: 5, school: "Divination", classes: ["Cleric"], castingTime: "1 Minute", range: "Self", components: ["V", "S", "M (incense and a vial of holy or unholy water)"], duration: "1 minute", description: "You contact your deity or a divine proxy and ask up to three questions that can be answered with a yes or no. You must ask your questions before the spell ends. You receive a correct answer for each question." },
+    { name: "Commune with Nature", level: 5, school: "Divination", classes: ["Druid", "Ranger"], castingTime: "1 Minute", range: "Self", components: ["V", "S"], duration: "Instantaneous", description: "You briefly become one with nature and gain knowledge of the surrounding territory. In the outdoors, the spell gives you knowledge of the land within 3 miles of you. In caves and other natural underground settings, the radius is limited to 300 feet. The spell doesn't function where nature has been replaced by construction, such as in dungeons and towns." },
+    { name: "Cone of Cold", level: 5, school: "Evocation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (60-foot cone)", components: ["V", "S", "M (a small crystal or glass cone)"], duration: "Instantaneous", description: "A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws." },
+    { name: "Conjure Elemental", level: 5, school: "Conjuration", classes: ["Druid", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (burning incense for air, soft clay for earth, sulfur and phosphorus for fire, or water and sand for water)"], duration: "Concentration, up to 1 hour", description: "You call forth an elemental servant. Choose an area of air, earth, fire, or water that fills a 10-foot cube within range. An elemental of challenge rating 5 or lower appropriate to the area you chose appears in an unoccupied space within 10 feet of it. For example, a fire elemental emerges from a bonfire, and an earth elemental rises up from the ground. The elemental disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Conjure Volley", level: 5, school: "Conjuration", classes: ["Ranger"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (one piece of ammunition or one thrown weapon)"], duration: "Instantaneous", description: "You fire a piece of nonmagical ammunition from a ranged weapon or throw a nonmagical weapon into the air and choose a point within range. Hundreds of duplicates of the ammunition or weapon fall in a volley from above and then disappear. Each creature in a 40-foot-radius, 20-foot-high cylinder centered on that point must make a Dexterity saving throw. A creature takes 8d8 damage on a failed save, or half as much damage on a successful one. The damage type is the same as that of the ammunition or weapon." },
+    { name: "Contact Other Plane", level: 5, school: "Divination", classes: ["Warlock", "Wizard"], castingTime: "1 Minute", range: "Self", components: ["V"], duration: "1 minute", description: "You mentally contact a demigod, the spirit of a long-dead sage, or some other mysterious entity from another plane. Contacting this extraplanar intelligence can strain or even break your mind. When you cast this spell, make a DC 15 Intelligence saving throw. On a failure, you take 6d6 psychic damage and are insane until you finish a long rest. While insane, you can't take actions, can't understand what other creatures say, can't read, and speak only in gibberish. A Greater Restoration spell cast on you ends this effect." },
+    { name: "Contagion", level: 5, school: "Necromancy", classes: ["Cleric", "Druid"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "7 days", description: "Your touch inflicts disease. Make a melee spell attack against a creature within your reach. On a hit, the target is poisoned." },
+    { name: "Control Winds", level: 5, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You take control of the air in a 100-foot cube that you can see within range. Choose one of the following effects when you cast the spell. The effect lasts for the spell's duration, unless you use your action on a later turn to switch to a different effect. You can also use your action to temporarily halt the effect or to restart one you've halted." },
+    { name: "Creation", level: 5, school: "Illusion", classes: ["Artificer", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a tiny piece of matter of the same type of the item you plan to create)"], duration: "Special", description: "You pull wisps of shadow material from the Shadowfell to create a nonliving object of vegetable matter within range: soft goods, rope, wood, or something similar. You can also use this spell to create mineral objects such as stone, crystal, or metal. The object created must be no larger than a 5-foot cube, and the object must be of a form and material that you have seen before." },
+    { name: "Danse Macabre", level: 5, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "Threads of dark power leap from your fingers to pierce up to five Small or Medium corpses you can see within range. Each corpse immediately stands up and becomes undead. You decide whether it is a zombie or a skeleton (the statistics for zombies and skeletons are in the Monster Manual), and it gains a bonus to its attack and damage rolls equal to your spellcasting ability modifier. You can use a bonus action to mentally command the creatures you make with this spell, issuing the same command to all of them. To receive the command, a creature must be within 60 feet of you. You decide what action the creatures will take and where they will move during their next turn, or you can issue a general command, such as to guard a chamber or passageway against your foes. If you issue no commands, the creatures do nothing except defend themselves against hostile creatures. Once given an order, the creatures continue to follow it until their task is complete." },
+    { name: "Dawn", level: 5, school: "Evocation", classes: ["Cleric", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a sunburst pendant worth at least 100 gp)"], duration: "Concentration, up to 1 minute", description: "The light of dawn shines down on a location you specify within range. Until the spell ends, a 30-foot-radius.40-foot-high cylinder of bright light glimmers there. This light is sunlight. When the cylinder appears, each creature in it must make a Constitution saving throw, taking 4d10 radiant damage on a failed save, or half as much damage on a successful one. A creature must also make this saving throw whenever it ends its turn in the cylinder. If you're within 60 feet of the cylinder, you can move it up to 60 feet as a bonus action on your turn." },
+    { name: "Destructive Wave", level: 5, school: "Evocation", classes: ["Paladin"], castingTime: "1 Action", range: "Self (30-foot radius)", components: ["V"], duration: "Instantaneous", description: "You strike the ground, creating a burst of divine energy that ripples outward from you. Each creature you choose within 30 feet of you must succeed on a Constitution saving throw or take 5d6 thunder damage, as well as 5d6 radiant or necrotic damage (your choice), and be knocked prone. A creature that succeeds on its saving throw takes half as much damage and isn't knocked prone." },
+    { name: "Dispel Evil and Good", level: 5, school: "Abjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (holy water or powdered silver and iron)"], duration: "Concentration, up to 1 minute", description: "Shimmering energy surrounds and protects you from fey, undead, and creatures originating from beyond the Material Plane. For the duration, celestials, elementals, fey, fiends, and undead have disadvantage on attack rolls against you. You can end the spell early by using either of the following special functions." },
+    { name: "Dominate Person", level: 5, school: "Enchantment", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You attempt to beguile a humanoid that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw." },
+    { name: "Dream", level: 5, school: "Illusion", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Minute", range: "Special", components: ["V", "S", "M (a handful of sand, a dab of ink, and a writing quill plucked from a sleeping bird)"], duration: "8 hours", description: "This spell shapes a creature's dreams. Choose a creature known to you as the target of this spell. The target must be on the same plane of existence as you. Creatures that don't sleep, such as elves, can't be contacted by this spell. You, or a willing creature you touch, enters a trance state, acting as a messenger. While in the trance, the messenger is aware of their surroundings, but can't take actions or move." },
+    { name: "Enervation", level: 5, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A tendril of inky darkness reaches out from you, touching a creature you can see within range to drain life from it. The target must make a Dexterity saving throw. On a successful save, the target takes 2d8 necrotic damage, and the spell ends. On a failed save, the target takes 4d8 necrotic damage, and until the spell ends, you can use your action on each of your turns to automatically deal 4d8 necrotic damage to the target. The spell ends if you use your action to do anything else, if the target is ever outside the spell's range, or if the target has total cover from you. Whenever the spell deals damage to a target, you regain hit points equal to half the amount of necrotic damage the target takes." },
+    { name: "Far Step", level: 5, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V"], duration: "Concentration, up to 1 minute", description: "You teleport up to 60 feet to an unoccupied space you can see. On each of your turns before the spell ends, you can use a bonus action to teleport in this way again." },
+    { name: "Flame Strike", level: 5, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (pinch of sulfur)"], duration: "Instantaneous", description: "A vertical column of divine fire roars down from the heavens in a location you specify. Each creature in a 10-foot radius, 40-foot-high cylinder centered on a point within range must make a Dexterity saving throw. A creature takes 4d6 fire damage and 4d6 radiant damage on a failed save, or half as much damage on a successful one." },
+    { name: "Geas", level: 5, school: "Enchantment", classes: ["Bard", "Cleric", "Druid", "Paladin", "Wizard"], castingTime: "1 Minute", range: "60 Feet", components: ["V"], duration: "30 days", description: "You place a magical command on a creature that you can see within range, forcing it to carry out some service or refrain from some action or course of activity as you decide." },
+    { name: "Greater Restoration", level: 5, school: "Abjuration", classes: ["Artificer", "Bard", "Cleric", "Druid", "Ranger"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (diamond dust worth at least 100 gp, which the spell consumes)"], duration: "Instantaneous", description: "You imbue a creature you touch with positive energy to undo a debilitating effect. You can reduce the target's exhaustion level by one, or end one of the following effects on the target:" },
+    { name: "Hallow", level: 5, school: "Evocation", classes: ["Cleric"], castingTime: "24 Hours", range: "Touch", components: ["V", "S", "M (herbs, oils, and incense worth at least 1,000 gp, which the spell consumes)"], duration: "Until dispelled", description: "You touch a point and infuse an area around it with holy (or unholy) power. The area can have a radius up to 60 feet, and the spell fails if the radius includes an area already under the effect a hallow spell. The affected area is subject to the following effects." },
+    { name: "Hold Monster", level: 5, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a small, straight piece of iron)"], duration: "Concentration, up to 1 minute", description: "Choose a creature that you can see within range. The target must succeed on a Wisdom saving throw or be paralyzed for the duration. This spell has no effect on undead. At the end of each of its turns, the target can make another Wisdom saving throw. On a success, the spell ends on the target." },
+    { name: "Holy Weapon", level: 5, school: "Evocation", classes: ["Cleric", "Paladin"], castingTime: "1 Bonus Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You imbue a weapon you touch with holy power. Until the spell ends, the weapon emits bright light in a 30--foot radius and dim light for an additional 30 feet. In addition, weapon attacks made with it deal an extra 2d8 radiant damage on a hit. If the weapon isn't already a magic weapon, it becomes one for the duration. As a bonus action on your turn, you can dismiss this spell and cause the weapon to emit a burst of radiance. Each creature of your choice that you can see within 30 feet of the weapon must make a Constitution saving throw. On a failed save, a creature takes 4d8 radiant damage, and it is blinded for 1 minute. On a successful save, a creature takes half as much damage and isn't blinded. At the end of each of its turns, a blinded creature can make a Constitution saving throw, ending the effect on itself on a success." },
+    { name: "Immolation", level: 5, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V"], duration: "Concentration, up to 1 minute", description: "Flames wreathe one creature you can see within range. The target must make a Dexterity saving throw. It takes 7d6 fire damage on a failed save, or half as much damage on a successful one. On a failed save, the target also burns for the spell's duration. The burning target sheds bright light in a 30-foot radius and dim light for an additional 30 feet. At the end of each of its turns, the target repeats the saving throw. It takes 3d6 fire damage on a failed save, and the spell ends on a successful one. These magical flames can't be extinguished through nonmagical means." },
+    { name: "Infernal Calling", level: 5, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Minute", range: "90 feet", components: ["V", "S", "M (a ruby worth at least 999 gp)"], duration: "Concentration, up to 1 hour", description: "Uttering a dark incantation, you summon a devil from the Nine Hells. You choose the devil's type, which must be one of challenge rating 6 or lower, such as a barbed devil or a bearded devil. The devil appears in an unoccupied space that you can see within range. The devil disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Insect Plague", level: 5, school: "Conjuration", classes: ["Cleric", "Druid", "Sorcerer"], castingTime: "1 Action", range: "300 feet", components: ["V", "S", "M (a few grains of sugar, some kernels of grain, and a smear of fat)"], duration: "Concentration, up to 10 minutes", description: "Swarming, biting locusts fill a 20-foot-radius sphere centered on a point you choose within range. The sphere spreads around corners. The sphere remains for the duration, and its area is lightly obscured. The sphere's area is difficult terrain." },
+    { name: "Legend Lore", level: 5, school: "Divination", classes: ["Bard", "Cleric", "Wizard"], castingTime: "10 Minutes", range: "Self", components: ["V", "S", "M (incense worth at least 250 gp, which the spell consumes, and four ivory strips worth at least 50 gp each)"], duration: "Instantaneous", description: "Name or describe a person, place, or object. The spell brings to your mind a brief summary of the significant lore about the thing you named. The lore might consist of current tales, forgotten stories, or even secret lore that has never been widely known. If the thing you named isn't of legendary importance, you gain no information. The more information you already have about the thing, the more precise and detailed the information you receive is." },
+    { name: "Maelstrom", level: 5, school: "Evocation", classes: ["Druid"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (paper or leaf in the shape of a funnel)"], duration: "Concentration, up to 1 minute", description: "A mass of 5-foot-deep water appears and swirls in a 30-foot radius centered on a point you can see within range. The point must be on ground or in a body of water. Until the spell ends, that area is difficult terrain, and any creature that starts its turn there must succeed on a Strength saving throw or take 6d6 bludgeoning damage and be pulled 10 feet toward the center." },
+    { name: "Mass Cure Wounds", level: 5, school: "Evocation", classes: ["Bard", "Cleric", "Druid"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A wave of healing energy washes out from a point of your choice within range. Choose up to six creatures in a 30-foot-radius sphere centered on that point. Each target regains hit points equal to 3d8 + your spellcasting ability modifier. This spell has no effect on undead or constructs." },
+    { name: "Mislead", level: 5, school: "Illusion", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["S"], duration: "Concentration, up to 1 hour", description: "You become invisible at the same time that an illusory double of you appears where you are standing. The double lasts for the duration, but the invisibility ends if you attack or cast a spell." },
+    { name: "Modify Memory", level: 5, school: "Enchantment", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You attempt to reshape another creature's memories. One creature that you can see must make a Wisdom saving throw. If you are fighting the creature, it has advantage on the saving throw. On a failed save, the target becomes charmed by you for the duration. The charmed target is incapacitated and unaware of its surroundings, though it can still hear you. If it takes any damage or is targeted by another spell, this spell ends, and none of the target's memories are modified." },
+    { name: "Negative Energy Flood", level: 5, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "M (a broken bone and a square of black silk)"], duration: "Instantaneous", description: "You send ribbons of negative energy at one creature you can see within range. Unless the target is undead, it must make a Constitution saving throw, taking 5d12 necrotic damage on a failed save, or half as much damage on a successful one. A target killed by this damage rises up as a zombie at the start of your next turn. The zombie pursues whatever creature it can see that is closest to it. Statistics for the zombie are in the Monster Manual. If you target an undead with this spell, the target doesn't make a saving throw. Instead, roll 5d12. The target gains half the total as temporary hit points." },
+    { name: "Passwall", level: 5, school: "Transmutation", classes: ["Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a pinch of sesame seeds)"], duration: "1 hour", description: "A passage appears at a point of your choice that you can see on a wooden, plaster, or stone surface (such as a wall, a ceiling, or a floor) within range, and lasts for the duration. You choose the opening's dimensions: up to 5 feet wide, 8 feet tall, and 20 feet deep. The passage creates no instability in a structure surrounding it." },
+    { name: "Planar Binding", level: 5, school: "Abjuration", classes: ["Bard", "Cleric", "Druid", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a jewel worth at least 1,000 gp, which the spell consumes)"], duration: "24 hours", description: "With this spell, you attempt to bind a celestial, an elemental, a fey, or a fiend to your service. The creature must be within range for the entire casting of the spell. (Typically, the creature is first summoned into the center of an inverted Magic Circle in order to keep it trapped while this spell is cast.) At the completion of the casting, the target must make a Charisma saving throw. On a failed save, it is bound to serve you for the duration. If the creature was summoned or created by another spell, that spell's duration is extended to match the duration of this spell." },
+    { name: "Raise Dead", level: 5, school: "Necromancy", classes: ["Bard", "Cleric", "Paladin"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a diamond worth at least 500 gp, which the spell consumes)"], duration: "Instantaneous", description: "You return a dead creature you touch to life, provided that it has been dead no longer than 10 days. If the creature's soul is both willing and at liberty to rejoin the body, the creature returns to life with 1 hit point." },
+    { name: "Rary's Telepathic Bond", level: 5, school: "Divination", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (pieces of eggshell from two different kinds of creatures)"], duration: "1 hour", description: "You forge a telepathic link among up to eight willing creatures of your choice within range, psychically linking each creature to all the others for the duration. Creatures with Intelligence scores of 2 or less aren't affected by this spell." },
+    { name: "Reincarnate", level: 5, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (rare oils and unguents worth at least 1,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "You touch a dead humanoid or a piece of a dead humanoid. Provided that the creature has been dead no longer than 10 days, the spell forms a new adult body for it and then calls the soul to enter that body. If the target's soul isn't free or willing to do so, the spell fails." },
+    { name: "Scrying", level: 5, school: "Divination", classes: ["Bard", "Cleric", "Druid", "Warlock", "Wizard"], castingTime: "10 Minutes", range: "Self", components: ["V", "S", "M (a focus worth at least 1,000 gp, such as a crystal ball, a silver mirror, or a font filled with holy water)"], duration: "Concentration, up to 10 minutes", description: "You can see and hear a particular creature you choose that is on the same plane of existence as you. The target must make a Wisdom saving throw, which is modified by how well you know the target and the sort of physical connection you have to it. If a target knows you're casting this spell, it can fail the saving throw voluntarily if it wants to be observed." },
+    { name: "Seeming", level: 5, school: "Illusion", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "8 hours", description: "This spell allows you to change the appearance of any number of creatures that you can see within range. You give each target you choose a new, illusory appearance. An unwilling target can make a Charisma saving throw, and if it succeeds, it is unaffected by this spell." },
+    { name: "Skill Empowerment", level: 5, school: "Transmutation", classes: ["Artificer", "Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "Your magic deepens a creature's understanding of its own talent. You touch one willing creature and give it expertise in one skill of your choice; until the spell ends, the creature doubles its proficiency bonus for ability checks it makes that use the chosen skill." },
+    { name: "Steel Wind Strike", level: 5, school: "Conjuration", classes: ["Ranger", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["S", "M (a melee weapon worth at least 1 sp)"], duration: "Instantaneous", description: "You flourish the weapon used in the casting and then vanish to strike like the wind. Choose up to five creatures you can see within range. Make a melee spell attack against each target. On a hit, a target takes 6d10 force damage." },
+    { name: "Summon Celestial", level: 5, school: "Conjuration", classes: ["Cleric", "Paladin"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (a golden reliquary worth at least 500 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a celestial spirit. It manifests in an angelic form in an unoccupied space that you can see within range. This corporeal form uses the Celestial Spirit stat block. When you cast the spell, choose Avenger or Defender. Your choice determines the creature's attack in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Swift Quiver", level: 5, school: "Transmutation", classes: ["Ranger"], castingTime: "1 Bonus Action", range: "Touch", components: ["V", "S", "M (a quiver containing at least one piece of ammunition)"], duration: "Concentration, up to 1 minute", description: "You transmute your quiver so it produces an endless supply of nonmagical ammunition, which seems to leap into your hand when you reach for it." },
+    { name: "Synaptic Static", level: 5, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You choose a point within range and cause psychic energy to explode there. Each creature in a 20-foot-radius sphere centered on that point must make an Intelligence saving throw. A creature with an Intelligence score of 2 or lower can't be affected by this spell. A target takes 8d6 psychic damage on a failed save, or half as much damage on a successful one." },
+    { name: "Telekinesis", level: 5, school: "Transmutation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You gain the ability to move or manipulate creatures or objects by thought. When you cast the spell, and as your action each round for the duration, you can exert your will on one creature or object that you can see within range, causing the appropriate effect below. You can affect the same target round after round, or choose a new one at any time. If you switch targets, the prior target is no longer affected by the spell." },
+    { name: "Teleportation Circle", level: 5, school: "Conjuration", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "10 feet", components: ["V", "M (rare chalks and inks infused with precious gems with 50 gp, which the spell consumes)"], duration: "1 round", description: "As you cast the spell, you draw a 10-foot-diameter circle on the ground inscribed with sigils that link your location to a permanent teleportation circle of your choice whose sigil sequence you know and that is on the same plane of existence as you." },
+    { name: "Transmute Rock", level: 5, school: "Transmutation", classes: ["Druid", "Wizard", "Artificer"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (clay and water)"], duration: "Instantaneous", description: "You choose an area of stone or mud that you can see that fits within a 40-foot cube and that is within range, and choose one of the following effects." },
+    { name: "Tree Stride", level: 5, school: "Conjuration", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You gain the ability to enter a tree and move from inside it to inside another tree of the same kind within 500 feet." },
+    { name: "Wall of Force", level: 5, school: "Evocation", classes: ["Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a pinch of powder made by crushing a clear gemstone)"], duration: "Concentration, up to 10 minutes", description: "An invisible wall of force springs into existence at a point you choose within range." },
+    { name: "Wall Of Light", level: 5, school: "Evocation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a hand mirror)"], duration: "Concentration, up to 10 minutes", description: "A shimmering wall of bright light appears at a point you choose within range. The wall appears in any orientation you choose: horizontally, vertically, or diagonally. It can be free floating, or it can rest on a solid surface. The wall can be up to 60 feet long, 10 feet high, and 5 feet thick. The wall blocks line of sight, but creatures and objects can pass through it. It emits bright light out to 120 feet and dim light for an additional 120 feet." },
+    { name: "Wall of Stone", level: 5, school: "Evocation", classes: ["Artificer", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a small block of granite)"], duration: "Concentration, up to 10 minutes", description: "A nonmagical wall of solid stone springs into existence at a point you choose within range. The wall is 6 inches thick and is composed of ten 10-foot-by-10-foot panels. Each panel must be contiguous with at least on other panel. Alternatively, you can create 10-foot-by-20-foot panels that are only 3 inches thick." },
+    { name: "Wrath Of Nature", level: 5, school: "Evocation", classes: ["Druid", "Ranger"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You call out to the spirits of nature to rouse them against your enemies. Choose a point you can see within range. The spirits cause trees, rocks, and grasses in a 60-foot cube centered on that point to become animated until the spell ends." }
   ],
   "6th": [
-    { name: "Summon Fiend", level: 6, school: "Conjuration", classes: ["Warlock","Wizard"], castingTime: "1 action", range: "90 ft", components: ["V","S","M (humanoid blood inside a ruby vial worth at least 600 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a fiendish spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Fiendish Spirit stat block. When you cast the spell, choose Demon, Devil, or Yugoloth. The creature disappears when it drops to 0 hit points or when the spell ends. The creature is an ally to you and your companions. In combat, the creature shares your initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you)." },
-    { name: "Tasha's Otherworldly Guise", level: 6, school: "Transmutation", classes: ["Sorcerer","Wizard"], castingTime: "1 bonus action", range: "Self", components: ["V","S","M (an object engraved with a symbol of the Outer Planes, worth at least 500 gp)"], duration: "Concentration, up to 1 minute", description: "You draw on the magic of the Lower Planes or Upper Planes (your choice) to transform yourself. You gain the following benefits: immunity to fire and poison (Lower) or radiant and necrotic (Upper); immunity to poisoned (Lower) or charmed (Upper); flying speed 40 ft.; +2 bonus to AC; all weapon attacks are magical and can use your spellcasting ability modifier; you can attack twice instead of once when you take the Attack action." }
-  ]
+    { name: "Arcane Gate", level: 6, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "500 feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You create linked teleportation portals that remain open for the duration. Choose two points on the ground that you can see, one point within 10 feet of you and one point within 500 feet of you. A circular portal, 10 feet in diameter, opens over each point. If the portal would open in the space occupied by a creature, the spell fails, and the casting is lost." },
+    { name: "Blade Barrier", level: 6, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You create a vertical wall of whirling, razor-sharp blades made of magical energy. The wall appears within range and lasts for the duration. You can make a straight wall up to 100 feet long, 20 feet high, and 5 feet thick, or a ringed wall up to 60 feet in diameter, 20 feet high, and 5 feet thick. The wall provides three-quarters cover to creatures behind it, and its space is difficult terrain." },
+    { name: "Bones of the Earth", level: 6, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You cause up to six pillars of stone to burst from places on the ground that you can see within range. Each pillar is a cylinder that has a diameter of 5 feet and a height of up to 30 feet. The ground where a pillar appears must be wide enough for its diameter, and you can target ground under a creature if that creature is Medium or smaller. Each pillar has AC 5 and 30 hit points. When reduced to 0 hit points, a pillar crumbles into rubble, which creates an area of difficult terrain with a 10-foot radius. The rubble lasts until cleared." },
+    { name: "Chain Lightning", level: 6, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a bit of fur; a piece of amber, glass, or a crystal rod; and three silver pins)"], duration: "Instantaneous", description: "You create a bolt of lightning that arcs toward a target of your choice that you can see within range. Three bolts then leap from that target to as many as three other targets, each of which must be within 30 feet of the first target. A target can be a creature or an object and can be targeted by only one of the bolts." },
+    { name: "Circle of Death", level: 6, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (the powder of a crushed black pearl worth at least 500 gp)"], duration: "Instantaneous", description: "A sphere of negative energy ripples out in a 60-foot-radius sphere from a point within range. Each creature in that area must make a Constitution saving throw. A target takes 8d6 necrotic damage on a failed save, or half as much damage on a successful one." },
+    { name: "Conjure Fey", level: 6, school: "Conjuration", classes: ["Druid", "Warlock"], castingTime: "1 Action", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You summon a fey creature of challenge rating 6 or lower, or a fey spirit that takes the form of a beast of challenge rating 6 or lower. It appears in an unoccupied space that you can see within range. The fey creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Contingency", level: 6, school: "Evocation", classes: ["Wizard"], castingTime: "10 Minutes", range: "Self", components: ["V", "S", "M (a statuette of yourself carved from ivory and decorated with gems worth at least 1,500 gp)"], duration: "10 days", description: "Choose a spell of 5th level or lower that you can cast, that has a casting time of 1 action, and that can target you. You cast that spell called the contingent spell as part of casting contingency, expending spell slots for both, but the contingent spell doesn't come into effect. Instead, it takes effect when a certain circumstance occurs. You describe that circumstance when you cast the two spells. For example, a contingency cast with water breathing might stipulate that water breathing comes into effect when you are engulfed in water or a similar liquid." },
+    { name: "Create Homunculus", level: 6, school: "Transmutation", classes: ["Wizard"], castingTime: "1 Hour", range: "120 Feet", components: ["V", "S", "M (clay, ash, and mandrake root, all of which the spell consumes, and a jewel-encrusted dagger worth at least 1,000 gp)"], duration: "Instantaneous", description: "While speaking an intricate incantation, you cut yourself with a jewel-encrusted dagger, taking 2d4 piercing damage that can't be reduced in any way. You then drip your blood on the spell's other components and touch them, transforming them into a special construct called a homunculus. The statistics of the homunculus are in the Monster Manual. It is your faithful companion, and it dies if you die. Whenever you finish a long rest, you can spend up to half your Hit Dice if the homunculus is on the same plane of existence as you. When you do so, roll each die and add your Constitution modifier to it. Your hit point maximum is reduced by the total, and the homunculus's hit point maximum and current hit points are both increased by it. This process can reduce you to no lower than 1 hit point. and the change to your and the homunculus's hit points ends when you finish your next long rest. The reduction to your hit point maximum can't be removed by any means before then, except by the homunculus's death. You can have only one homunculus at a time. If you cast this spell while your homunculus lives, the spell fails." },
+    { name: "Create Undead", level: 6, school: "Necromancy", classes: ["Cleric", "Warlock", "Wizard"], castingTime: "1 Minute", range: "10 feet", components: ["V", "S", "M (one clay pot filled with grave dirt, one clay pot filled with brackish water, and one 150 gp black onyx stone for each corpse)"], duration: "Instantaneous", description: "You can cast this spell only at night. Choose up to three corpses of Medium or Small humanoids within range. Each corpse becomes a ghoul under your control. The DM has game statistics for these creatures." },
+    { name: "Disintegrate", level: 6, school: "Transmutation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a lodestone and a pinch of dust)"], duration: "Instantaneous", description: "A thin green ray springs from your pointing finger to a target that you can see within range. The target can be a creature, an object, or a creation of magical force, such as the wall created by wall of force." },
+    { name: "Drawmij's Instant Summons", level: 6, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (a sapphire worth 1,000 gp)"], duration: "Until dispelled", description: "You touch an object weighing 10 pounds or less whose longest dimension is 6 feet or less. The spell leaves an invisible mark on its surface and invisibly inscribes the name of the item on the sapphire you use as the material component. Each time you cast this spell, you must use a different sapphire." },
+    { name: "Druid Grove", level: 6, school: "Abjuration", classes: ["Druid"], castingTime: "10 Minutes", range: "Touch", components: ["V", "S", "M (mistletoe, which the spell consumes, that was harvested with a golden sickle under the light of a full moon)"], duration: "24 hours", description: "You invoke the spirits of nature to protect an area outdoors or underground. The area can be as small as a 30--foot cube or as large as a 90-foot cube. Buildings and other structures are excluded from the affected area. If you cast this spell in the same area every day for a year, the spell lasts until dispelled. The spell creates the following effects within the area. When you cast this spell, you can specify creatures as friends who are immune to the effects. You can also specify a password that, when spoken aloud, makes the speaker immune to these effects. The entire warded area radiates magic. A dispel magic cast on the area, if successful, removes only one of the following effects, not the entire area. That spell's caster chooses which effect to end. Only when all its effects are gone is this spell dispelled." },
+    { name: "Eyebite", level: 6, school: "Necromancy", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "For the spell's duration, your eyes become an inky void imbued with dread power. One creature of your choice within 60 feet of you that you can see must succeed on a Wisdom saving throw or be affected by one of the following effects of your choice for the duration. On each of your turns until the spell ends, you can use your action to target another creature but can't target a creature again if it has succeeded on a saving throw against this casting of eyebite." },
+    { name: "Find the Path", level: 6, school: "Divination", classes: ["Bard", "Cleric", "Druid"], castingTime: "1 Minute", range: "Self", components: ["V", "S", "M (a set of divinatory tools - such as bones, ivory sticks, cards, teeth, or carved runes - worth 100 gp, and an object from the location you wish to find)"], duration: "Concentration, up to 1 day", description: "This spell allows you to find the shortest, most direct physical route to a specific fixed location that you are familiar with on the same plane of existence. If you name a destination on another plan of existence, a destination that moves (such as a mobile fortress), or a destination that isn't specific (such as \"a green dragon's lair\"), the spell fails." },
+    { name: "Flesh to Stone", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a pinch of lime, water, and earth)"], duration: "Concentration, up to 1 minute", description: "You attempt to turn one creature that you can see within range into stone. If the target's body is made of flesh, the creature must make a Constitution saving throw. On a failed save, it is restrained as its flesh begins to harden. On a successful save, the creature isn't affected." },
+    { name: "Forbiddance", level: 6, school: "Abjuration", classes: ["Cleric"], castingTime: "10 Minutes", range: "Touch", components: ["V", "S", "M (a sprinkling of holy water, rare incense, and powdered ruby worth at least 1,000 gp)"], duration: "1 day", description: "You create a ward against magical travel that protects up to 40,000 square feet of floor space to a height of 30 feet above the floor. For the duration, creatures can't teleport into the area or use portals, such as those created by the gate spell, to enter the area. The spell proofs the area against planar travel, and therefore prevents creatures from accessing the area by way of the Astral Plane, Ethereal Plane, Feywild, Shadowfell, or the plane shift spell." },
+    { name: "Globe of Invulnerability", level: 6, school: "Abjuration", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (10-foot radius)", components: ["V", "S", "M (a glass or crystal bead that shatters when the spell ends)"], duration: "Concentration, up to 1 minute", description: "An immobile, faintly shimmering barrier springs into existence in a 10-foot radius around you and remains for the duration." },
+    { name: "Guards and Wards", level: 6, school: "Abjuration", classes: ["Bard", "Wizard"], castingTime: "10 Minutes", range: "Touch", components: ["V", "S", "M (burning incense, a small measure of brimstone and oil, a knotted string, a small amount of umber hulk blood, and a small silver rod worth at least 10 gp)"], duration: "24 hours", description: "You create a ward that protects up to 2,500 square feet of floor space (an area 50 feet square, or one hundred 5-foot squares or twenty-five 10-foot squares). The warded area can be up to 20 feet tall, and shaped as you desire. You can ward several stories of a stronghold by dividing the area among them, as long as you can walk into each contiguous area while you are casting the spell." },
+    { name: "Harm", level: 6, school: "Necromancy", classes: ["Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You unleash a virulent disease on a creature that you can see within range. The target must make a Constitution saving throw. On a failed save, it takes 14d6 necrotic damage, or half as much damage on a successful save. The damage can't reduce the target's hit points below 1. If the target fails the saving throw, its hit point maximum is reduced for 1 hour by an amount equal to the necrotic damage it took. Any effect that removes a disease allows a creature's hit point maximum to return to normal before that time passes." },
+    { name: "Heal", level: 6, school: "Evocation", classes: ["Cleric", "Druid"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "Choose a creature that you can see within range. A surge of positive energy washes through the creature, causing it to regain 70 hit points. The spell also ends blindness, deafness, and any diseases affecting the target. This spell has no effect on constructs or undead." },
+    { name: "Heroes' Feast", level: 6, school: "Conjuration", classes: ["Bard", "Cleric", "Druid"], castingTime: "10 Minutes", range: "30 Feet", components: ["V", "S", "M (a gem-encrusted bowl worth at least 1,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "You bring forth a great feast, including magnificent food and drink. The feast takes 1 hour to consume and disappears at the end of that time, and the beneficial effects don't set in until this hour is over. Up to twelve other creatures can partake of the feast." },
+    { name: "Investiture of Flame", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "Flames race across your body, shedding bright light in a 30-foot radius and dim light for an additional 30 feet for the spell's duration. The flames don't harm you. Until the spell ends, you gain the following benefits:" },
+    { name: "Investiture of Ice", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "Until the spell ends, ice rimes your body, and you gain the following benefits:" },
+    { name: "Investiture of Stone", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "Until the spell ends, bits of rock spread across your body, and you gain the following benefits:" },
+    { name: "Investiture of Wind", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "Until the spell ends, wind whirls around you, and you gain the following benefits:" },
+    { name: "Magic Jar", level: 6, school: "Necromancy", classes: ["Wizard"], castingTime: "1 Minute", range: "Self", components: ["V", "S", "M (a gem, crystal, reliquary, or some other ornamental container worth at least 500 gp)"], duration: "Until dispelled", description: "Your body falls into a catatonic state as your soul leaves it and enters the container you used for the spell's material component. While your soul inhabits the container, you are aware of your surroundings as if you were in the container's space. You can't move or use reactions. The only action you can take is to project your soul up to 100 feet out of the container, either returning to your living body (and ending the spell) or attempting to possess a humanoids body." },
+    { name: "Mass Suggestion", level: 6, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "M (a snake's tongue and either a bit of honeycomb or a drop of sweet oil)"], duration: "24 hours", description: "You suggest a course of activity (limited to a sentence or two) and magically influence up to twelve creatures of your choice that you can see within range and that can hear and understand you. Creatures that can't be charmed are immune to this effect. The suggestion must be worded in such a manner as to make the course of action sound reasonable. Asking the creature to stab itself, throw itself onto a spear, immolate itself, or do some other obviously harmful act automatically negates the effect of the spell." },
+    { name: "Mental Prison", level: 6, school: "Illusion", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S"], duration: "Concentration, up to 1 minute", description: "You attempt to bind a creature within an illusory cell that only it perceives. One creature you can see within range must make an Intelligence saving throw. The target succeeds automatically if it is immune to being charmed. On a successful save, the target takes 5d10 psychic damage, and the spell ends. On a failed save, the target takes 5d10 psychic damage, and you make the area immediately around the target's space appear dangerous to it in some way. You might cause the target to perceive itself as being surrounded by fire, floating razors, or hideous maws filled with dripping teeth. Whatever form the illusion takes, the target can't see or hear anything beyond it and is restrained for the spell's duration. If the target is moved out of the illusion, makes a melee attack through it, or reaches any part of its body through it, the target takes 10d10 psychic damage, and the spell ends." },
+    { name: "Move Earth", level: 6, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (an iron blade and a small bag containing a mixture of soils - clay, loam, and sand)"], duration: "Concentration, up to 2 hours", description: "Choose an area of terrain no larger than 40 feet on a side within range. You can reshape dirt, sand, or clay in the area in any manner you choose for the duration. You can raise or lower the area's elevation, create or fill in a trench, erect or flatten a wall, or form a pillar. The extent of any such changes can't exceed half the area's largest dimension. So, if you affect a 40-foot square, you can create a pillar up to 20 feet high, raise or lower the square's elevation by up to 20 feet, dig a trench up to 20 feet deep, and so on. It takes 10 minutes for these changes to complete." },
+    { name: "Otiluke's Freezing Sphere", level: 6, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V", "S", "M (a small crystal sphere)"], duration: "Instantaneous", description: "A frigid globe of cold energy streaks from your fingertips to a point of your choice within range, where it explodes in a 60-foot-radius sphere. Each creature within the area must make a Constitution saving throw. On a failed save, a creature takes 10d6 cold damage. On a successful save, it takes half as much damage." },
+    { name: "Otto's Irresistible Dance", level: 6, school: "Enchantment", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "Concentration, up to 1 minute", description: "Choose one creature that you can see within range. The target begins a comic dance in place: shuffling, tapping its feet, and capering for the duration. Creatures that can't be charmed are immune to this spell." },
+    { name: "Planar Ally", level: 6, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You beseech an otherworldly entity for aid. The being must be known to you: a god, a primordial, a demon prince, or some other being of cosmic power. That entity sends a celestial, an elemental, or a fiend loyal to it to aid you, making the creature appear in an unoccupied space within range. If you know a specific creature's name, you can speak that name when you cast this spell to request that creature, though you might get a different creature anyway (DM's choice)." },
+    { name: "Primordial Ward", level: 6, school: "Abjuration", classes: ["Druid"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You have resistance to acid, cold, fire, lightning, and thunder damage for the spell's duration." },
+    { name: "Programmed Illusion", level: 6, school: "Illusion", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a bit of fleece and jade dust worth at least 25 gp)"], duration: "Until dispelled", description: "You create an illusion of an object, a creature, or some other visible phenomenon within range that activates when a specific condition occurs. The illusion is imperceptible until then. It must be no larger than a 30-foot cube, and you decide when you cast the spell how the illusion behaves and what sounds it makes. This scripted performance can last up to 5 minutes." },
+    { name: "Scatter", level: 6, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V"], duration: "Instantaneous", description: "The air quivers around up to five creatures of your choice that you can see within range. An unwilling creature must succeed on a Wisdom saving throw to resist this spell. You teleport each affected target to an unoccupied space that you can see within 120 feet of you. That space must be on the ground or on a floor." },
+    { name: "Soul Cage", level: 6, school: "Necromancy", classes: ["Warlock", "Wizard"], castingTime: "1 Reaction", range: "60 Feet", components: ["V", "S", "M (a tiny silver cage worth 100 gp)"], duration: "8 hours", description: "This spell snatches the soul of a humanoid as it dies and traps it inside the tiny cage you use for the material component. A stolen soul remains inside the cage until the spell ends or until you destroy the cage, which ends the spell. While you have a soul inside the cage, you can exploit it in any of the ways described below. You can use a trapped soul up to six times. Once you exploit a soul for the sixth time, it is released, and the spell ends. While a soul is trapped, the dead humanoid it came from can't be revived." },
+    { name: "Summon Fiend", level: 6, school: "Conjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (humanoid blood inside a ruby vial worth at least 600 gp)"], duration: "Concentration, up to 1 hour", description: "You call forth a fiendish spirit. It manifests in an unoccupied space that you can see within range. This corporeal form uses the Fiendish Spirit stat block. When you cast the spell, choose Demon, Devil, or Yugoloth. The creature resembles a fiend of the chosen type, which determines certain traits in its stat block. The creature disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Sunbeam", level: 6, school: "Evocation", classes: ["Cleric", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (60-foot line)", components: ["V", "S", "M (a magnifying glass)"], duration: "Concentration, up to 1 minute", description: "A beam of brilliant light flashes out from your hand in a 5-foot-wide, 60-foot-line. Each creature in the line must make a Constitution saving throw. On a failed save, a creature takes 6d8 radiant damage and is blinded until your next turn. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw." },
+    { name: "Tasha's Otherworldly Guise", level: 6, school: "Transmutation", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "Self", components: ["V", "S", "M (an object engraved with a symbol of the Outer Planes, worth at least 500 gp)"], duration: "Concentration, up to 1 minute", description: "Uttering an incantation, you draw on the magic of the Lower Planes or Upper Planes (your choice) to transform yourself. You gain the following benefits until the spell ends:" },
+    { name: "Tenser's Transformation", level: 6, school: "Transmutation", classes: ["Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a few hairs from a bull)"], duration: "Concentration, up to 10 minutes", description: "You endow yourself with endurance and martial prowess fueled by magic. Until the spell ends, you can't cast spells, and you gain the following benefits:" },
+    { name: "Transport via Plants", level: 6, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "10 feet", components: ["V", "S"], duration: "1 round", description: "This spell creates a magical link between a Large or larger inanimate plant within range and another plant, at any distance, on the same plane of existence. You must have seen or touched the destination plant at least once before. For the duration, any creature can step into the target plant and exit from the destination plant by using 5 feet of movement." },
+    { name: "True Seeing", level: 6, school: "Divination", classes: ["Bard", "Cleric", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (an ointment for the eyes that costs 25 gp; is made from mushroom powder, saffron, and fat; and is consumed by the spell)"], duration: "1 hour", description: "This spell gives the willing creature you touch the ability to see things as they actually are. For the duration, the creature has truesight, notices secret doors hidden by magic, and can see into the Ethereal Plane, all out to a range of 120 feet." },
+    { name: "Wall of Ice", level: 6, school: "Evocation", classes: ["Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a small piece of quartz)"], duration: "Concentration, up to 10 minutes", description: "You create a wall of ice on a solid surface within range. You can form it into a hemispherical dome or a sphere with radius of up to 10 feet, or you can shape a flat surface made up of ten 10-foot-square panels. Each panel must be contiguous with another panel. In any form, the wall is 1 foot thick and lasts for the duration." },
+    { name: "Wall of Thorns", level: 6, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a handful of thorns)"], duration: "Concentration, up to 10 minutes", description: "You create a wall of tough, pliable, tangled brush bristling with needle-sharp thorns. The wall appears within range on a solid surface and lasts for the duration. You choose to make the wall up to 60 feet long, 10 feet high, and 5 feet thick or a circle that has a 20-foot diameter and is up to 20 feet high and 5 feet thick. The wall blocks line of sight." },
+    { name: "Wind Walk", level: 6, school: "Transmutation", classes: ["Druid"], castingTime: "1 Minute", range: "30 Feet", components: ["V", "S", "M (fire and holy water)"], duration: "8 hours", description: "You and up to ten willing creatures you can see within range assume a gaseous form for the duration, appearing as wisps of cloud. While in this cloud form, a creature has a flying speed of 300 feet and has resistance to damage from nonmagical weapons. The only actions a creature can take in this form are the Dash action or to revert to its normal form." },
+    { name: "Word of Recall", level: 6, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Action", range: "5 feet", components: ["V"], duration: "Instantaneous", description: "You and up to five willing creatures within 5 feet of you instantly teleport to a previously designated sanctuary. You and any creatures that teleport with you appear in the nearest unoccupied space to the spot you designated when you prepared your sanctuary (see below). If you cast this spell without first preparing a sanctuary, the spell has no effect." }
+  ],
+  "7th": [
+    { name: "Conjure Celestial", level: 7, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Minute", range: "90 feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You summon a celestial of challenge rating 4 or lower, which appears in an unoccupied space that you can see within range. The celestial disappears when it drops to 0 hit points or when the spell ends." },
+    { name: "Crown Of Stars", level: 7, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "1 hour", description: "Seven star-like motes of light appear and orbit your head until the spell ends. You can use a bonus action to send one of the motes streaking toward one creature or object within 120 feet of you. When you do so, make a ranged spell attack. On a hit. the target takes 4d12 radiant damage. Whether you hit or miss, the mote is expended. The spell ends early if you expend the last mote. If you have four or more motes remaining, they shed bright light in a 30-foot radius and dim light for an additional 30 feet. If you have one to three motes remaining, they shed dim light in a 30--foot radius." },
+    { name: "Delayed Blast Fireball", level: 7, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a tiny ball of bat guano and sulfur)"], duration: "Concentration, up to 1 minute", description: "A beam of yellow light flashes from your pointing finger, then condenses to linger at a chosen point within range as a glowing bead for the duration. When the spell ends, either because your concentration is broken or because you decide to end it, the bead blossoms with a low roar into an explosion of flame that spreads around corners. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw. A creature takes fire damage equal to the total accumulated damage on a failed save, or half as much damage on a successful one." },
+    { name: "Divine Word", level: 7, school: "Evocation", classes: ["Cleric"], castingTime: "1 Bonus Action", range: "30 Feet", components: ["V"], duration: "Instantaneous", description: "You utter a divine word, imbued with the power that shaped the world at the dawn of creation. Choose any number of creatures you can see within range. Each creature that can hear you must make a Charisma saving throw. On a failed save, a creature suffers an effect based on its current hit points:" },
+    { name: "Dream of the Blue Veil", level: 7, school: "Conjuration", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "10 Minutes", range: "20 feet", components: ["V", "S", "M (a magic item or a willing creature from the destination world)"], duration: "6 hours", description: "You and up to eight willing creatures within range fall unconscious for the spells' duration and experience visions of another world on the Material Plane, such as Oerth, Toril, Krynn, or Eberron. If the spell reaches its full duration, the visions conclude with each of you encountering and pulling back a mysterious blue curtain. The spell then ends with you mentally and physically transported to the world that was in the visions." },
+    { name: "Etherealness", level: 7, school: "Transmutation", classes: ["Bard", "Cleric", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S"], duration: "Up to 8 hours", description: "You step into the border regions of the Ethereal Plane, in the area where it overlaps with your current plane. You remain in the Border Ethereal for the duration or until you use your action to dismiss the spell. During this time, you can move in any direction. If you move up or down, every foot of movement costs an extra foot. You can see and hear the plane you originated from, but everything there looks gray, and you can't see anything more than 60 feet away." },
+    { name: "Finger of Death", level: 7, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You send negative energy coursing through a creature that you can see within range, causing it searing pain. The target must make a Constitution saving throw. It takes 7d8 + 30 necrotic damage on a failed save, or half as much damage on a successful one." },
+    { name: "Fire Storm", level: 7, school: "Evocation", classes: ["Cleric", "Druid", "Sorcerer"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A storm made up of sheets of roaring flame appears in a location you choose within range. The area of the storm consists of up to ten 10-foot cubes, which you can arrange as you wish. Each cube must have at least one face adjacent to the face of another cube. Each creature in the area must make Dexterity saving throw. It takes 7d10 fire damage on a failed save, or half as much damage on a successful one." },
+    { name: "Forcecage", level: 7, school: "Evocation", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "100 feet", components: ["V", "S", "M (ruby dust worth 1,500 gp)"], duration: "1 hour", description: "An immobile, invisible, cube-shaped prison composed of magical force springs into existence around an area you choose within range. The prison can be a cage or a solid box as you choose." },
+    { name: "Mirage Arcane", level: 7, school: "Illusion", classes: ["Bard", "Druid", "Wizard"], castingTime: "10 Minutes", range: "Sight", components: ["V", "S"], duration: "10 days", description: "You make terrain in an area up to 1 mile square look, sound, smell, and even feel like some other sort of terrain. The terrain's general shape remains the same, however. Open fields or a road could be made to resemble a swamp, hill, crevasse, or some other difficult or impassable terrain. A pond can be made to seem like a grassy meadow, a precipice like a gentle slope, or a rock-strewn gully like a wide and smooth road." },
+    { name: "Mordenkainen's Magnificent Mansion", level: 7, school: "Conjuration", classes: ["Bard", "Wizard"], castingTime: "1 Minute", range: "300 feet", components: ["V", "S", "M (a miniature portal carved from ivory, a small piece of polished marble, and a tiny silver spoon, each item worth at least 5 gp)"], duration: "24 hours", description: "You conjure an extradimensional dwelling in range that lasts for the duration. You choose where its one entrance is located. The entrance shimmers faintly and is 5 feet wide and 10 feet tall. You and any creature you designate when you cast the spell can enter the extradimensional dwelling as long as the portal remains open. You can open or close the portal if you are within 30 feet of it. While closed, the portal is invisible." },
+    { name: "Mordenkainen's Sword", level: 7, school: "Evocation", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a miniature platinum sword with a grip and pommel of copper and zinc, worth 250 gp)"], duration: "Concentration, up to 1 minute", description: "You create a sword-shaped plane of force that hovers within range. It lasts for the duration." },
+    { name: "Plane Shift", level: 7, school: "Conjuration", classes: ["Cleric", "Druid", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a forked, metal rod worth at least 250 gp, attuned to a particular plane of existence)"], duration: "Instantaneous", description: "You and up to eight willing creatures who link hands in a circle are transported to a different plane of existence. You can specify a target destination in general terms, such as the City of Brass on the Elemental Plane of Fire or the palace of Dispater on the second level of the Nine Hells, and you appear in or near that destination. If you are trying to reach the City of Brass, for example, you might arrive in its Street of Steel, before its Gate of Ashes, or looking at the city from across the Sea of Fire, at the DM's discretion." },
+    { name: "Power Word: Pain", level: 7, school: "Enchantment", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "You speak a word of power that causes waves of intense pain to assail one creature you can see within range. If the target has 100 hit points or fewer, it is subject to crippling pain. Otherwise, the spell has no effect on it. A target is also unaffected if it is immune to being charmed." },
+    { name: "Prismatic Spray", level: 7, school: "Evocation", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self (60-foot cone)", components: ["V", "S"], duration: "Instantaneous", description: "Eight multicolored rays of light flash from your hand. Each ray is a different color and has a different power and purpose. Each creature in a 60-foot cone must make a Dexterity saving throw. For each target, roll a d8 to determine which color ray affects it." },
+    { name: "Project Image", level: 7, school: "Illusion", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "500 Miles", components: ["V", "S", "M (a small replica of you made from materials worth at least 5 gp)"], duration: "Concentration, up to 1 day", description: "You create an illusory copy of yourself that lasts for the duration. The copy can appear at any location within range that you have seen before, regardless of intervening obstacles. The illusion looks and sounds like you but is intangible. If the illusion takes any damage, it disappears, and the spell ends." },
+    { name: "Regenerate", level: 7, school: "Transmutation", classes: ["Bard", "Cleric", "Druid"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (a prayer wheel and holy water)"], duration: "1 hour", description: "You touch a creature and stimulate its natural healing ability. The target regains 4d8 + 15 hit points. For the duration of the spell, the target regains 1 hit point at the start of each of its turns (10 hit points each minute)." },
+    { name: "Resurrection", level: 7, school: "Necromancy", classes: ["Bard", "Cleric"], castingTime: "1 Hour", range: "Touch", components: ["V", "S", "M (a diamond worth at least 1,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "You touch a dead creature that has been dead for no more than a century, that didn't die of old age, and that isn't undead. If its soul is free and willing, the target returns to life with all its hit points." },
+    { name: "Reverse Gravity", level: 7, school: "Transmutation", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "100 feet", components: ["V", "S", "M (a lodestone and iron filings)"], duration: "Concentration, up to 1 minute", description: "This spell reverses gravity in a 50-foot-radius, 100-foot high cylinder centered on a point within range. All creatures and objects that aren't somehow anchored to the ground in the area fall upward and reach the top of the area when you cast this spell. A creature can make a Dexterity saving throw to grab onto a fixed object it can reach, thus avoiding the fall." },
+    { name: "Sequester", level: 7, school: "Transmutation", classes: ["Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S", "M (a powder composed of diamond, emerald, ruby, and sapphire dust worth at least 5,000 gp, which the spell consumes)"], duration: "Until dispelled", description: "By means of this spell, a willing creature or an object can be hidden away, safe from detection for the duration. When you cast the spell and touch the target, it becomes invisible and can't be targeted by divination spells or perceived through scrying sensors created by the divination of spells." },
+    { name: "Simulacrum", level: 7, school: "Illusion", classes: ["Wizard"], castingTime: "12 Hours", range: "Touch", components: ["V", "S", "M (snow or ice in quantities sufficient to made a life-size copy of the duplicated creature; some hair, fingernail clippings, or other piece of that creature's body placed inside the snow or ice; and powdered ruby worth 1,500 gp, sprinkled over the duplicate and consumed by the spell)"], duration: "Until dispelled", description: "You shape an illusory duplicate of one beast or humanoid that is within range for the entire casting time of the spell. The duplicate is a creature, partially real and formed from ice or snow, and it can take actions and otherwise be affected as a normal creature. It appears to be the same as the original, but it has half the creature's hit point maximum and is formed without any equipment. Otherwise, the illusion uses all the statistics of the creature it duplicates." },
+    { name: "Symbol", level: 7, school: "Abjuration", classes: ["Bard", "Cleric", "Druid", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (mercury, phosphorus, and powdered diamond and opal with a total value of at least 1,000 gp, which the spell consumes)"], duration: "Until dispelled or triggered", description: "When you cast this spell, you inscribe a harmful glyph either on a surface (such as a section of floor, a wall, or a table) or within an object that can be closed to conceal the glyph (such as a book, a scroll, or a treasure chest). If you choose a surface, the glyph can cover an area of the surface no larger than 10 feet in diameter. If you choose an object, that object must remain in its place; if the object is moved more than 10 feet from where you cast this spell, the glyph is broken, and the spell ends without being triggered." },
+    { name: "Teleport", level: 7, school: "Conjuration", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "10 feet", components: ["V"], duration: "Instantaneous", description: "This spell instantly transports you and up to eight willing creatures of your choice that you can see within range, or a single object that you can see within range, to a destination you select. If you target an object, it must be able to fit entirely inside a 10-foot cube, and it can't be held or carried by an unwilling creature." },
+    { name: "Temple of the Gods", level: 7, school: "Conjuration", classes: ["Cleric"], castingTime: "1 Hour", range: "120 Feet", components: ["V", "S", "M (a holy symbol worth at least 5 gp)"], duration: "24 hours", description: "You cause a temple to shimmer into existence on ground you can see within range. The temple must fit within an unoccupied cube of space, up to 120 feet on each side. The temple remains until the spell ends. It is dedicated to whatever god, pantheon, or philosophy is represented by the holy symbol used in the casting." },
+    { name: "Whirlwind", level: 7, school: "Evocation", classes: ["Druid", "Wizard"], castingTime: "1 Action", range: "300 feet", components: ["V", "M (a piece of straw)"], duration: "Concentration, up to 1 minute", description: "A whirlwind howls down to a point on the ground you specify. The whirlwind is a 10-foot-radius, 30-foot-high cylinder centered on that point. Until the spell ends, you can use your action to move the whirlwind up to 30 feet in any direction along the ground. The whirlwind sucks up any Medium or smaller objects that aren't secured to anything and that aren't worn or carried by anyone." }
+  ],
+  "8th": [
+    { name: "Abi-Dalzim's Horrid Wilting", level: 8, school: "Necromancy", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a bit of sponge)"], duration: "Instantaneous", description: "You draw the moisture from every creature in a 30-foot cube centered on a point you choose within range. Each creature in that area must make a Constitution saving throw. Constructs and undead aren't affected, and plants and water elementals make this saving throw with disadvantage. A creature takes 10d8 necrotic damage on a failed save, or half as much damage on a successful one." },
+    { name: "Animal Shapes", level: 8, school: "Transmutation", classes: ["Druid"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S"], duration: "Concentration, up to 24 hours", description: "Your magic turns others into beasts. Choose any number of willing creatures that you can see within range. You transform each target into the form of a large or smaller beast with a challenge rating of 4 or lower. On subsequent turns, you can use your actions to transform affected creatures into new forms." },
+    { name: "Antimagic Field", level: 8, school: "Abjuration", classes: ["Cleric", "Wizard"], castingTime: "1 Action", range: "Self (10-foot radius sphere)", components: ["V", "S", "M (a pinch of powdered iron or iron filings)"], duration: "Concentration, up to 1 hour", description: "A 10-foot-radius invisible sphere of antimagic surrounds you. This area is divorced from the magical energy that suffuses the multiverse. Within the sphere, spells can't be cast, summoned creatures disappear, and even magic items become mundane. Until the spell ends, the sphere moves with you, centered on you." },
+    { name: "Antipathy/Sympathy", level: 8, school: "Enchantment", classes: ["Bard", "Druid", "Wizard"], castingTime: "1 Hour", range: "60 Feet", components: ["V", "S", "M (either a lump of alum soaked in vinegar for the antipathy effect or a drop of honey for the sympathy effect)"], duration: "10 days", description: "This spell attracts or repels creatures of your choice. You target something within range, either a Huge or smaller object or creature or an area that is no larger than a 200-foot cube. Then specify a kind of intelligent creature, such as red dragons, goblins, or vampires. You invest the target with an aura that either attracts or repels the specified creatures for the duration. Choose antipathy or sympathy as the aura's effect." },
+    { name: "Clone", level: 8, school: "Necromancy", classes: ["Wizard"], castingTime: "1 Hour", range: "Touch", components: ["V", "S", "M (a diamond worth at least 1000 gp and at least 1 cubic inch of flesh of the creature that is to be cloned, which the spell consumes. A vessel worth at least 2000 gp that has a sealable lid and is large enough to hold a Medium creature, such as a huge urn, coffin, mud-filled cyst in the ground, or crystal container filled with salt water)"], duration: "Instantaneous", description: "This spell grows an inert duplicate of a living creature as a safeguard against death. This clone forms inside a sealed vessel and grows to full size and maturity after 120 days; you can also choose to have the clone be a younger version of the same creature. It remains inert and endures indefinitely, as long as its vessel remains undisturbed." },
+    { name: "Control Weather", level: 8, school: "Transmutation", classes: ["Cleric", "Druid", "Wizard"], castingTime: "10 Minutes", range: "Self (5 mile radius)", components: ["V", "S", "M ((burning incense and bits of earth and wood mixed in water)"], duration: "Concentration, up to 8 hours", description: "You take control of the weather within 5 miles of you for the duration. You must be outdoors to cast this spell. Moving to a place where you don't have a clear path to the sky ends the spell early." },
+    { name: "Demiplane", level: 8, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["S"], duration: "1 hour", description: "You create a shadowy door on a flat solid surface that you can see within range. The door is large enough to allow Medium creatures to pass through unhindered. When opened, the door leads to a demiplane that appears to be an empty room 30 feet in each dimension, made of wood or stone. When the spell ends, the door disappears, and any creatures or objects inside the demiplane remain trapped there, as the door also disappears from the other side." },
+    { name: "Dominate Monster", level: 8, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 hour", description: "You attempt to beguile a creature that you can see within range. It must succeed on a Wisdom saving throw or be charmed by you for the duration. If you or creatures that are friendly to you are fighting it, it has advantage on the saving throw." },
+    { name: "Earthquake", level: 8, school: "Evocation", classes: ["Cleric", "Druid", "Sorcerer"], castingTime: "1 Action", range: "500 feet", components: ["V", "S", "M (a pinch o f dirt, a piece o f rock, and a lump of clay)"], duration: "Concentration, up to 1 minute", description: "You create a seismic disturbance at a point on the ground that you can see within range. For the duration, an intense tremor rips through the ground in a 100-foot-radius circle centered on that point and shakes creatures and structures in contact with the ground in that area." },
+    { name: "Feeblemind", level: 8, school: "Enchantment", classes: ["Bard", "Druid", "Warlock", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (a handful of clay, crystal, glass, or mineral spheres)"], duration: "Instantaneous", description: "You blast the mind of a creature that you can see within range, attempting to shatter its intellect and personality. The target takes 4d6 psychic damage and must make an Intelligence saving throw." },
+    { name: "Glibness", level: 8, school: "Transmutation", classes: ["Bard", "Warlock"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "1 hour", description: "Until the spell ends, when you make a Charisma check, you can replace the number you roll with a 15. Additionally, no matter what you say, magic that would determine if you are telling the truth indicates that you are being truthful." },
+    { name: "Holy Aura", level: 8, school: "Abjuration", classes: ["Cleric"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a tiny reliquary worth at least 1,000 gp containing a sacred relic, such as a scrap of cloth from a saint's robe or a piece of parchment from a religious text)"], duration: "Concentration, up to 1 minute", description: "Divine light washes out from you and coalesces in a soft radiance in a 30-foot radius around you. Creatures of your choice in that radius when you cast this spell shed dim light in a 5-foot radius and have advantage on all saving throws, and other creatures have disadvantage on attack rolls against them until the spell ends. In addition, when a fiend or an undead hits an affected creature with a melee attack, the aura flashes with brilliant light. The attacker must succeed on a Constitution saving throw or be blinded until the spell ends." },
+    { name: "Illusory Dragon", level: 8, school: "Illusion", classes: ["Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["S"], duration: "Concentration, up to 1 minute", description: "By gathering threads of shadow material from the Shadowfell, you create a Huge shadowy dragon in an unoccupied space that you can see within range. The illusion lasts for the spell's duration and occupies its space, as if it were a creature." },
+    { name: "Incendiary Cloud", level: 8, school: "Conjuration", classes: ["Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A swirling cloud of smoke shot through with white-hot embers appears in a 20-foot-radius sphere centered on a point within range. The cloud spreads around corners and is heavily obscured. It lasts for the duration or until a wind of moderate or greater speed (at least 10 miles per hour) disperses it." },
+    { name: "Maddening Darkness", level: 8, school: "Evocation", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "M (a drop of pitch mixed with a drop of mercury)"], duration: "Concentration, up to 10 minutes", description: "Magical darkness spreads from a point you choose within range to fill a 60--foot--radius sphere until the spell ends. The darkness spreads around corners. A creature with darkvision can't see through this darkness. Nonmagical light, as well as light created by spells of 8th level or lower, can't illuminate the area. Shrieks, gibbering, and mad laughter can be heard within the sphere. Whenever a creature starts its turn in the sphere, it must make a Wisdom saving throw, taking 8d8 psychic damage on a failed save, or half as much damage on a successful one." },
+    { name: "Maze", level: 8, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 10 minutes", description: "You banish a creature that you can see within range into a labyrinthine demiplane. The target remains there for the duration or until it escapes the maze." },
+    { name: "Mighty Fortress", level: 8, school: "Conjuration", classes: ["Wizard"], castingTime: "1 Minute", range: "1 mile", components: ["V", "S", "M (a diamond worth at least 500 gp, which the spell consumes)"], duration: "Instantaneous", description: "A fortress of stone erupts from a square area of ground of your choice that you can see within range. The area is 120 feet on each side, and it must not have any buildings or other structures on it. Any creatures in the area are harmlessly lifted up as the fortress rises." },
+    { name: "Mind Blank", level: 8, school: "Abjuration", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "24 hours", description: "Until the spell ends, one willing creature you touch is immune to psychic damage, any effect that would sense its emotions or read its thoughts, divination spells, and the charmed condition. The spell even foils Wish spells and spells or effects of similar power used to affect the target's mind or to gain information about the target." },
+    { name: "Power Word: Stun", level: 8, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "You speak a word of power that can overwhelm the mind of one creature you can see within range, leaving it dumbfounded. If the target has 150 hit points or fewer, it is stunned. Otherwise, the spell has no effect. The stunned target must make a Constitution saving throw at the end of each of its turns. On a successful save, this stunning effect ends." },
+    { name: "Sunburst", level: 8, school: "Evocation", classes: ["Cleric", "Druid", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "150 Feet", components: ["V", "S", "M (fire and a piece of sunstone)"], duration: "Instantaneous", description: "Brilliant sunlight flashes in a 60-foot radius centered on a point you choose within range. Each creature in that light must make a Constitution saving throw. On a failed save, a creature takes 12d6 radiant damage and is blinded for 1 minute. On a successful save, it takes half as much damage and isn't blinded by this spell. Undead and oozes have disadvantage on this saving throw." },
+    { name: "Telepathy", level: 8, school: "Evocation", classes: ["Wizard"], castingTime: "1 Action", range: "Unlimited", components: ["V", "S", "M (a pair of linked silver rings)"], duration: "24 hours", description: "You create a telepathic link between yourself and a willing creature with which you are familiar. The creature can be anywhere on the same plane of existence as you. The spell ends if you or the target are no longer on the same plane." },
+    { name: "Tsunami", level: 8, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "Sight", components: ["V", "S"], duration: "Concentration, up to 6 rounds", description: "A wall of water springs into existence at a point you choose within range. You can make the wall up to 300 feet long, 300 feet high, and 50 feet thick. The wall lasts for the duration." }
+  ],
+  "9th": [
+    { name: "Astral Projection", level: 9, school: "Evocation", classes: ["Cleric", "Warlock", "Wizard"], castingTime: "1 Hour", range: "10 feet", components: ["V", "S", "M (for each creature you affect with this spell, you must provide one jacinth worth at least 1,000 gp and one ornately carved bar of silver worth at least 100 gp, all of which the spell consumes)"], duration: "Special", description: "You and up to eight willing creatures within range project your astral bodies into the Astral Plane (the spell fails and the casting is wasted if you are already on that plane). The material body you leave behind is unconscious and in a state of suspended animation; it doesn't need food or air and doesn't age." },
+    { name: "Blade of Disaster", level: 9, school: "Conjuration", classes: ["Sorcerer", "Warlock", "Wizard"], castingTime: "1 Bonus Action", range: "60 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "You create a blade-shaped planar rift about 3 feet long in an unoccupied space you can see within range. The blade lasts for the duration. When you cast this spell, you can make up to two melee spell attacks with the blade, each one against a creature, loose object, or structure within 5 feet of the blade. On a hit, the target takes 4d12 force damage. This attack scores a critical hit if the number on the d20 is 18 or higher. On a critical hit, the blade deals an extra 8d12 force damage (for a total of 12d12 force damage)." },
+    { name: "Foresight", level: 9, school: "Divination", classes: ["Bard", "Druid", "Warlock", "Wizard"], castingTime: "1 Minute", range: "Touch", components: ["V", "S", "M (a hummingbird feather)"], duration: "8 hours", description: "You touch a willing creature and bestow a limited ability to see into the immediate future. For the duration, the target can't be surprised and has advantage on attack rolls, ability checks, and saving throws. Additionally, other creatures have disadvantage on attack rolls against the target for the duration. This spell immediately ends if you cast it again before its duration ends." },
+    { name: "Gate", level: 9, school: "Conjuration", classes: ["Cleric", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S", "M (a diamond worth at least 5,000 gp)"], duration: "Concentration, up to 1 minute", description: "You conjure a portal linking an unoccupied space you can see within range to a precise location on a different plane of existence. The portal is a circular opening, which you can make 5 to 20 feet in diameter. You can orient the portal in any direction you choose. The portal lasts for the duration." },
+    { name: "Imprisonment", level: 9, school: "Abjuration", classes: ["Warlock", "Wizard"], castingTime: "1 Minute", range: "30 Feet", components: ["V", "S", "M (a vellum depiction or a carved statuette in the likeness of the target, and a special component that varies according to the version of the spell you choose, worth at least 500 gp per Hit Die of the target)"], duration: "Until dispelled", description: "You create a magical restraint to hold a creature that you can see within range. The target must succeed on a Wisdom saving throw or be bound by the spell; if it succeeds, it is immune to this spell if you cast it again. While affected by this spell, the creature doesn't need to breathe, eat, or drink, and it doesn't age. Divination spells can't locate or perceive the target." },
+    { name: "Invulnerability", level: 9, school: "Abjuration", classes: ["Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a small piece of adamantine worth at least 500 gp, which the spell consumes)"], duration: "Concentration, up to 10 minutes", description: "You are immune to all damage until the spell ends." },
+    { name: "Mass Heal", level: 9, school: "Evocation", classes: ["Cleric"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "Instantaneous", description: "A flood of healing energy flows from you into injured creatures around you. You restore up to 700 hit points, divided as you choose among any number of creatures that you can see within range. Creatures healed by this spell are also cured of all diseases and any effect making them blinded or deafened. This spell has no effect on undead or constructs." },
+    { name: "Mass Polymorph", level: 9, school: "Transmutation", classes: ["Bard", "Sorcerer", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S", "M (a caterpillar cocoon)"], duration: "Concentration, up to 1 hour", description: "You transform up to ten creatures of your choice that you can see within range. An unwilling target must succeed on a Wisdom saving throw to resist the transformation. An unwilling shapechanger automatically succeeds on the save." },
+    { name: "Meteor Swarm", level: 9, school: "Evocation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "1 mile", components: ["V", "S"], duration: "Instantaneous", description: "Blazing orbs of fire plummet to the ground at four different points you can see within range. Each creature in a 40-foot-radius sphere centered on each point you choose must make a Dexterity saving throw. The sphere spreads around corners. A creature takes 20d6 fire damage and 20d6 bludgeoning damage on a failed save, or half as much damage on a successful one. A creature in the area of more than one fiery burst is affected only once." },
+    { name: "Power Word: Heal", level: 9, school: "Evocation", classes: ["Bard", "Cleric"], castingTime: "1 Action", range: "Touch", components: ["V", "S"], duration: "Instantaneous", description: "A wave of healing energy washes over a creature you touch. The target regains all its hit points. If the creature is charmed, frightened, paralyzed, or stunned, the condition ends. If the creature is prone, it can use its reaction to stand up. This spell has no effect on undead or constructs." },
+    { name: "Power Word: Kill", level: 9, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V"], duration: "Instantaneous", description: "You utter a word of power that can compel one creature you can see within range to die instantly. If the creature you chose has 100 hit points or fewer, it dies. Otherwise, the spell has no effect." },
+    { name: "Prismatic Wall", level: 9, school: "Abjuration", classes: ["Bard", "Wizard"], castingTime: "1 Action", range: "60 Feet", components: ["V", "S"], duration: "10 minutes", description: "A shimmering, multicolored plane of light forms a vertical opaque wall - up to 90 feet long, 30 feet high, and 1 inch thick - centered on a point you can see within range. Alternatively, you can shape the wall into a sphere up to 30 feet in diameter centered on a point you choose within range. The wall remains in place for the duration. If you position the wall so that it passes through a space occupied by a creature, the spell fails, and your action and the spell slot are wasted." },
+    { name: "Psychic Scream", level: 9, school: "Enchantment", classes: ["Bard", "Sorcerer", "Warlock", "Wizard"], castingTime: "1 Action", range: "90 feet", components: ["S"], duration: "Instantaneous", description: "You unleash the power of your mind to blast the intellect of up to ten creatures of your choice that you can see within range. Creatures that have an Intelligence score of 2 or lower are unaffected." },
+    { name: "Shapechange", level: 9, school: "Transmutation", classes: ["Druid", "Warlock", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V", "S", "M (a jade circlet worth at least 1,500 gp, which you must place on your head before you cast the spell)"], duration: "Concentration, up to 1 hour", description: "You assume the form of a different creature for the duration. The new form can be any creature with a challenge rating equal to your level or lower. The creature can't be a construct or an undead, and you must have seen the sort of creature at least once. You transform into an average example of that creature, one without any class levels or the Spellcasting trait." },
+    { name: "Storm of Vengeance", level: 9, school: "Conjuration", classes: ["Druid"], castingTime: "1 Action", range: "Sight", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "A churning storm cloud forms, centered on a point you can see and spreading to a radius of 360 feet. Lightning flashes in the area, thunder booms, and strong winds roar. Each creature under the cloud (no more than 5,000 feet beneath the cloud) when it appears must make a Constitution saving throw. On a failed save, a creature takes 2d6 thunder damage and becomes deafened for 5 minutes." },
+    { name: "Time Ravage", level: 9, school: "Necromancy", classes: ["Wizard"], castingTime: "1 Action", range: "90 feet", components: ["V", "S", "M (an hourglass filled with diamond dust worth at least 5,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "You target a creature you can see within range, putting its physical form through the devastation of rapid aging. The target must make a Constitution saving throw, taking 10d12 necrotic damage on a failed save, or half as much damage on a successful one. If the save fails, the target also ages to the point where it has only 30 days left before it dies of old age. In this aged state, the target has disadvantage on attack rolls, ability checks, and saving throws, and its walking speed is halved. Only the Wish spell or the Greater Restoration spell cast with a 9th-level spell slot can end these effects and restore the target to its previous age." },
+    { name: "Time Stop", level: 9, school: "Transmutation", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "Instantaneous", description: "You briefly stop the flow of time for everyone but yourself. No time passes for other creatures, while you take 1d4 + 1 turns in a row, during which you can use actions and move as normal." },
+    { name: "True Polymorph", level: 9, school: "Transmutation", classes: ["Bard", "Warlock", "Wizard"], castingTime: "1 Action", range: "30 Feet", components: ["V", "S", "M (a drop of mercury, a dollop of gum arabic, and a wisp of smoke)"], duration: "Concentration, up to 1 hour", description: "Choose one creature or nonmagical object that you can see within range. You transform the creature into a different creature, the creature into an object, or the object into a creature (the object must be neither worn nor carried by another creature). The transformation lasts for the duration, or until the target drops to 0 hit points or dies. If you concentrate on this spell for the full duration, the transformation becomes permanent." },
+    { name: "True Resurrection", level: 9, school: "Necromancy", classes: ["Cleric", "Druid"], castingTime: "1 Hour", range: "Touch", components: ["V", "S", "M (a sprinkle of holy water and diamonds worth at least 25,000 gp, which the spell consumes)"], duration: "Instantaneous", description: "You touch a creature that has been dead for no longer than 200 years and that died for any reason except old age. If the creature's soul is free and willing, the creature is restored to life with all its hit points." },
+    { name: "Weird", level: 9, school: "Illusion", classes: ["Warlock", "Wizard"], castingTime: "1 Action", range: "120 Feet", components: ["V", "S"], duration: "Concentration, up to 1 minute", description: "Drawing on the deepest fears of a group of creatures, you create illusory creatures in their minds, visible only to them." },
+    { name: "Wish", level: 9, school: "Conjuration", classes: ["Sorcerer", "Wizard"], castingTime: "1 Action", range: "Self", components: ["V"], duration: "Instantaneous", description: "Wish is the mightiest spell a mortal creature can cast. By simply speaking aloud, you can alter the very foundations of reality in accord with your desires." }
+  ],
 };
-
 const classSpellLists = {
   "Artificer": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Artificer")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Artificer")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Artificer")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Artificer")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Artificer")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Artificer"))],
-  "Bard": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Bard")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Bard")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Bard"))],
-  "Cleric": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Cleric")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Cleric")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Cleric"))],
-  "Druid": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Druid")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Druid")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Druid"))],
-  "Paladin": [...spellsDatabase["1st"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Paladin"))],
-  "Ranger": [...spellsDatabase["1st"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Ranger"))],
-  "Sorcerer": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Sorcerer")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Sorcerer"))],
-  "Warlock": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Warlock")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Warlock")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Warlock"))],
-  "Wizard": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Wizard")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Wizard")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Wizard"))]
+  "Bard": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Bard")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Bard")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Bard")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Bard")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Bard")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Bard")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Bard"))],
+  "Cleric": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Cleric")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Cleric")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Cleric")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Cleric")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Cleric")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Cleric")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Cleric"))],
+  "Druid": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Druid")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Druid")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Druid")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Druid")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Druid")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Druid")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Druid"))],
+  "Paladin": [...spellsDatabase["1st"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Paladin")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Paladin")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Paladin")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Paladin")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Paladin")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Paladin"))],
+  "Ranger": [...spellsDatabase["1st"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Ranger")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Ranger")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Ranger")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Ranger")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Ranger")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Ranger"))],
+  "Sorcerer": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Sorcerer")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Sorcerer")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Sorcerer")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Sorcerer")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Sorcerer")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Sorcerer"))],
+  "Warlock": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Warlock")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Warlock")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Warlock")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Warlock")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Warlock")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Warlock")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Warlock"))],
+  "Wizard": [...spellsDatabase.Cantrips.filter(s => s.classes.includes("Wizard")), ...spellsDatabase["1st"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["2nd"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["3rd"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["4th"].filter(s => s.classes.includes("Wizard")), ...spellsDatabase["5th"].filter(s => s.classes.includes("Wizard")), ...(spellsDatabase["6th"]||[]).filter(s => s.classes.includes("Wizard")), ...(spellsDatabase["7th"]||[]).filter(s => s.classes.includes("Wizard")), ...(spellsDatabase["8th"]||[]).filter(s => s.classes.includes("Wizard")), ...(spellsDatabase["9th"]||[]).filter(s => s.classes.includes("Wizard"))]
 };
-
 // Weapons data (from the provided table)
 const weaponsData = {
   "Club": { cost: "1 sp", damage: "1d4 bludgeoning", weight: 2, properties: "Light", type: "simple", melee: true, thrown: false },
@@ -273,6 +697,7 @@ const classDescriptions = {
   "Artificer": "Artificers are magical engineers who infuse objects with power. They create wondrous items, use gadgets, and can heal, blast, or support with their inventions.",
   "Barbarian": "Barbarians tap into raw, primal fury. They are unstoppable warriors who shrug off blows and deal devastating damage when enraged.",
   "Bard": "Bards are storytellers, musicians, and masters of inspiration. They use their charisma to support allies, debuff enemies, and cast versatile spells.",
+  "Blood Hunter": "Blood Hunters are fearsome warriors who harness their own life force to empower weapons with elemental rites and unleash blood curses upon their foes. They walk a razor's edge between power and self-destruction.",
   "Cleric": "Clerics are divine agents of a god or pantheon. They heal, protect, and smite, with domain spells that reflect their deity's nature.",
   "Druid": "Druids draw power from nature itself. They can shape-shift into beasts, summon animals, and wield elemental magic to protect the wild.",
   "Fighter": "Fighters are weapon-masters, skilled in all forms of combat. They are durable, adaptable, and can specialize in anything from archery to heavy armor.",
@@ -286,6 +711,89 @@ const classDescriptions = {
 };
 
 const subclassDescriptions = {
+  // Blood Hunter
+  "Order of the Ghostslayer": "Ghostslayers are the oldest order, specializing in hunting undead. They gain radiant rites, resist necrotic damage, and can phase through obstacles.",
+  "Order of the Lycan": "Lycan blood hunters undergo the Taming, gaining hybrid transformation with claws, regeneration, and heightened senses, but risk bloodlust.",
+  "Order of the Mutant": "Mutants brew alchemical mutagens to enhance themselves, trading temporary side effects for powerful stat boosts and unique abilities.",
+  "Order of the Profane Soul": "Profane Souls make pacts with otherworldly patrons, gaining warlock spellcasting and patron-specific bonuses to their Crimson Rite.",
+  // Artificer
+  "Alchemist": "Alchemists brew experimental elixirs that heal, buff, or transform allies. They excel at support and utility through potions and acid-based attacks.",
+  "Armorer": "Armorers craft powerful magical armor that grants protection and integrated weapons, allowing them to tank damage or strike from range.",
+  "Artillerist": "Artillerists create eldritch cannons that blast foes or shield allies. They are magical artillery experts who control the battlefield.",
+  "Battle Smith": "Battle Smiths bond with a steel defender companion and blend swordplay with magic, acting as a durable support-and-damage hybrid.",
+  // Barbarian
+  "Path of the Berserker": "Berserkers embrace pure rage, entering a frenzy that lets them make extra attacks at the cost of exhaustion. They are relentless, reckless destroyers.",
+  "Path of the Totem Warrior": "Totem Warriors gain spirit animal powers, choosing between wolf (ally support), bear (tankiness), or eagle (mobility) totems.",
+  "Path of the Ancestral Guardian": "Ancestral Guardians summon spectral spirits of their forebears to protect allies and taunt enemies, making them peerless defenders.",
+  "Path of the Beast": "Beast Barbarians manifest natural weapons — claws, fangs, or a tail — and gain bestial mobility and ferocity while raging.",
+  "Path of Wild Magic": "Wild Magic Barbarians tap into chaotic primal forces, causing random magical surges that erupt from their rage.",
+  // Bard
+  "College of Lore": "Lore Bards are knowledge-seekers who gain extra skills, cutting words to hinder foes, and can steal spells from other classes.",
+  "College of Valor": "Valor Bards inspire courage in battle, gaining martial weapons, shields, and the ability to attack while inspiring allies.",
+  "College of Swords": "Swords Bards are flamboyant duelists who use their weapon as a focus, performing flourishes that grant extra damage or mobility.",
+  "College of Eloquence": "Eloquence Bards are silver-tongued orators whose persuasion and deception are nearly irresistible, able to debuff enemy saving throws.",
+  // Cleric
+  "Knowledge Domain": "Knowledge clerics are scholars of forgotten lore, gaining divination spells and expertise in two knowledge skills.",
+  "Nature Domain": "Nature clerics protect the wild, gaining druid cantrips, elemental damage, and the ability to charm beasts and plants.",
+  "Tempest Domain": "Tempest clerics command storms and seas, blasting foes with thunder and lightning, and can push enemies back with divine fury.",
+  "Trickery Domain": "Trickery clerics are agents of deception, creating illusory duplicates, granting allies stealth, and charming their enemies.",
+  "Forge Domain": "Forge clerics are master smiths who bless armor and weapons with divine fire, gaining fire resistance and creating magic items.",
+  "Grave Domain": "Grave clerics ward death itself, sensing undead, negating critical hits, and maximizing healing on fallen allies.",
+  "Order Domain": "Order clerics enforce law and discipline, compelling allies to attack when buffed and charming enemies with divine authority.",
+  "Twilight Domain": "Twilight clerics shroud themselves in shadow and moonlight, granting darkvision, flying, and a protective aura to allies.",
+  // Druid
+  "Circle of the Land": "Land Druids are tied to a specific terrain (forest, coast, etc.), gaining bonus spells and recovering spell slots in natural settings.",
+  "Circle of the Moon": "Moon Druids are masters of wild shape, transforming into more powerful beasts earlier and healing while shapeshifted.",
+  "Circle of the Shepherd": "Shepherd Druids summon and empower animals and fey spirits, shielding allies and bolstering summoned creatures.",
+  "Circle of Spores": "Spores Druids command decay and fungus, using necrotic damage, raising zombie-like spores, and spreading toxic clouds.",
+  "Circle of Stars": "Stars Druids channel celestial power, using starry forms that boost healing, damage, or concentration. They read the cosmos for guidance.",
+  "Circle of Wildfire": "Wildfire Druids cultivate a fiery spirit companion, balancing destruction and renewal with flames that heal or burn.",
+  // Fighter
+  "Rune Knight": "Rune Knights inscribe giant runes on their gear, growing in size, gaining runic powers like fire damage or teleportation.",
+  // Monk
+  "Way of the Open Hand": "Open Hand monks are masters of unarmed combat, pushing, knocking prone, and denying reactions with precise strikes.",
+  "Way of Shadow": "Shadow monks move through darkness, teleporting between shadows, becoming invisible, and casting minor illusion spells.",
+  "Way of the Four Elements": "Four Elements monks channel ki to cast elemental spells — fireball, gust of wind, or shape water — bending nature to their will.",
+  "Way of the Drunken Master": "Drunken Masters sway unpredictably in combat, redirecting attacks against enemies and moving with fluid, disorienting grace.",
+  "Way of the Sun Soul": "Sun Soul monks radiate inner light, firing radiant energy bolts and creating blinding flashes that sear undead.",
+  "Way of Mercy": "Mercy monks are healers and harmers, using the Hand of Healing to restore or Hand of Harm to poison enemies with a touch.",
+  // Paladin
+  "Oath of Devotion": "Devotion paladins are paragons of honor, gaining immunity to charm, a sacred weapon enhancement, and radiating a holy aura.",
+  "Oath of the Ancients": "Ancients paladins preserve light and life, turning foes into rooted plants and gaining resistance to spell damage.",
+  "Oath of Vengeance": "Vengeance paladins relentlessly hunt a single foe, gaining advantage on pursuit and bonus damage against their sworn enemy.",
+  "Oath of Conquest": "Conquest paladins dominate through fear, causing terror in enemies and immobilizing anyone frightened near them.",
+  "Oath of Redemption": "Redemption paladins seek peaceful solutions, absorbing damage meant for allies and rebuking attackers with radiant retribution.",
+  // Ranger
+  "Hunter": "Hunters choose a prey and a defensive style, gaining bonus damage against wounded foes, multi-target attacks, or evasion.",
+  "Beast Master": "Beast Masters bond with a primal animal companion that fights alongside them, growing stronger as the ranger levels up.",
+  "Gloom Stalker": "Gloom Stalkers are ambush predators who excel in darkness, gaining invisibility to darkvision and devastating first-round attacks.",
+  "Monster Slayer": "Monster Slayers specialize in hunting supernatural threats, marking a quarry and gaining defenses against its spells and attacks.",
+  "Swarmkeeper": "Swarmkeepers command a swarm of nature spirits (insects, birds, or pixies) that can damage, move, or scout for them.",
+  // Rogue
+  "Thief": "Thieves are fast-fingered scoundrels who climb, sneak, and pilfer with unmatched speed. They can use items as a bonus action.",
+  "Assassin": "Assassins excel at stealth kills, gaining automatic crits on surprised foes and expertise in disguise and poison.",
+  "Arcane Trickster": "Arcane Tricksters blend thievery with wizard magic, using mage hand for larceny and casting illusions to baffle foes.",
+  "Swashbuckler": "Swashbucklers are daring duelists who taunt enemies into single combat, dart in and out of melee, and ignore opportunity attacks.",
+  "Soulknife": "Soulknives manifest psychic blades from their mind, striking telepathically and using psionic talents for skills and communication.",
+  // Sorcerer
+  "Divine Soul": "Divine Souls carry celestial blood, accessing both cleric and sorcerer spells, able to heal allies and empower their magic.",
+  "Shadow Magic": "Shadow Magic sorcerers draw power from the Shadowfell, seeing in darkness, surviving death, and summoning a shadow hound.",
+  "Storm Sorcery": "Storm Sorcerers command wind and lightning, flying when they cast spells, zapping nearby enemies, and controlling the weather.",
+  // Warlock
+  "The Great Old One": "Great Old One warlocks tap into alien cosmic minds, causing insanity, reading thoughts, and shielding themselves with psychic wards.",
+  "The Hexblade": "Hexblade warlocks forge a pact with a sentient weapon from the Shadowfell, gaining martial prowess and a cursed strike ability.",
+  "The Fathomless": "Fathomless warlocks draw power from deep-sea leviathans, summoning a spectral tentacle, breathing water, and controlling oceans.",
+  // Wizard
+  "School of Abjuration": "Abjurers specialize in protective magic, creating a magical ward that absorbs damage and excelling at countering spells.",
+  "School of Conjuration": "Conjurers summon creatures and objects from thin air, teleport short distances, and can conjure matter temporarily.",
+  "School of Divination": "Diviners see the future, replacing dice rolls with portent predictions and gaining clairvoyance to spy on distant locations.",
+  "School of Enchantment": "Enchanters bewitch and beguile, charming crowds, hypnotizing enemies, and making foes forget they were attacked.",
+  "School of Evocation": "Evokers wield raw elemental force, sculpting explosive spells around allies and maximizing damage with Overchannel.",
+  "School of Illusion": "Illusionists create convincing phantasms, making illusions semi-real and even manifesting their imaginings into reality.",
+  "School of Necromancy": "Necromancers command life and death, raising undead minions, siphoning vitality from foes, and resisting the grave.",
+  "School of Transmutation": "Transmuters reshape matter and biology, turning foes to stone, transforming into beasts, and brewing alchemical transmutations.",
+  "Bladesinging": "Bladesingers are elven sword-mages who enter a graceful combat trance, gaining AC, speed, and concentration bonuses while wielding a blade.",
+  // Original entries (preserved)
   "Champion": "Champions focus on raw athleticism and critical hits. They are simple but deadly, improving their chance to land devastating blows.",
   "Battle Master": "Battle Masters use maneuvers to control the battlefield – tripping, disarming, or goading enemies while commanding allies.",
   "Eldritch Knight": "Eldritch Knights blend magic with martial skill, casting defensive spells and summoning their bonded weapon.",
@@ -299,6 +807,167 @@ const subclassDescriptions = {
   "The Archfey": "Archfey warlocks charm and frighten, teleporting away when hit and spreading beguiling magic."
 };
 
+// ========== BLOOD HUNTER DATA ==========
+
+const hemocraftDieByLevel = {
+  1: "d4", 2: "d4", 3: "d4", 4: "d4",
+  5: "d6", 6: "d6", 7: "d6", 8: "d6", 9: "d6", 10: "d6",
+  11: "d8", 12: "d8", 13: "d8", 14: "d8", 15: "d8", 16: "d8",
+  17: "d10", 18: "d10", 19: "d10", 20: "d10"
+};
+
+const bloodCurses = [
+  { name: "Blood Curse of the Anxious", description: "As a bonus action, make a creature more susceptible to coercion. Intimidation checks against it have advantage until end of your next turn.", amplify: "Target also has disadvantage on its next Wisdom saving throw." },
+  { name: "Blood Curse of Binding", description: "As a bonus action, attempt to bind an enemy within 30 ft (Str save) or its speed becomes 0 until end of your next turn.", amplify: "Lasts 1 minute, save at end of each turn." },
+  { name: "Blood Curse of Bloated Agony", description: "Curse a creature to swell; it has disadvantage on Str/Dex checks and takes 1d8 necrotic if it makes more than one attack on its turn.", amplify: "Lasts 1 minute, save ends." },
+  { name: "Blood Curse of Exposure", description: "When a creature takes damage, use reaction to make it lose resistance to that damage type.", amplify: "Lose invulnerability (becomes resistance)." },
+  { name: "Blood Curse of the Eyeless", description: "When a creature makes an attack roll, use reaction to subtract one hemocraft die from the roll.", amplify: "Applies to all attack rolls until end of turn." },
+  { name: "Blood Curse of the Fallen Puppet", description: "When a creature falls unconscious or dies within 30 ft, use reaction to make it attack a target.", amplify: "Add Int mod to attack and damage." },
+  { name: "Blood Curse of the Marked", description: "As a bonus action, mark a creature; your Crimson Rite deals double damage to it until end of turn.", amplify: "Next attack roll against it has advantage." },
+  { name: "Blood Curse of the Muddled Mind", description: "Curse a creature concentrating on a spell; the next concentration save has disadvantage.", amplify: "Target also takes 3d6 psychic if it fails." }
+];
+
+const crimsonRites = [
+  { name: "Rite of the Flame", damageType: "Fire", level: 2, description: "Weapon deals extra fire damage equal to hemocraft die." },
+  { name: "Rite of the Frozen", damageType: "Cold", level: 2, description: "Weapon deals extra cold damage equal to hemocraft die." },
+  { name: "Rite of the Storm", damageType: "Lightning", level: 2, description: "Weapon deals extra lightning damage equal to hemocraft die." },
+  { name: "Rite of the Dead", damageType: "Necrotic", level: 14, esoteric: true, description: "Weapon deals extra necrotic damage equal to hemocraft die." },
+  { name: "Rite of the Oracle", damageType: "Psychic", level: 14, esoteric: true, description: "Weapon deals extra psychic damage equal to hemocraft die." },
+  { name: "Rite of the Roar", damageType: "Thunder", level: 14, esoteric: true, description: "Weapon deals extra thunder damage equal to hemocraft die." },
+  { name: "Rite of the Dawn", damageType: "Radiant", level: 3, order: "Ghostslayer", note: "Special: no HP max reduction vs undead.", description: "Weapon deals extra radiant damage equal to hemocraft die." }
+];
+
+// ========== FIGHTING STYLE DATABASE ==========
+
+const fightingStyleDatabase = {
+  "Fighter": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Protection", description: "Use reaction to impose disadvantage on an attack against an ally within 5 ft while wielding a shield." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ],
+  "Paladin": [
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Protection", description: "Use reaction to impose disadvantage on an attack against an ally within 5 ft while wielding a shield." }
+  ],
+  "Ranger": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ],
+  "Blood Hunter": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ]
+};
+
+// ========== FEAT DATABASE (fallback for wizard) ==========
+
+const defaultFeatList = [
+  { name: "Alert", description: "+5 bonus to initiative, can't be surprised, no advantage to hidden attackers.", abilityIncrease: null },
+  { name: "Athlete", description: "+1 Strength or Dexterity, climb speed, standing up from prone costs only 5 ft.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Charger", description: "Can bonus action melee attack or shove after Dash, +5 damage or push 10 ft.", abilityIncrease: null },
+  { name: "Crossbow Expert", description: "Ignore loading property, no disadvantage when adjacent, bonus attack with hand crossbow.", abilityIncrease: null },
+  { name: "Defensive Duelist", description: "Add proficiency bonus to AC as a reaction when hit with melee attack.", abilityIncrease: null, prerequisite: "Dexterity 13+" },
+  { name: "Dual Wielder", description: "+1 AC when dual-wielding, can use non-light one-handed weapons, draw/stow two weapons.", abilityIncrease: null },
+  { name: "Dungeon Delver", description: "Advantage on Perception/Investigation for secret doors, advantage vs. traps, trap resistance.", abilityIncrease: null },
+  { name: "Durable", description: "+1 Constitution, minimum regained HP from Hit Dice is twice CON mod.", abilityIncrease: { options: ["Constitution"], amount: 1 } },
+  { name: "Elemental Adept", description: "Spells ignore resistance to chosen damage type; treat 1s on damage dice as 2s.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Grappler", description: "Advantage on attacks vs. grappled target; Action to pin, both restrained.", abilityIncrease: null, prerequisite: "Strength 13+" },
+  { name: "Great Weapon Master", description: "Bonus melee attack on crit or kill; -5 to hit / +10 to damage.", abilityIncrease: null },
+  { name: "Healer", description: "Stabilize to 1 HP; restore 1d6+4+HD HP (1/LR) with healer's kit.", abilityIncrease: null },
+  { name: "Heavily Armored", description: "+1 Strength, gain heavy armor proficiency.", abilityIncrease: { options: ["Strength"], amount: 1 } },
+  { name: "Heavy Armor Master", description: "+1 Strength, reduce nonmagical B/P/S damage by 3 when in heavy armor.", abilityIncrease: { options: ["Strength"], amount: 1 } },
+  { name: "Inspiring Leader", description: "Grant temporary HP equal to level + CHA mod to 6 allies.", abilityIncrease: null, prerequisite: "Charisma 13+" },
+  { name: "Keen Mind", description: "+1 Intelligence, always know north, time until sunrise/sunset, accurately recall last month.", abilityIncrease: { options: ["Intelligence"], amount: 1 } },
+  { name: "Lightly Armored", description: "+1 Strength or Dexterity, gain light armor proficiency.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Linguist", description: "+1 Intelligence, learn three languages, create ciphers.", abilityIncrease: { options: ["Intelligence"], amount: 1 } },
+  { name: "Lucky", description: "3 luck points: reroll d20 for attack, save, or check, or force attacker to reroll.", abilityIncrease: null },
+  { name: "Mage Slayer", description: "Reaction melee attack vs. adjacent caster; disadvantage on concentration saves.", abilityIncrease: null },
+  { name: "Magic Initiate", description: "Learn two cantrips and one 1st-level spell from a class's spell list.", abilityIncrease: null },
+  { name: "Martial Adept", description: "Learn two Battle Master maneuvers, gain one superiority die (d6).", abilityIncrease: null },
+  { name: "Medium Armor Master", description: "No Stealth disadvantage; +3 AC (instead of +2) when DEX 16+.", abilityIncrease: null, prerequisite: "Medium armor proficiency" },
+  { name: "Mobile", description: "+10 ft. speed; Dash ignores difficult terrain; no opportunity attacks from targets you attack.", abilityIncrease: null },
+  { name: "Moderately Armored", description: "+1 Strength or Dexterity, gain medium armor and shield proficiency.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Mounted Combatant", description: "Advantage vs. smaller unmounted; redirect attacks to self; mount takes half damage.", abilityIncrease: null },
+  { name: "Observant", description: "+1 Intelligence or Wisdom, read lips, +5 passive Perception/Investigation.", abilityIncrease: { options: ["Intelligence","Wisdom"], amount: 1 } },
+  { name: "Polearm Master", description: "Bonus d4 attack with opposite end; opportunity attacks when enemies enter reach.", abilityIncrease: null },
+  { name: "Resilient", description: "+1 to chosen ability score, gain proficiency in that saving throw.", abilityIncrease: { options: ["Strength","Dexterity","Constitution","Intelligence","Wisdom","Charisma"], amount: 1 } },
+  { name: "Ritual Caster", description: "Gain ritual book with two 1st-level ritual spells from a class list.", abilityIncrease: null, prerequisite: "Intelligence or Wisdom 13+" },
+  { name: "Savage Attacker", description: "Once per turn, reroll melee weapon damage dice and use either total.", abilityIncrease: null },
+  { name: "Sentinel", description: "Opportunity attack reduces speed to 0; enemies provoke even with Disengage.", abilityIncrease: null },
+  { name: "Sharpshooter", description: "No long-range disadvantage; ignore cover; -5 to hit / +10 to damage.", abilityIncrease: null },
+  { name: "Shield Master", description: "Bonus action shove; add shield's AC to DEX saves vs. single-target.", abilityIncrease: null },
+  { name: "Skilled", description: "Gain proficiency in three skills or tools.", abilityIncrease: null },
+  { name: "Skulker", description: "Hide when lightly obscured; missing a ranged attack doesn't reveal position.", abilityIncrease: null, prerequisite: "Dexterity 13+" },
+  { name: "Spell Sniper", description: "Double spell range; ignore cover; learn one cantrip that requires an attack roll.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Tavern Brawler", description: "+1 Strength or Constitution; improvised weapon proficiency; unarmed strike 1d4.", abilityIncrease: { options: ["Strength","Constitution"], amount: 1 } },
+  { name: "Tough", description: "+2 HP per character level.", abilityIncrease: null },
+  { name: "War Caster", description: "Advantage on concentration saves; perform somatic components with weapons/shield.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Weapon Master", description: "+1 Strength or Dexterity, gain proficiency with four simple or martial weapons.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Actor", description: "+1 Charisma, advantage on Deception and Performance checks to impersonate others.", abilityIncrease: { options: ["Charisma"], amount: 1 } },
+  { name: "Chef", description: "+1 Constitution or Wisdom; cook special food to recover extra HP during short rest.", abilityIncrease: { options: ["Constitution","Wisdom"], amount: 1 } },
+  { name: "Crusher", description: "+1 Strength or Constitution; move target 5 ft. with bludgeoning damage.", abilityIncrease: { options: ["Strength","Constitution"], amount: 1 } }
+];
+
+// Helper: get the feat list (from cached DB or fallback)
+function getFeatList() {
+  if (typeof featDatabase !== "undefined" && featDatabase && Object.keys(featDatabase).length > 0) {
+    // The dynamically loaded featDatabase is an object keyed by name; convert to array
+    return Object.keys(featDatabase).map(function(k) {
+      var f = featDatabase[k];
+      return { name: f.name || k, description: f.description || "", abilityIncrease: f.abilityIncrease || null, prerequisite: f.prerequisite || null };
+    });
+  }
+  return defaultFeatList;
+}
+
+function getFeatByName(name) {
+  var list = getFeatList();
+  return list.find(function(f) { return f.name === name; }) || null;
+}
+
+// ========== SUBCLASS FEATURE REGISTRY ==========
+
+const subclassFeatureRegistry = {
+  "Barbarian": {
+    "Path of the Totem Warrior": [
+      { minLevel: 3, id: "totem_3", label: "Totem Spirit", type: "choice", options: ["Bear", "Eagle", "Wolf"] },
+      { minLevel: 6, id: "totem_6", label: "Aspect of the Beast", type: "choice", options: ["Bear", "Eagle", "Wolf"] }
+    ],
+    "Path of the Beast": [
+      { minLevel: 3, id: "beast_form", label: "Form of the Beast", type: "choice", options: ["Bite", "Claws", "Tail"] }
+    ]
+  },
+  "Druid": {
+    "Circle of the Land": [
+      { minLevel: 2, id: "land_circle", label: "Circle Territory", type: "choice", options: ["Arctic", "Coast", "Desert", "Forest", "Grassland", "Mountain", "Swamp", "Underdark"] }
+    ]
+  },
+  "Ranger": {
+    "Hunter": [
+      { minLevel: 3, id: "hunter_prey", label: "Hunter's Prey", type: "choice", options: ["Colossus Slayer", "Giant Killer", "Horde Breaker"] },
+      { minLevel: 7, id: "hunter_def", label: "Defensive Tactics", type: "choice", options: ["Escape the Horde", "Multiattack Defense", "Steel Will"] }
+    ]
+  },
+  "Blood Hunter": {
+    "Order of the Mutant": [
+      { minLevel: 3, id: "mutant_formulas", label: "Mutagen Formulas", type: "multiChoice", count: 4, options: ["Celerity", "Potency", "Sagacity", "Reconstruction", "Cruelty"] }
+    ],
+    "Order of the Profane Soul": [
+      { minLevel: 3, id: "profane_patron", label: "Patron Focus", type: "choice", options: ["The Archfey", "The Celestial", "The Fathomless", "The Fiend", "The Genie", "The Great Old One", "The Hexblade", "The Undying"] }
+    ]
+  }
+};
+
 const equipmentPacks = {
   "Burglar's Pack": { cost: 16, classes: ["Rogue","Ranger"], contents: ["Backpack","bag of 1,000 ball bearings","10 ft of string","bell","5 candles","crowbar","hammer","10 pitons","hooded lantern","2 flasks of oil","5 days rations","tinderbox","waterskin","50 ft hempen rope"] },
   "Diplomat's Pack": { cost: 39, classes: ["Cleric","Bard","Druid"], contents: ["Chest","2 map/scroll cases","fine clothes","bottle of ink","ink pen","lamp","2 flasks of oil","5 sheets of paper","vial of perfume","sealing wax","soap"] },
@@ -308,6 +977,31 @@ const equipmentPacks = {
   "Priest's Pack": { cost: 19, classes: ["Cleric","Paladin"], contents: ["Backpack","blanket","10 candles","tinderbox","alms box","2 blocks of incense","censer","vestments","2 days rations","waterskin"] },
   "Scholar's Pack": { cost: 40, classes: ["Warlock","Wizard","Artificer"], contents: ["Backpack","book of lore","bottle of ink","ink pen","10 sheets of parchment","bag of sand","small knife"] }
 };
+
+// ========== WEAPON UTILITY FUNCTIONS ==========
+function parseWeaponProperties(propString) {
+  if (!propString) return [];
+  const parts = propString.split(',').map(p => p.trim().toLowerCase());
+  const mapping = {
+    'light': 'Light', 'finesse': 'Finesse', 'two-handed': 'Two-Handed',
+    'versatile': 'Versatile', 'thrown': 'Thrown', 'reach': 'Reach',
+    'heavy': 'Heavy', 'loading': 'Loading', 'ammunition': 'Ammunition',
+    'special': 'Special'
+  };
+  return parts
+    .filter(p => mapping[p])
+    .map(p => mapping[p]);
+}
+
+function getAbilityModifierForWeapon(abilityScores, weaponProps) {
+  let ability = 'Strength';
+  if (weaponProps.includes('Finesse')) {
+    const dex = calculateModifier(abilityScores.Dexterity);
+    const str = calculateModifier(abilityScores.Strength);
+    ability = dex >= str ? 'Dexterity' : 'Strength';
+  }
+  return calculateModifier(abilityScores[ability]);
+}
 
 // ========== SUBCLASS SPELLS ==========
 const subclassSpells = {
@@ -328,8 +1022,6 @@ const subclassSpells = {
   "Oath of Vengeance": ["bane","hunter's mark","hold person","misty step","haste","protection from energy","banishment","dimension door","hold monster","scrying"],
   "Oath of Conquest": ["armor of Agathys","command","hold person","spiritual weapon","fear","spirit guardians","dominate beast","stoneskin","dominate person","hold monster"],
   "Oath of Redemption": ["sanctuary","sleep","calm emotions","hold person","counterspell","hypnotic pattern","Otiluke's resilient sphere","stoneskin","hold monster","wall of force"],
-  "Oath of Glory": ["guiding bolt","heroism","enhance ability","magic weapon","haste","protection from energy","compulsion","freedom of movement","commune","flame strike"],
-  "Oath of the Watchers": ["alarm","detect magic","moonbeam","see invisibility","counterspell","nondetection","aura of purity","banishment","hold monster","scrying"],
   "Circle of the Land": ["speak with animals","animal friendship","barkskin","spike growth","plant growth","wind wall","dominate beast","grasping vine","insect plague","tree stride"],
   "Circle of the Moon": [],
   "Circle of Dreams": [],
@@ -380,6 +1072,100 @@ const eldritchInvocations = [
   { name: "Whispers of the Grave", prerequisite: "9th level", description: "You can cast speak with dead at will, without expending a spell slot." },
   { name: "Witch Sight", prerequisite: "15th level", description: "You can see the true form of any shapechanger or creature concealed by illusion or transmutation magic while it is within 30 feet of you." }
 ];
+
+// Pact Boon options for Warlocks
+const pactBoonOptions = [
+  "Pact of the Blade",
+  "Pact of the Chain",
+  "Pact of the Tome",
+  "Pact of the Talisman"
+];
+
+// ========== WARLOCK PATRONS DATABASE ==========
+const warlockPatrons = {
+  "The Archfey": {
+    expandedSpells: {
+      1: ["faerie fire", "sleep"],
+      2: ["calm emotions", "misty step"],
+      3: ["blink", "plant growth"],
+      4: ["dominate beast", "greater invisibility"],
+      5: ["dominate person", "seeming"]
+    },
+    features: [
+      { level: 1, name: "Fey Presence", description: "As an action, you cause each creature in a 10‑ft cube to make a Wisdom save vs. your spell save DC. On a failure, they are charmed or frightened (your choice) until the end of your next turn. Once per short or long rest." },
+      { level: 6, name: "Misty Escape", description: "When you take damage, you can use your reaction to become invisible and teleport up to 60 ft to an unoccupied space you can see. You remain invisible until the start of your next turn or until you attack/cast a spell. Once per short or long rest." },
+      { level: 10, name: "Beguiling Defenses", description: "You are immune to being charmed. When a creature attempts to charm you, you can use your reaction to turn the effect back on that creature, forcing it to make a Wisdom save or be charmed by you for 1 minute." },
+      { level: 14, name: "Dark Delirium", description: "As an action, you cause a creature you can see within 60 ft to make a Wisdom save. On a failure, it is charmed or frightened (your choice) for 1 minute or until you lose concentration. The creature perceives a hallucinatory realm of your design. Once per long rest." }
+    ],
+    resource: null
+  },
+  "The Fiend": {
+    expandedSpells: {
+      1: ["burning hands", "command"],
+      2: ["blindness/deafness", "scorching ray"],
+      3: ["fireball", "stinking cloud"],
+      4: ["fire shield", "wall of fire"],
+      5: ["flame strike", "hallow"]
+    },
+    features: [
+      { level: 1, name: "Dark One's Blessing", description: "When you reduce a hostile creature to 0 hit points, you gain temporary HP equal to your Charisma modifier + your warlock level." },
+      { level: 6, name: "Dark One's Own Luck", description: "When you make an ability check or saving throw, you can add a d10 to the roll. You must decide before the DM says if you succeed/fail. Once per short or long rest." },
+      { level: 10, name: "Fiendish Resilience", description: "When you finish a short or long rest, choose one damage type (except bludgeoning, piercing, slashing from nonmagical attacks). You gain resistance to that damage type until you finish a rest or choose a different type." },
+      { level: 14, name: "Hurl Through Hell", description: "When you hit a creature with an attack, you can teleport it through the lower planes. The creature disappears and takes 10d10 psychic damage, then reappears in the space it left (or the nearest unoccupied space). Once per long rest." }
+    ],
+    resource: null
+  },
+  "The Great Old One": {
+    expandedSpells: {
+      1: ["dissonant whispers", "Tasha's hideous laughter"],
+      2: ["detect thoughts", "phantasmal force"],
+      3: ["clairvoyance", "sending"],
+      4: ["confusion", "Evard's black tentacles"],
+      5: ["dominate person", "telekinesis"]
+    },
+    features: [
+      { level: 1, name: "Awakened Mind", description: "You can telepathically speak to any creature within 30 ft that you can see and that understands at least one language. The creature does not need to share a language." },
+      { level: 6, name: "Entropic Ward", description: "When a creature makes an attack roll against you, you can use your reaction to impose disadvantage on that roll. If the attack misses, you have advantage on your next attack roll against that creature before the end of your next turn. Once per short or long rest." },
+      { level: 10, name: "Thought Shield", description: "You have resistance to psychic damage. Additionally, any creature that deals psychic damage to you or reads your thoughts takes 3d6 psychic damage." },
+      { level: 14, name: "Create Thrall", description: "When you touch an incapacitated humanoid, it becomes charmed by you until a remove curse or similar magic is cast on it. You can communicate telepathically with the thrall at any distance (as long as you are on the same plane). You can have only one thrall at a time." }
+    ],
+    resource: null
+  },
+  "The Hexblade": {
+    expandedSpells: {
+      1: ["shield", "wrathful smite"],
+      2: ["blur", "branding smite"],
+      3: ["blink", "elemental weapon"],
+      4: ["phantasmal killer", "staggering smite"],
+      5: ["banishing smite", "cone of cold"]
+    },
+    features: [
+      { level: 1, name: "Hexblade's Curse", description: "As a bonus action, choose one creature you can see within 30 ft. Once per short rest, you gain: bonus to damage rolls equal to proficiency bonus; critical hit on 19–20; you regain HP equal to your warlock level + Cha mod if the cursed target dies. Lasts 1 minute." },
+      { level: 1, name: "Hex Warrior", description: "You can use your Charisma modifier instead of Strength or Dexterity for attack and damage rolls with one handed weapon you touch (not two‑handed). Also gain proficiency with medium armor, shields, and martial weapons." },
+      { level: 6, name: "Accursed Specter", description: "When you slay a humanoid, you can bind its spirit as a specter (use specter stat block). It gains bonus HP equal to half your warlock level. It obeys your verbal commands and rolls its own initiative. Lasts until you finish a long rest. Once per long rest." },
+      { level: 10, name: "Armor of Hexes", description: "While your Hexblade's Curse is on a target, when that target hits you with an attack roll, you can roll a d6. On a 4–6, the attack misses regardless of its roll." },
+      { level: 14, name: "Master of Hexes", description: "You can transfer your Hexblade's Curse to a new creature as a bonus action (no action required if the previous cursed creature died). No longer limited to once per rest – you can use it at will, but only one curse active at a time." }
+    ],
+    resource: { name: "Hexblade's Curse", maxUses: "proficiency bonus per short rest", currentUses: 0 }
+  },
+  "The Fathomless": {
+    expandedSpells: {
+      1: ["create or destroy water", "thunderwave"],
+      2: ["gust of wind", "shatter"],
+      3: ["lightning bolt", "sleet storm"],
+      4: ["control water", "summon elemental (water only)"],
+      5: ["bigby's hand (appears as a watery tentacle)", "cone of cold"]
+    },
+    features: [
+      { level: 1, name: "Tentacle of the Deeps", description: "As a bonus action, create a spectral tentacle at a point you can see within 60 ft. It lasts 1 minute. When you create it, make a melee spell attack against a creature within 10 ft of it; on hit, it deals 1d8 cold damage and reduces the target's speed by 10 ft. As a bonus action, you can move the tentacle 30 ft and repeat the attack. Uses equal to proficiency bonus per long rest." },
+      { level: 1, name: "Gift of the Sea", description: "You gain a swimming speed equal to your walking speed, and you can breathe underwater." },
+      { level: 6, name: "Oceanic Soul", description: "You gain resistance to cold damage. Additionally, when you are fully submerged, any creature that starts its turn in the water within 30 ft of you takes cold damage equal to your Charisma modifier." },
+      { level: 10, name: "Guardian Coil", description: "When a creature you can see hits you with an attack, you can use your reaction to reduce the damage by 1d8. You can use this after the damage roll but before the damage is applied. You gain additional uses equal to your proficiency bonus per long rest." },
+      { level: 14, name: "Fathomless Plunge", description: "As a bonus action, you can teleport to an unoccupied space you can see that is submerged in water (or within 30 ft of a body of water). You can also cause a 20‑ft radius sphere of water to erupt, forcing creatures within to make a Strength save or take 2d6 bludgeoning damage and be pushed 15 ft away. Once per long rest." }
+    ],
+    resource: { name: "Tentacle of the Deeps", maxUses: "proficiency bonus per long rest", currentUses: 0 }
+  }
+};
 
 const battleMasterManeuvers = [
   { name: "Commander's Strike", description: "When you take the Attack action on your turn, you can forgo one of your attacks and use a bonus action to direct one of your companions to strike. When you do so, choose a friendly creature who can see or hear you and expend one superiority die. That creature can immediately use its reaction to make one weapon attack, adding the superiority die to the attack's damage roll." },
@@ -483,14 +1269,140 @@ let chosenMetamagic = [];
 let chosenInvocations = [];
 let chosenManeuvers = [];
 let chosenArcaneShots = [];
+let selectedPactBoon = "";
 let selectedDragonbornAncestry = "";
 let selectedSorcererAncestry = "";
 let selectedAlignment = "N";
+let tempLevelUpSpells = null; // temporary spell selection for level-up modal
+
 let chosenClassSkills = [];
 let chosenRaceBonusSkills = [];
 let chosenHighElfCantrip = "";
 let pendingOpenWorldConfig = null;
 let pendingStoryCampaign = null;
+
+// Step 0: External databases loaded from markdown files
+let spellDatabase = null;      // Will hold { normalizedName: spellObject }
+let featDatabase = null;       // Will hold { normalizedName: featObject }
+
+function normalizeName(name) {
+  return name.toLowerCase().replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, ' ').trim();
+}
+
+async function loadSpellDatabase() {
+  const storageKey = 'dnd_spell_db';
+  const version = 2;
+  const cached = localStorage.getItem(storageKey);
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      if (data.version === version) {
+        spellDatabase = data.spells;
+        console.log('Spell DB loaded from cache:', Object.keys(spellDatabase).length);
+        return;
+      }
+    } catch(e) {}
+  }
+  try {
+    const response = await fetch('spells.md');
+    const text = await response.text();
+    const spells = parseSpellsFromMarkdown(text);
+    spellDatabase = spells;
+    localStorage.setItem(storageKey, JSON.stringify({ version, spells }));
+    console.log('Spell DB parsed:', Object.keys(spells).length);
+  } catch(e) {
+    console.warn('Could not load spells.md, using built-in database');
+    spellDatabase = null;
+  }
+}
+
+function parseSpellsFromMarkdown(markdown) {
+  const spells = {};
+  const blocks = markdown.split(/\n### /);
+  for (let block of blocks) {
+    if (!block.trim()) continue;
+    const lines = block.split('\n');
+    const name = lines[0].trim();
+    const spell = { name };
+    for (let line of lines.slice(1)) {
+      const match = line.match(/^-\s*\*\*([^*]+)\*\*:\s*(.*)/);
+      if (match) {
+        let key = match[1].toLowerCase().replace(/\s/g, '_');
+        let value = match[2].trim();
+        if (key === 'classes') value = value.split(',').map(s => s.trim());
+        spell[key] = value;
+      }
+    }
+    spells[normalizeName(name)] = spell;
+  }
+  return spells;
+}
+
+async function loadFeatDatabase() {
+  const storageKey = 'dnd_feat_db';
+  const version = 1;
+  const cached = localStorage.getItem(storageKey);
+  if (cached) {
+    try {
+      const data = JSON.parse(cached);
+      if (data.version === version) {
+        featDatabase = data.feats;
+        console.log('Feat DB loaded from cache:', Object.keys(featDatabase).length);
+        return;
+      }
+    } catch(e) {}
+  }
+  try {
+    const response = await fetch('feats.md');
+    const text = await response.text();
+    const feats = parseFeatsFromMarkdown(text);
+    featDatabase = feats;
+    localStorage.setItem(storageKey, JSON.stringify({ version, feats }));
+    console.log('Feat DB parsed:', Object.keys(feats).length);
+  } catch(e) {
+    console.warn('Could not load feats.md');
+    featDatabase = null;
+  }
+}
+
+function parseFeatsFromMarkdown(markdown) {
+  const feats = {};
+  const blocks = markdown.split(/\n### /);
+  for (let block of blocks) {
+    if (!block.trim()) continue;
+    const lines = block.split('\n');
+    const name = lines[0].trim();
+    const feat = { name };
+    for (let line of lines.slice(1)) {
+      const match = line.match(/^-\s*\*\*([^*]+)\*\*:\s*(.*)/);
+      if (match) {
+        let key = match[1].toLowerCase().replace(/\s/g, '_');
+        let value = match[2].trim();
+        if (key === 'prerequisite') {
+          // keep as string
+        } else if (key === 'benefit') {
+          // keep
+        } else if (key === 'ability_increase') {
+          const parts = value.match(/(\w+)\s*\+\s*(\d+)/);
+          if (parts) feat.abilityIncrease = { ability: parts[1], amount: parseInt(parts[2]) };
+        }
+        feat[key] = value;
+      }
+    }
+    feats[normalizeName(name)] = feat;
+  }
+  return feats;
+}
+
+function getSpellArray() {
+  if (spellDatabase) return Object.values(spellDatabase);
+  // Fallback: build from built-in spellsDatabase
+  const arr = [];
+  for (let level in spellsDatabase) {
+    arr.push(...spellsDatabase[level]);
+  }
+  return arr;
+}
 
 // Equipment selections
 let selectedPack = "";
@@ -507,7 +1419,75 @@ let selectionModal, configModal, campaignListDiv;
 let characterSheetModal, charCreationWizard;
 
 // Hardcoded story campaigns
-const storyCampaigns = [];
+const storyCampaigns = [
+  {
+    id: "pale_harvest",
+    name: "The Pale Harvest",
+    setting: "Dalelands / Baldur's Gate / Northern Faerûn",
+    tone: "Grimdark / Mystery",
+    description: `The grain turns black in the fields. Rivers run thick and slow. A plague without a name sweeps the North, and the dead do not stay dead. A whisper on the wind says: "The Lord of Bones has set his table."
+
+You are not the prophesied saviour. No fallen prince will bear the cursed crown for you. There is only the rising dead, a cult that preys on the desperate, and a necromancer who claims to offer salvation. Behind him, in a citadel of frozen shadow, a Lich waits. His name is Aszagrix. He has seen empires rot and gods blink.
+
+This is not a story of a single monster. It is the story of how the world learns to fear the dark again. And how you, against all reason, decide to light a match.`,
+    initialHook: `*A cold wind rattles the windows of the inn. Outside, a funeral procession passes – but the corpse is walking at the front.*
+
+The town of Westbridge is dying. Not from war or famine, but from a sleeping sickness that turns its victims pale and hollow. Three days later, they rise. The local lords blame a foreign plague. The church of Lathander is baffled. But you've seen the symbol carved into the forehead of one of the risen – a black crown, the mark of Myrkul.
+
+A hooded figure has left a message under your door: "The harvest has begun. Come to the old catacombs if you wish to stop it."
+
+What do you do?`,
+    toneClass: "tone-grimdark"
+  },
+  {
+    id: "iron_wake",
+    name: "The Iron Wake",
+    setting: "The North (Silver Marches / Spine of the World)",
+    tone: "Heroic / Tactical",
+    description: `Palischuk burned in a single night. The half-orc city of smiths and shield-maidens, which stood for three centuries, is now ash and bone. The survivors speak of a warlord named Aragway—not a brute, but a general. He rides a frost dragon from the Spine of the World. His army of three thousand orcs, half-orcs, goblins, and ogres marches not for plunder, but for dominion.
+
+They say his black helm whispers. They say it broke the dragon's will in nine heartbeats. He offers every city one choice: kneel, and your people become the foundation of a new empire. Resist, and you become the mortar.
+
+The lords of Faerûn bicker. The Harpers watch and wait. But you have seen the razed farmsteads, the chained prisoners, the goblin raiders wearing half-orc sergeant's stripes. This is the story of free peoples standing against the iron fist. Of dragon-fire met with courage. Of a helm that breaks wills—and the wills that refuse to break.`,
+    initialHook: `*The morning sun is choked by smoke on the horizon. A half-dozen ragged survivors from Palischuk stumble into your camp, their eyes hollow. One of them, a one-armed shield-maiden named Threnn, grips your arm.*
+
+"Aragway is three days behind us. He has a dragon, three thousand killers, and a helm that eats souls. Every town between here and Silverymoon will burn unless someone rallies the lords. The Harpers are too slow. The lords are too scared."
+
+*She presses a tarnished compass into your hand.*
+
+"This belonged to my father. It points to an old dwarven cache – weapons, maybe a secret. Go. I'll gather who I can and meet you at the Ironfast."
+
+What do you do?`,
+    toneClass: "tone-heroic"
+  },
+  {
+    id: "crimson_rift",
+    name: "The Crimson Rift",
+    setting: "Athkatla / Thunder Peaks / Western Faerûn",
+    tone: "High Heroism / Desperate Last Stand",
+    description: `"The merchant lords of Athkatla speak of a miracle: a young heiress named Seren Vaskar, whose fortune doubled overnight after her father's mysterious death. She buys iron, slaves, and masons by the thousand. She says she is building a monument to her father's memory. She lies.
+
+Deep in the Thunder Peaks, her workers have carved a colossal archway into a mountain. When the sun sets, the stone bleeds light. When the wind blows, it smells of brimstone. Goblins raiding the lowlands now flee from things with wings and barbed tails. Farmers vanish. Villages wake to find their children's shadows missing.
+
+The demon lord Saramok the Screaming Hunger has waited ten thousand years for this. His tanarukk legions—half-demon, half-orc berserkers—stand ready beyond the Rift. Seren Vaskar promised him a world to devour. In return, he will make her a queen of ashes.
+
+The portal is not yet complete. It needs one final ingredient: thousands of souls, offered in a single night of blood. The sacrifices are already being rounded up.
+
+You are not generals. You are not chosen by prophecy. You are the only ones who have seen the truth beneath the rumors. And you are the only ones close enough to stop the slaughter before the Rift tears open.
+
+This is the story of a portal, a pact, and a people who refuse to kneel to the abyss."`,
+    initialHook: `*The evening air in Waymoot carries the scent of smoke from the east. A merchant caravan arrived this morning—or what was left of it. The guards are dead. The cargo is untouched. But every victim has a burned handprint seared into their face.*
+
+*A dwarf named Dorrik Stonehand sits in the corner of the tavern, nursing a mug of ale with trembling hands. He escaped from a place he calls "the Riftworks"—a massive construction site hidden in the Thunder Peaks. He mutters about a young heiress, a stone arch that bleeds crimson light, and something winged that hunts the night.*
+
+*He looks at you with haunted eyes.*
+
+"If you've got steel in your spine and foolsblood in your veins, you'll want to see what I saw. But I warn you—some doors are built to keep things out. That one was built to let something in."
+
+What do you do?`,
+    toneClass: "tone-heroic"
+  }
+];
 
 /* ========== COMBAT TRACKER STATE ========== */
 let activeCombat = {
@@ -779,6 +1759,23 @@ function updateSubclassDropdown() {
     subclassSelect.innerHTML = `<option value="">None (choose later)</option>` + cls.subclasses.map(sc => `<option value="${sc}">${sc}</option>`).join("");
     selectedSubclass = "";
   } else subclassSelect.innerHTML = `<option value="">None</option>`;
+  updatePactBoonUI();
+}
+function updatePactBoonUI() {
+  const field = document.getElementById("pactBoonField");
+  const select = document.getElementById("wizardPactBoon");
+  if (!field || !select) return;
+  if (selectedClass === "Warlock") {
+    field.style.display = "block";
+    // Only populate if empty (preserve selection)
+    if (select.options.length === 0) {
+      select.innerHTML = `<option value="">— Choose Pact Boon —</option>`
+        + pactBoonOptions.map(p => `<option value="${p}">${p}</option>`).join("");
+    }
+  } else {
+    field.style.display = "none";
+    selectedPactBoon = "";
+  }
 }
 function updateVariantHumanUI() {
   // Variant Human removed – no action needed
@@ -837,7 +1834,7 @@ function updateSubclassDescription() {
   }
 }
 
-function getSpellSlotsForClass(className, level) {
+function getSpellSlotsForClass(className, level, subclass) {
   // Full casters
   if (["Bard","Cleric","Druid","Sorcerer","Wizard"].includes(className)) {
     if (level === 1) return {1:2};
@@ -851,9 +1848,9 @@ function getSpellSlotsForClass(className, level) {
     if (level === 9) return {1:4,2:3,3:3,4:3,5:1};
     if (level >= 10) return {1:4,2:3,3:3,4:3,5:2};
   }
-  // Warlock
-  else if (className === "Warlock") {
-    let slotLevel = Math.min(5, Math.ceil(level / 2));
+  // Warlock or Profane Soul Blood Hunter (pact magic)
+  else if (className === "Warlock" || (className === "Blood Hunter" && subclass === "Order of the Profane Soul")) {
+    let slotLevel = Math.min(4, Math.ceil(level / 2));
     let slotCount = 2;
     if (level >= 17) slotCount = 4;
     else if (level >= 11) slotCount = 3;
@@ -1176,14 +2173,15 @@ function renderSpellGrid(containerId, spellList, isCantrip, maxSelections, selec
 
 function updateSpellUI() {
   const cls = classes[selectedClass];
-  if (!cls || !cls.spellcasting) {
+  const isProfaneSoul = selectedClass === "Blood Hunter" && selectedSubclass === "Order of the Profane Soul";
+  if (!cls || (!cls.spellcasting && !isProfaneSoul)) {
     document.getElementById("spellsSection").style.display = "none";
     return;
   }
   document.getElementById("spellsSection").style.display = "block";
-  document.getElementById("spellcastingAbility").innerText = cls.spellcastingAbility;
+  document.getElementById("spellcastingAbility").innerText = isProfaneSoul ? "Intelligence" : (cls.spellcastingAbility || "Intelligence");
   const level = characterLevel;
-  const spellSlots = getSpellSlotsForClass(selectedClass, level);
+  const spellSlots = getSpellSlotsForClass(selectedClass, level, selectedSubclass);
   let slotsHtml = `<table><tr><th>Level</th><th>Slots</th></tr>`;
   for (let i=1; i<=5; i++) if (spellSlots[i]) slotsHtml += `<tr><td>${i}</td><td>${spellSlots[i]}</td></tr>`;
   slotsHtml += `</table>`;
@@ -1194,11 +2192,12 @@ function updateSpellUI() {
   else if (selectedClass === "Cleric") maxCantrips = 3 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Druid") maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Sorcerer") maxCantrips = 4 + (level>=4?1:0) + (level>=10?1:0);
-  else if (selectedClass === "Warlock") maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
+  else if (selectedClass === "Warlock" || isProfaneSoul) maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Wizard") maxCantrips = 3 + (level>=4?1:0) + (level>=10?1:0);
   document.getElementById("maxCantrips").innerText = maxCantrips;
   
-  const availableCantrips = classSpellLists[selectedClass]?.filter(s => s.level === 0) || [];
+  const spellListKey = isProfaneSoul ? "Warlock" : selectedClass;
+  const availableCantrips = classSpellLists[spellListKey]?.filter(s => s.level === 0) || [];
   renderSpellGrid("cantripGrid", availableCantrips, true, maxCantrips, new Set(chosenCantrips), (newSet) => {
     chosenCantrips = Array.from(newSet);
     document.getElementById("cantripsKnown").innerText = chosenCantrips.length;
@@ -1208,13 +2207,13 @@ function updateSpellUI() {
   let maxSpells = 0;
   if (selectedClass === "Bard") maxSpells = 4 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0) + (level>4?1:0);
   else if (selectedClass === "Sorcerer") maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0) + (level>4?1:0);
-  else if (selectedClass === "Warlock") maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0);
+  else if (selectedClass === "Warlock" || isProfaneSoul) maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0);
   else if (["Cleric","Druid","Wizard","Paladin","Ranger","Artificer"].includes(selectedClass)) {
     const abilityMod = calculateModifier(finalScores[cls.spellcastingAbility]);
     maxSpells = level + abilityMod;
   }
   document.getElementById("maxSpells").innerText = maxSpells;
-  const availableSpells = classSpellLists[selectedClass]?.filter(s => s.level > 0 && s.level <= Math.min(5, Math.floor((level+1)/2))) || [];
+  const availableSpells = classSpellLists[spellListKey]?.filter(s => s.level > 0 && s.level <= Math.min(4, Math.floor((level+1)/2))) || [];
   renderSpellGrid("spellGrid", availableSpells, false, maxSpells, new Set(chosenSpells), (newSet) => {
     chosenSpells = Array.from(newSet);
     document.getElementById("spellsKnownCount").innerText = chosenSpells.length;
@@ -1425,6 +2424,16 @@ function updateEquipmentUI() {
   updateEquipmentSummary();
   updateSkillUI();
   renderPackSelection();
+  
+  // ── Blood Hunter: Crimson Rite & Blood Curse selection ──
+  const bhPanel = document.getElementById("bloodHunterWizardPanel");
+  if (!bhPanel) return;
+  if (selectedClass === "Blood Hunter") {
+    bhPanel.style.display = "block";
+    renderBloodHunterWizardChoices();
+  } else {
+    bhPanel.style.display = "none";
+  }
 }
 
 /* ── Subclass Features UI ── */
@@ -1477,7 +2486,9 @@ function renderFeatureGrid(containerId, optionsArray, selectedSet, maxAllowed, f
 }
 
 function getAvailableInvocations(level) {
+  const pact = selectedPactBoon || (currentCharacter && currentCharacter.pactBoon) || "";
   return eldritchInvocations.filter(inv => {
+    // Level prerequisite check
     if (inv.prerequisite && inv.prerequisite.includes("level")) {
       const match = inv.prerequisite.match(/(\d+)/);
       if (match) {
@@ -1485,6 +2496,16 @@ function getAvailableInvocations(level) {
         if (level < reqLevel) return false;
       }
     }
+    // Pact Boon prerequisite check
+    if (inv.prerequisite && inv.prerequisite.includes("Pact of the")) {
+      // Extract the pact name from prerequisite (e.g., "Pact of the Blade" from "5th level, Pact of the Blade")
+      const pactMatch = inv.prerequisite.match(/(Pact of the \w+)/);
+      if (pactMatch) {
+        const requiredPact = pactMatch[1];
+        if (pact !== requiredPact) return false;
+      }
+    }
+    // Eldritch blast prerequisite (already passed level check)
     return true;
   });
 }
@@ -1522,6 +2543,279 @@ function getArcaneShotsMax(level) {
   if (level >= 7) return 3;
   if (level >= 3) return 2;
   return 0;
+}
+
+// ========== BLOOD HUNTER WIZARD CHOICES ==========
+
+// Global state for wizard choices
+var chosenRites = [];
+var chosenBloodCurses = [];
+var selectedFightingStyle = "";
+var tempAsiChoices = []; // [{ type: "asi"|"feat", ability?: string, amount?: number, featName?: string }]
+var tempSubclassSelections = {}; // { "totem_3": "Bear", "land_circle": "Coast" }
+
+function renderBloodHunterWizardChoices() {
+  var level = characterLevel || 1;
+  var subclass = selectedSubclass || "";
+  
+  // Crimson Rites
+  var riteMax = getCrimsonRiteMax(level, subclass);
+  var availableRites = crimsonRites.filter(function(r) {
+    if (r.order && r.order !== subclass) return false;
+    if (r.esoteric && level < 14) return false;
+    if (r.level > level) return false;
+    return true;
+  });
+  
+  var riteContainer = document.getElementById("crimsonRiteChoices");
+  if (riteContainer) {
+    var riteHtml = '<div class="feature-grid">';
+    availableRites.forEach(function(r) {
+      var checked = chosenRites.includes(r.name);
+      riteHtml += '<div class="feature-card">' +
+        '<label><input type="checkbox" value="' + r.name + '" ' + (checked ? 'checked' : '') + '> <strong>' + r.name + '</strong> <span class="eq-prop-badge">' + r.damageType + '</span></label>' +
+        '<div class="feature-desc">' + (r.description || "Weapon deals extra " + r.damageType.toLowerCase() + " damage.") + '</div>' +
+        (r.note ? '<div class="feature-desc" style="color:#C8A96E;">' + r.note + '</div>' : '') +
+        '</div>';
+    });
+    riteHtml += '</div>';
+    riteContainer.innerHTML = riteHtml;
+    
+    // Bind checkboxes
+    riteContainer.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener("change", function() {
+        if (cb.checked) {
+          if (!chosenRites.includes(cb.value)) chosenRites.push(cb.value);
+          // Enforce max
+          var checkedCount = chosenRites.length;
+          if (checkedCount > riteMax) {
+            cb.checked = false;
+            chosenRites = chosenRites.filter(function(r) { return r !== cb.value; });
+            alert("You can select at most " + riteMax + " crimson rite(s) at level " + level + ".");
+          }
+        } else {
+          chosenRites = chosenRites.filter(function(r) { return r !== cb.value; });
+        }
+      });
+    });
+  }
+  
+  // Blood Curses
+  var curseMax = getBloodCurseMax(level);
+  var curseLabel = document.getElementById("bloodCurseMaxLabel");
+  if (curseLabel) curseLabel.innerText = curseMax;
+  
+  var curseContainer = document.getElementById("bloodCurseChoices");
+  if (curseContainer) {
+    var curseHtml = '<div class="feature-grid">';
+    bloodCurses.forEach(function(c) {
+      var checked = chosenBloodCurses.includes(c.name);
+      curseHtml += '<div class="feature-card">' +
+        '<label><input type="checkbox" value="' + c.name + '" ' + (checked ? 'checked' : '') + '> <strong>' + c.name + '</strong></label>' +
+        '<div class="feature-desc">' + c.description + '</div>' +
+        '<div class="feature-desc" style="color:#C8A96E;">Amplify: ' + c.amplify + '</div>' +
+        '</div>';
+    });
+    curseHtml += '</div>';
+    curseContainer.innerHTML = curseHtml;
+    
+    curseContainer.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener("change", function() {
+        if (cb.checked) {
+          if (!chosenBloodCurses.includes(cb.value)) chosenBloodCurses.push(cb.value);
+          var checkedCount = chosenBloodCurses.length;
+          if (checkedCount > curseMax) {
+            cb.checked = false;
+            chosenBloodCurses = chosenBloodCurses.filter(function(c) { return c !== cb.value; });
+            alert("You can select at most " + curseMax + " blood curse(s) at level " + level + ".");
+          }
+        } else {
+          chosenBloodCurses = chosenBloodCurses.filter(function(c) { return c !== cb.value; });
+        }
+      });
+    });
+  }
+}
+
+// ========== FIGHTING STYLE UI ==========
+
+function updateFightingStyleUI() {
+  const container = document.getElementById("fightingStyleWizardGroup");
+  const select = document.getElementById("wizardFightingStyleSelect");
+  const desc = document.getElementById("fightingStyleDesc");
+  const eligible = ["Fighter","Paladin","Ranger","Blood Hunter"];
+  if (!eligible.includes(selectedClass) || characterLevel < 2) {
+    container.style.display = "none";
+    return;
+  }
+  container.style.display = "block";
+  const styles = fightingStyleDatabase[selectedClass] || [];
+  select.innerHTML = '<option value="">— Select a style —</option>';
+  styles.forEach(function(s) {
+    select.innerHTML += '<option value="' + s.name + '">' + s.name + '</option>';
+  });
+  if (selectedFightingStyle) select.value = selectedFightingStyle;
+  // Show description on change
+  select.onchange = function() {
+    selectedFightingStyle = select.value;
+    const style = styles.find(function(s) { return s.name === select.value; });
+    desc.innerText = style ? style.description : "";
+  };
+  // Initial description
+  const initialStyle = styles.find(function(s) { return s.name === select.value; });
+  if (initialStyle) desc.innerText = initialStyle.description;
+}
+
+// ========== ASI & FEAT MILESTONES ==========
+
+function getASIMilestonesCount(className, level) {
+  if (level < 4) return 0;
+  if (className === "Fighter") {
+    if (level >= 19) return 7;
+    if (level >= 16) return 6;
+    if (level >= 14) return 5;
+    if (level >= 12) return 4;
+    if (level >= 8)  return 3;
+    if (level >= 6)  return 2;
+    return 1;
+  }
+  if (className === "Rogue") {
+    if (level >= 19) return 6;
+    if (level >= 16) return 5;
+    if (level >= 12) return 4;
+    if (level >= 10) return 3;
+    if (level >= 8)  return 2;
+    return 1;
+  }
+  // Standard classes
+  var count = 0;
+  if (level >= 4) count++;
+  if (level >= 8) count++;
+  if (level >= 12) count++;
+  if (level >= 16) count++;
+  if (level >= 19) count++;
+  return count;
+}
+
+function getASILevels(className, level) {
+  var levels = [];
+  if (className === "Fighter") {
+    [4,6,8,12,14,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+    return levels;
+  }
+  if (className === "Rogue") {
+    [4,8,10,12,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+    return levels;
+  }
+  [4,8,12,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+  return levels;
+}
+
+function renderASIMilestonePanels() {
+  var container = document.getElementById("asiFeatMilestonesContainer");
+  var badge = document.getElementById("asiCountBadge");
+  if (!container) return;
+  var asiLevels = getASILevels(selectedClass, characterLevel);
+  if (asiLevels.length === 0) {
+    container.innerHTML = '<p class="field-note">No Ability Score Improvements available at level ' + characterLevel + '. ASIs start at level 4.</p>';
+    if (badge) badge.innerText = "0 ASIs";
+    tempAsiChoices = [];
+    return;
+  }
+  if (badge) badge.innerText = asiLevels.length + " ASI" + (asiLevels.length > 1 ? "s" : "");
+  
+  // Ensure tempAsiChoices has enough entries
+  while (tempAsiChoices.length < asiLevels.length) {
+    tempAsiChoices.push({ type: "asi", ability: "Strength", amount: 1, featName: "" });
+  }
+  
+  var html = "";
+  asiLevels.forEach(function(lvl, idx) {
+    var choice = tempAsiChoices[idx] || { type: "asi", ability: "Strength", amount: 1, featName: "" };
+    var asiChecked = choice.type === "asi" ? "checked" : "";
+    var featChecked = choice.type === "feat" ? "checked" : "";
+    var featSel = choice.featName || "";
+    html += '<div class="asi-milestone-panel" data-idx="' + idx + '">' +
+      '<div class="asi-milestone-header">Level ' + lvl + ' – ASI Milestone ' + (idx + 1) + '</div>' +
+      '<div class="asi-choice-row">' +
+        '<label class="asi-radio-label"><input type="radio" name="asi_type_' + idx + '" value="asi" ' + asiChecked + ' onchange="onAsiTypeChange(' + idx + ', \'asi\')"> Ability Score Increase</label>' +
+        '<label class="asi-radio-label"><input type="radio" name="asi_type_' + idx + '" value="feat" ' + featChecked + ' onchange="onAsiTypeChange(' + idx + ', \'feat\')"> Feat</label>' +
+      '</div>' +
+      '<div class="asi-fields" id="asi_fields_' + idx + '" style="' + (choice.type === "feat" ? "display:none;" : "") + '">' +
+        '<label>Ability: <select class="sheet-input asi-ability-select" data-idx="' + idx + '">' +
+          abilities.map(function(a) { return '<option value="' + a + '" ' + (choice.ability === a ? "selected" : "") + '>' + a + '</option>'; }).join("") +
+        '</select></label>' +
+        '<label>Increase: <select class="sheet-input asi-amount-select" data-idx="' + idx + '">' +
+          '<option value="2" ' + (choice.amount === 2 ? "selected" : "") + '>+2</option>' +
+          '<option value="1" ' + (choice.amount === 1 ? "selected" : "") + '>+1 (pick another +1 below)</option>' +
+        '</select></label>' +
+        '<div class="asi-second-ability" id="asi_second_' + idx + '" style="' + (choice.amount === 2 ? "display:none;" : "") + '">' +
+          '<label>Second Ability: <select class="sheet-input asi-ability-second-select" data-idx="' + idx + '">' +
+            abilities.map(function(a) { return '<option value="' + a + '" ' + ((choice.secondAbility || "Strength") === a ? "selected" : "") + '>' + a + '</option>'; }).join("") +
+          '</select></label>' +
+        '</div>' +
+      '</div>' +
+      '<div class="asi-feat-select" id="asi_feat_fields_' + idx + '" style="' + (choice.type === "feat" ? "" : "display:none;") + '">' +
+        '<label>Choose a Feat: <select class="sheet-input asi-feat-select" data-idx="' + idx + '">' +
+          '<option value="">— Select a feat —</option>' +
+          getFeatList().map(function(f) { return '<option value="' + f.name + '" ' + (featSel === f.name ? "selected" : "") + '>' + f.name + '</option>'; }).join("") +
+        '</select></label>' +
+        '<div class="field-help" id="asi_feat_desc_' + idx + '">' + (featSel ? (getFeatByName(featSel)?.description || "") : "") + '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+  
+  // Bind change events
+  container.querySelectorAll(".asi-ability-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].ability = sel.value;
+    };
+  });
+  container.querySelectorAll(".asi-amount-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].amount = parseInt(sel.value);
+      document.getElementById("asi_second_" + idx).style.display = sel.value === "1" ? "" : "none";
+    };
+  });
+  container.querySelectorAll(".asi-ability-second-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].secondAbility = sel.value;
+    };
+  });
+  container.querySelectorAll(".asi-feat-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].featName = sel.value;
+      var descEl = document.getElementById("asi_feat_desc_" + idx);
+      var feat = getFeatByName(sel.value);
+      descEl.innerText = feat ? feat.description : "";
+    };
+  });
+}
+
+function onAsiTypeChange(idx, type) {
+  tempAsiChoices[idx] = tempAsiChoices[idx] || { type: "asi", ability: "Strength", amount: 1, featName: "" };
+  tempAsiChoices[idx].type = type;
+  document.getElementById("asi_fields_" + idx).style.display = type === "asi" ? "" : "none";
+  document.getElementById("asi_feat_fields_" + idx).style.display = type === "feat" ? "" : "none";
+}
+
+function validateAsiFeatChoices() {
+  var asiLevels = getASILevels(selectedClass, characterLevel);
+  if (asiLevels.length === 0) return true;
+  for (var i = 0; i < asiLevels.length; i++) {
+    var c = tempAsiChoices[i];
+    if (!c) return false;
+    if (c.type === "feat" && !c.featName) {
+      alert("Please select a feat for ASI milestone " + (i + 1) + " (level " + asiLevels[i] + ").");
+      return false;
+    }
+  }
+  return true;
 }
 
 function updateSubclassFeaturesUI() {
@@ -1595,7 +2889,7 @@ function updateSubclassFeaturesUI() {
 }
 
 function updateWizardUI() {
-  for (let i=1; i<=5; i++) {
+  for (let i=1; i<=7; i++) {
     const stepDiv = document.getElementById(`wizard-step-${i}`);
     if (stepDiv) stepDiv.style.display = i === wizardStep ? "block" : "none";
   }
@@ -1603,12 +2897,14 @@ function updateWizardUI() {
     if (idx+1 === wizardStep) step.classList.add("active");
     else step.classList.remove("active");
   });
-  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 5`;
+  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 7`;
   const backBtn = document.getElementById("wizardBackBtn"), nextBtn = document.getElementById("wizardNextBtn"), finishBtn = document.getElementById("wizardFinishBtn");
   backBtn.disabled = (wizardStep === 1);
-  if (wizardStep === 5) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
+  if (wizardStep === 7) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
   else { nextBtn.style.display = "inline-block"; finishBtn.style.display = "none"; }
 }
+
+function prevStep() { wizardStep--; updateWizardUI(); }
 
 function nextStep() {
   if (wizardStep === 1) {
@@ -1616,6 +2912,7 @@ function nextStep() {
     selectedSubrace = document.getElementById("wizardSubrace").value;
     selectedClass = document.getElementById("wizardClass").value;
     selectedSubclass = document.getElementById("wizardSubclass").value;
+    selectedPactBoon = document.getElementById("wizardPactBoon")?.value || "";
     selectedBackground = document.getElementById("wizardBackground").value;
     characterLevel = parseInt(document.getElementById("wizardLevel").value, 10);
     updateVariantHumanUI();
@@ -1640,6 +2937,19 @@ function nextStep() {
     }
   } else if (wizardStep === 4) {
     customItems = document.getElementById("extraItems").value;
+  } else if (wizardStep === 5) {
+    // Validate fighting style selection for eligible classes
+    const eligibleFS = ["Fighter","Paladin","Ranger","Blood Hunter"];
+    if (eligibleFS.includes(selectedClass) && characterLevel >= 2) {
+      selectedFightingStyle = document.getElementById("wizardFightingStyleSelect")?.value || "";
+      if (!selectedFightingStyle) {
+        alert("Please select a Fighting Style before proceeding.");
+        return;
+      }
+    }
+  } else if (wizardStep === 6) {
+    // Validate ASI/feat selections
+    if (!validateAsiFeatChoices()) return;
   }
   wizardStep++;
   updateWizardUI();
@@ -1651,10 +2961,14 @@ function nextStep() {
   } else if (wizardStep === 4) {
     updateEquipmentUI();
     updateSpellUI();
+    initWizardWeaponSlots();
+  } else if (wizardStep === 5) {
+    updateFightingStyleUI();
     updateSubclassFeaturesUI();
+  } else if (wizardStep === 6) {
+    renderASIMilestonePanels();
   }
 }
-function prevStep() { wizardStep--; updateWizardUI(); }
 function generateReview() {
   const racialBonuses = getCurrentRacialBonuses();
   const hp = (classes[selectedClass].hitDie === "d6"?6: classes[selectedClass].hitDie === "d8"?8: classes[selectedClass].hitDie === "d10"?10:12) + calculateModifier(finalScores.Constitution);
@@ -1664,25 +2978,43 @@ function generateReview() {
     <p><strong>Race:</strong> ${selectedRace} (${selectedSubrace})</p>
     <p><strong>Class:</strong> ${selectedClass} ${selectedSubclass ? `(${selectedSubclass})` : ""}</p>
     <p><strong>Level:</strong> ${characterLevel}</p>
+    ${selectedClass === "Warlock" && selectedPactBoon ? `<p><strong>Pact Boon:</strong> ${selectedPactBoon}</p>` : ""}
     <p><strong>Background:</strong> ${selectedBackground}</p>
     <p><strong>Ability Scores:</strong> ${abilities.map(ab => `${ab}: ${finalScores[ab]} (${calculateModifier(finalScores[ab])>=0?"+":""}${calculateModifier(finalScores[ab])})`).join(", ")}</p>
     <p><strong>Hit Points:</strong> ${hp}</p>
     <p><strong>Proficiency Bonus:</strong> +${getProficiencyBonus(characterLevel)}</p>
     <p><strong>Equipment:</strong> Armor: ${selectedArmor || "None"}, Shield: ${hasShield ? "Yes" : "No"}, Weapons: ${selectedWeapons.map(w => `${w.name} (${w.quantity})`).join(", ") || "None"}, Extra: ${customItems || "None"}</p>
     <p><strong>Spells:</strong> Cantrips: ${chosenCantrips.join(", ")} | Spells: ${chosenSpells.join(", ")}</p>
+    ${selectedFightingStyle ? `<p><strong>Fighting Style:</strong> ${selectedFightingStyle}</p>` : ""}
+    ${tempAsiChoices.filter(c => c.type === "feat" && c.featName).length ? `<p><strong>Feats:</strong> ${tempAsiChoices.filter(c => c.type === "feat").map(c => c.featName).join(", ")}</p>` : ""}
     ${chosenMetamagic.length ? `<p><strong>Metamagic:</strong> ${chosenMetamagic.join(", ")}</p>` : ""}
     ${chosenInvocations.length ? `<p><strong>Eldritch Invocations:</strong> ${chosenInvocations.join(", ")}</p>` : ""}
     ${chosenManeuvers.length ? `<p><strong>Maneuvers:</strong> ${chosenManeuvers.join(", ")}</p>` : ""}
     ${chosenArcaneShots.length ? `<p><strong>Arcane Shots:</strong> ${chosenArcaneShots.join(", ")}</p>` : ""}
+    ${selectedClass === "Blood Hunter" && chosenRites.length ? `<p><strong>Crimson Rites:</strong> ${chosenRites.join(", ")}</p>` : ""}
+    ${selectedClass === "Blood Hunter" && chosenBloodCurses.length ? `<p><strong>Blood Curses:</strong> ${chosenBloodCurses.join(", ")}</p>` : ""}
   `;
   document.getElementById("reviewCard").innerHTML = reviewHtml;
 }
+
+// Calculate max HP for any class and level (1st level: max die + Con; subsequent levels: average roll + Con)
+function calculateLevelBasedMaxHp(className, conMod, level) {
+    const cls = classes[className];
+    if (!cls) return 8 + conMod;
+    const hitDieVal = cls.hitDie === "d12" ? 12 : cls.hitDie === "d10" ? 10 : cls.hitDie === "d8" ? 8 : 6;
+    let hp = hitDieVal + conMod;               // level 1
+    const average = Math.floor(hitDieVal / 2) + 1;  // average roll (rounded up)
+    for (let i = 2; i <= level; i++) {
+        hp += average + conMod;
+    }
+    return hp;
+}
+
 function finishWizard() {
   const racialBonuses = getCurrentRacialBonuses();
   const charClass = classes[selectedClass];
-  const baseHp = charClass ? (charClass.hitDie === "d6"?6: charClass.hitDie === "d8"?8: charClass.hitDie === "d10"?10:12) : 8;
   const conMod = calculateModifier(finalScores.Constitution);
-  const maxHp = baseHp + conMod;
+  const maxHp = calculateLevelBasedMaxHp(selectedClass, conMod, characterLevel);
   const character = {
     id: Date.now().toString(), name: characterName, race: selectedRace, subrace: selectedSubrace,
     class: selectedClass, subclass: selectedSubclass, level: characterLevel, background: selectedBackground,
@@ -1692,13 +3024,37 @@ function finishWizard() {
     tempHp: 0,
     appearance: characterAppearance, backstory: characterBackstory, personalityTraits: characterTraits,
     cantrips: chosenCantrips.slice(), spells: chosenSpells.slice(),
-    equipment: { armor: selectedArmor, shield: hasShield, weapons: selectedWeapons.slice(), custom: document.getElementById("extraItems").value },
+    equipment: (function() {
+      const eq = { armor: { name: selectedArmor, weight: (armorData[selectedArmor]?.weight || 0), ac: parseInt(armorData[selectedArmor]?.ac) || 10 }, shield: hasShield, mainHand: null, offHand: null, ranged: null, custom: document.getElementById("extraItems").value };
+      // Read wizard weapon slots
+      const wizardSlots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+      const slotKeys = ['mainHand', 'offHand', 'ranged'];
+      wizardSlots.forEach((slot, idx) => {
+        const name = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value.trim();
+        if (!name) return;
+        const properties = [];
+        document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]:checked`).forEach(cb => properties.push(cb.value));
+        eq[slotKeys[idx]] = {
+          name: name,
+          quantity: parseInt(document.querySelector(`.weapon-qty[data-slot="${slot}"]`).value) || 1,
+          weight: parseFloat(document.querySelector(`.weapon-weight[data-slot="${slot}"]`).value) || 0,
+          properties: properties,
+          attack: document.querySelector(`.weapon-attack[data-slot="${slot}"]`).value,
+          damage: document.querySelector(`.weapon-damage[data-slot="${slot}"]`).value
+        };
+      });
+      return eq;
+    })(),
     currency: { cp: parseInt(document.getElementById("coinCP").value) || 0, sp: parseInt(document.getElementById("coinSP").value) || 0, ep: parseInt(document.getElementById("coinEP").value) || 0, gp: parseInt(document.getElementById("coinGP").value) || 0, pp: parseInt(document.getElementById("coinPP").value) || 0 },
-    xp: 0,
+    xp: xpTable[characterLevel] || 0,
     metamagic: chosenMetamagic.slice(),
     invocations: chosenInvocations.slice(),
     maneuvers: chosenManeuvers.slice(),
     arcaneShots: chosenArcaneShots.slice(),
+    learnedRites: chosenRites.slice(),
+    bloodCurses: (function() { return chosenBloodCurses.map(function(c) { var obj = bloodCurses.find(function(bc) { return bc.name === c; }); return obj || { name: c }; }); })(),
+    activeRite: null,
+    pactBoon: selectedPactBoon || "",
     dragonbornAncestry: selectedDragonbornAncestry,
     sorcererDragonAncestry: selectedSorcererAncestry,
     alignment: selectedAlignment,
@@ -1707,11 +3063,20 @@ function finishWizard() {
     racialCantrip: chosenHighElfCantrip,
     selectedPack: selectedPack,
     backgroundFeature: backgrounds[selectedBackground]?.feature || null,
-    alwaysPreparedSpells: subclassSpells[selectedSubclass] || [],
+    alwaysPreparedSpells: selectedClass === "Warlock" && warlockPatrons[selectedSubclass]
+      ? (function() {
+          const patron = warlockPatrons[selectedSubclass];
+          let spells = [];
+          for (let level in patron.expandedSpells) {
+            spells = spells.concat(patron.expandedSpells[level]);
+          }
+          return spells;
+        })()
+      : subclassSpells[selectedSubclass] || [],
     // Inventory items
     inventory: [],
     // New feature fields
-    spellSlots: (function() { const s = getSpellSlotsForClass(selectedClass, characterLevel); let o = {}; for (let k in s) { o[k] = { used: 0, max: s[k] }; } return o; })(),
+    spellSlots: (function() { const s = getSpellSlotsForClass(selectedClass, characterLevel, selectedSubclass); let o = {}; for (let k in s) { o[k] = { used: 0, max: s[k] }; } return o; })(),
     hitDiceRemaining: characterLevel,
     hitDiceTotal: characterLevel,
     hitDiceType: charClass ? charClass.hitDie : "d8",
@@ -1720,8 +3085,39 @@ function finishWizard() {
     classResources: getClassResources(selectedClass, selectedSubclass, characterLevel),
     deathSaveSuccesses: 0,
     deathSaveFailures: 0,
-    isUnconscious: false
+    isUnconscious: false,
+    fightingStyle: selectedFightingStyle || null,
+    feats: (function() {
+      var feats = [];
+      tempAsiChoices.forEach(function(c) {
+        if (c.type === "feat" && c.featName) {
+          feats.push(c.featName);
+          // Apply feat ability increase
+          var featObj = getFeatByName(c.featName);
+          if (featObj && featObj.abilityIncrease && featObj.abilityIncrease.options && featObj.abilityIncrease.options.length === 1) {
+            var ab = featObj.abilityIncrease.options[0];
+            if (finalScores[ab] && finalScores[ab] < 20) finalScores[ab] += featObj.abilityIncrease.amount;
+          }
+        } else if (c.type === "asi") {
+          if (c.ability && finalScores[c.ability] && finalScores[c.ability] < 20) {
+            finalScores[c.ability] += c.amount || 0;
+          }
+          if (c.amount === 1 && c.secondAbility && finalScores[c.secondAbility] && finalScores[c.secondAbility] < 20) {
+            finalScores[c.secondAbility] += 1;
+          }
+        }
+      });
+      return feats;
+    })(),
+    subclassChoices: JSON.parse(JSON.stringify(tempSubclassSelections))
   };
+  // Update abilityScores in character with ASI-applied values
+  character.abilityScores = {...finalScores};
+  // Recalculate HP after potential CON changes from ASI
+  const newConMod = calculateModifier(finalScores.Constitution);
+  const newMaxHp = calculateLevelBasedMaxHp(selectedClass, newConMod, characterLevel);
+  character.hp = newMaxHp;
+  character.maxHp = newMaxHp;
   
   currentCharacter = character;
   localStorage.setItem('dnd_current_character', JSON.stringify(currentCharacter));
@@ -1730,17 +3126,25 @@ function finishWizard() {
   let newCampaign = null;
   if (wizardContext && wizardContext.type === 'openworld' && pendingOpenWorldConfig) {
     const config = pendingOpenWorldConfig;
+    const isFaerun = config.worldbuildingKey === 'faerun';
     newCampaign = {
       id: Date.now().toString(),
       name: config.name,
       lastPlayed: new Date().toISOString().slice(0,10),
       type: 'openworld',
       config: { location: config.location, tone: config.tone },
-      description: "The world of Al'mundi is yours to explore.",
+      description: isFaerun ? "The continent of Faerûn awaits. Explore the Sword Coast, brave the Underdark, and shape your legend in the Forgotten Realms." : "The world of Al'mundi is yours to explore.",
       initialHook: config.initialHook,
-      characterId: character.id
+      characterId: character.id,
+      worldbuildingKey: config.worldbuildingKey || 'almundi'
     };
     campaigns.push(newCampaign);
+    // Store the appropriate worldbuilding reference
+    if (isFaerun && typeof FAERUN_WORLDBUILDING !== 'undefined') {
+      saveWorldbuilding(FAERUN_WORLDBUILDING);
+    } else if (!isFaerun && typeof ALMUNDI_WORLDBUILDING !== 'undefined') {
+      saveWorldbuilding(ALMUNDI_WORLDBUILDING);
+    }
     pendingOpenWorldConfig = null;
   } else if (wizardContext && wizardContext.type === 'story' && pendingStoryCampaign) {
     newCampaign = {
@@ -1750,11 +3154,35 @@ function finishWizard() {
       type: 'story',
       refId: pendingStoryCampaign.id,
       description: pendingStoryCampaign.description || '',
-      initialHook: pendingStoryCampaign.description || '',
+      initialHook: pendingStoryCampaign.initialHook || pendingStoryCampaign.description || '',
       characterId: character.id
     };
     campaigns.push(newCampaign);
     pendingStoryCampaign = null;
+  } else if (wizardContext && wizardContext.type === 'custom' && wizardContext.campaign) {
+    const customCamp = wizardContext.campaign;
+    customCamp.characterId = character.id;
+    const index = campaigns.findIndex(c => c.id === customCamp.id);
+    if (index !== -1) campaigns[index] = customCamp;
+    saveCampaigns();
+
+    selectedCampaignId = customCamp.id;
+    sessionActive = true;
+    applyState();
+    chatSessionInit = false;
+    startGameSession(customCamp.id);
+
+    const chatNoSession = document.getElementById('chatNoSession');
+    const chatShell = document.getElementById('chatShell');
+    if (chatNoSession) chatNoSession.style.display = 'none';
+    if (chatShell) chatShell.style.display = 'flex';
+    sessionSec.classList.remove('hidden');
+    if (sessionBtns && sessionBtns.length) {
+      for (let i = 0; i < sessionBtns.length; i++) {
+        const btn = document.getElementById(sessionBtns[i]);
+        if (btn) btn.disabled = false;
+      }
+    }
   }
   
   if (newCampaign) {
@@ -1835,6 +3263,10 @@ function resumeCampaign(id) {
   if (campaign.characterId) {
     const storedChar = localStorage.getItem('dnd_current_character');
     if (storedChar) currentCharacter = JSON.parse(storedChar);
+    if (currentCharacter) {
+      migrateCharacterState(currentCharacter);
+      syncCharacterStats();
+    }
   }
   closeCampaignModal();
   // Don't call applyState() first — it would init a fresh session.
@@ -1877,6 +3309,9 @@ function startGameSession(campaignId) {
     chatHistory = [];
   }
   
+  // Initialize summarization counter
+  messagesSinceLastSummary = chatHistory.filter(m => m.role !== 'system').length;
+  
   // Load quests for this campaign
   loadQuests();
   
@@ -1893,14 +3328,6 @@ function startGameSession(campaignId) {
   // Initialize the chat interface
   initChatSession();
   
-  // If this is a truly fresh campaign with no persisted chat history and has an initial hook, send it
-  if (campaign && !storedChat && campaign.initialHook) {
-    setTimeout(() => {
-      appendDMMessage(`*${campaign.initialHook}*\n\nHow would you like to proceed, adventurer?`);
-      chatHistory.push({ role: 'assistant', content: campaign.initialHook });
-      saveChatHistory();
-    }, 300);
-  }
 }
 
 function saveChatHistory() {
@@ -1919,8 +3346,35 @@ function closeCampaignSelectionModal() { if (!selectionModal) return; selectionM
 function renderCampaignSelection() {
   if (!campaignListDiv) return;
   campaignListDiv.innerHTML = '';
-  const openWorld = { type: "openworld", id: "openworld", name: "Al'mundi", setting: "Al'mundi", tone: "Choose tone at creation", description: "The world of Al'mundi is yours to explore. No fixed main plot—the AI Dungeon Master creates dynamic adventures as you go.", toneClass: "tone-neutral" };
-  campaignListDiv.appendChild(createCampaignCard(openWorld, true));
+
+  // Open World: Al'mundi
+  const openWorldAlmundi = {
+    type: "openworld",
+    id: "openworld_almundi",
+    name: "Al'mundi",
+    setting: "Al'mundi (Homebrew)",
+    tone: "Custom",
+    description: "The world of Al'mundi is yours to explore. No fixed main plot—the AI Dungeon Master creates dynamic adventures as you go.",
+    toneClass: "tone-neutral"
+  };
+  campaignListDiv.appendChild(createCampaignCard(openWorldAlmundi, true));
+
+  // Open World: Faerûn (Forgotten Realms)
+  const openWorldFaerun = {
+    type: "openworld",
+    id: "openworld_faerun",
+    name: "Faerûn (Forgotten Realms)",
+    setting: "Faerûn",
+    tone: "Custom",
+    description: "Explore the Sword Coast, brave the Underdark, or sail the Sea of Fallen Stars. The classic D&D setting, open for sandbox adventure. The AI will generate quests, factions, and random encounters using Faerûn lore.",
+    toneClass: "tone-neutral"
+  };
+  campaignListDiv.appendChild(createCampaignCard(openWorldFaerun, true));
+
+  // Story campaigns
+  storyCampaigns.forEach(story => {
+    campaignListDiv.appendChild(createCampaignCard(story, false));
+  });
 }
 function createCampaignCard(campaign, isOpenWorld = false) {
   const card = document.createElement('div'); card.className = 'campaign-card';
@@ -1930,15 +3384,27 @@ function createCampaignCard(campaign, isOpenWorld = false) {
   const tone = document.createElement('div'); tone.className = `campaign-tone ${campaign.toneClass || 'tone-neutral'}`; tone.textContent = typeof campaign.tone === 'string' ? campaign.tone : 'Narrative Tone: ' + campaign.tone; card.appendChild(tone);
   const desc = document.createElement('div'); desc.className = 'campaign-description'; desc.textContent = campaign.description; card.appendChild(desc);
   const button = document.createElement('button'); button.className = 'card-button'; button.textContent = 'Start Adventure';
-  button.addEventListener('click', (e) => { e.stopPropagation(); if (isOpenWorld) openOpenWorldConfigModal(); else startStoryCampaign(campaign); });
+  button.addEventListener('click', (e) => { e.stopPropagation(); if (isOpenWorld) openOpenWorldConfigModal(campaign.id); else startStoryCampaign(campaign); });
   card.appendChild(button);
   return card;
 }
 function startStoryCampaign(story) { closeCampaignSelectionModal(); pendingStoryCampaign = story; wizardContext = { type: 'story' }; openCharacterCreationWizard(); }
-function openOpenWorldConfigModal() { closeCampaignSelectionModal(); if (!configModal) return; document.getElementById('owSessionName').value = "Al'mundi"; document.getElementById('owStartLocation').value = 'Random'; document.getElementById('owTone').value = 'Heroic'; document.getElementById('owNameError').innerText = ''; configModal.style.display = 'flex'; setTimeout(() => configModal.classList.add('show'), 10); }
+let pendingWorldbuildingKey = 'almundi'; // 'almundi' or 'faerun'
+function openOpenWorldConfigModal(campaignId) { 
+  closeCampaignSelectionModal(); 
+  if (!configModal) return; 
+  const isFaerun = campaignId === 'openworld_faerun';
+  pendingWorldbuildingKey = isFaerun ? 'faerun' : 'almundi';
+  document.getElementById('owSessionName').value = isFaerun ? "Faerûn" : "Al'mundi"; 
+  document.getElementById('owStartLocation').value = 'Random'; 
+  document.getElementById('owTone').value = 'Heroic'; 
+  document.getElementById('owNameError').innerText = ''; 
+  configModal.style.display = 'flex'; 
+  setTimeout(() => configModal.classList.add('show'), 10); 
+}
 function closeOpenWorldConfigModal() { if (!configModal) return; configModal.classList.remove('show'); setTimeout(() => { configModal.style.display = 'none'; }, 200); }
 function generateAIHook(location, tone) {
-  const hooks = { 'Forest of Allanar': `Ancient trees whisper secrets in the Forest of Allanar, where fey creatures and forgotten ruins lie hidden...`, 'Khigvorda Mountains': `The Khigvorda Mountains hold veins of precious ore and deeper, darker tunnels where something stirs...`, 'The Fading Swamp': `Miasma clings to the Fading Swamp, a place where the veil between worlds is thin and strange lights flicker at night...`, 'Starview Plains': `Across the open Starview Plains, nomadic tribes trade tales of a falling star that brought something otherworldly...`, "The Merchant's Pass": `The Merchant's Pass is a vital trade route, but bandits and a recent monster attack have brought commerce to a halt...`, 'random town': `A bustling town square, a guarded gate, and rumors of trouble beyond the walls draw your attention...`, 'random village': `A quiet hamlet where the locals eye you with a mix of curiosity and concern—something is amiss...`, 'Random': `Rumors swirl of an ancient ruin...` };
+  const hooks = { "Baldur's Gate": `The Gate's streets teem with intrigue – a Flaming Fist patrol blocks an alley, a smuggler's note falls from a crate, and a desperate tiefling whispers of a vanished duke.`, 'Waterdeep': `The City of Splendors gleams under the afternoon sun. A masked lord has been murdered, and the Watch is offering a reward for any who can track the killer into the Undermountain.`, 'Neverwinter': `Smoke still rises from the Chasm, but the city rebuilds. A half‑elven ranger claims the Neverwinter Wood hides a green dragon – and a lost forge that could save the city.`, 'Silverymoon': `The Moonbridge shimmers above the river. The High Mage requests discreet adventurers to retrieve a stolen spellbook – one that holds the secret to closing a planar rift in the High Forest.`, 'Menzoberranzan': `In the dark elf city, a matron mother offers a dangerous bargain: retrieve a rogue House's soul‑spider egg from the Clawrift, and earn safe passage to the surface.`, 'random town': `A bustling town square, a guarded gate, and rumors of trouble beyond the walls draw your attention...`, 'random village': `A quiet hamlet where the locals eye you with a mix of curiosity and concern—something is amiss...`, 'Random': `Rumors swirl of an ancient ruin...` };
   let hook = hooks[location] || hooks['Random'];
   if (tone === 'Grimdark') hook += ' Dark omens and blood‑soaked trails await.';
   if (tone === 'Lighthearted') hook += ' A bumbling wizard offers a comical reward.';
@@ -1951,7 +3417,7 @@ function submitOpenWorldConfig() {
   const tone = document.getElementById('owTone').value;
   if (!name) { document.getElementById('owNameError').innerText = 'Adventure name is required'; return; }
   document.getElementById('owNameError').innerText = '';
-  pendingOpenWorldConfig = { name, location, tone, initialHook: generateAIHook(location, tone) };
+  pendingOpenWorldConfig = { name, location, tone, initialHook: generateAIHook(location, tone), worldbuildingKey: pendingWorldbuildingKey || 'almundi' };
   wizardContext = { type: 'openworld' };
   closeOpenWorldConfigModal();
   openCharacterCreationWizard();
@@ -2126,6 +3592,7 @@ function recalcDerivedStats() {
     if (el) el.innerText = (mod >= 0 ? "+" : "") + mod;
   }
   updateSavesAndSkills();
+  updateACDisplay();
 }
 
 /**
@@ -2141,10 +3608,14 @@ function updateHPDisplay() {
   if (cls) {
     const hitDieVal = cls.hitDie === "d12" ? 12 : cls.hitDie === "d10" ? 10 : cls.hitDie === "d8" ? 8 : cls.hitDie === "d6" ? 6 : 8;
     const conMod = calculateModifier(char.abilityScores.Constitution);
-    // Level 1: max hit die + Con mod; for higher levels we use stored maxHp or compute
     const computedMax = hitDieVal + conMod;
-    // Allow stored maxHp to override (in case of level ups or manual edits)
-    if (!char.maxHp || char.maxHp < computedMax) {
+    // Only set maxHp if it's not yet defined, or if it's lower than computed base
+    // (Blood Hunter may have reduced maxHp from Crimson Rite, so don't override)
+    if (!char.maxHp) {
+      char.maxHp = computedMax;
+    }
+    // For non-Blood Hunters, ensure maxHp is at least the computed base
+    if (char.class !== "Blood Hunter" && char.maxHp < computedMax) {
       char.maxHp = computedMax;
     }
   }
@@ -2291,6 +3762,36 @@ function populateCharacterSheet() {
   document.getElementById("sheetRace").innerText = `${char.race}${char.subrace ? " (" + char.subrace + ")" : ""}`;
   document.getElementById("sheetClass").innerText = `${char.class}${char.subclass ? " (" + char.subclass + ")" : ""}`;
   document.getElementById("sheetLevel").value = char.level || 1;
+  // ── Level change listener ──
+  const levelInput = document.getElementById("sheetLevel");
+  if (levelInput && !levelInput.hasAttribute("data-listener")) {
+    levelInput.setAttribute("data-listener", "true");
+    levelInput.addEventListener("change", function() {
+      const newLevel = parseInt(this.value);
+      if (!isNaN(newLevel) && newLevel >= 1 && newLevel <= 20) {
+        currentCharacter.level = newLevel;
+        syncCharacterStats();    // recalc HP and XP
+        // Also update spell slots and hit dice
+        const slots = getSpellSlotsForClass(currentCharacter.class, newLevel, currentCharacter.subclass);
+        if (!currentCharacter.spellSlots) currentCharacter.spellSlots = {};
+        for (let k in slots) {
+          if (!currentCharacter.spellSlots[k]) currentCharacter.spellSlots[k] = { used: 0, max: slots[k] };
+          else currentCharacter.spellSlots[k].max = slots[k];
+        }
+        currentCharacter.hitDiceTotal = newLevel;
+        currentCharacter.hitDiceRemaining = newLevel;
+        // Recalculate class resources (Blood Maledict uses scale with level)
+        currentCharacter.classResources = getClassResources(currentCharacter.class, currentCharacter.subclass, newLevel);
+        saveCharacter();
+        updateSpellSlotsUI();
+        updateHitDiceUI();
+        updateHPDisplay();
+        updateBloodHunterUI();
+        updateClassResourcesUI();
+        recalcDerivedStats();
+      }
+    });
+  }
   // ── HP display ──
   updateHPDisplay();
   // ── Spell Slots & Hit Dice (init) ──
@@ -2338,6 +3839,7 @@ function populateCharacterSheet() {
     const subrace = race.subraces.find(s => s.name === char.subrace);
     if (subrace) document.getElementById("sheetSpeed").value = subrace.speed || 30;
   }
+  updateBloodHunterUI();
   updateXPDisplay();
   recalcDerivedStats();
   populateBackstoryTab();
@@ -2346,6 +3848,123 @@ function populateCharacterSheet() {
   populateSpellsTab();
   populateFeatsTab();
   populateDetailsTab();
+  syncCharacterStats();
+}
+
+// ========== BACKWARD COMPATIBILITY ==========
+
+function migrateCharacterState(char) {
+  if (char.fightingStyle === undefined) char.fightingStyle = null;
+  if (char.subclassChoices === undefined) char.subclassChoices = {};
+  if (char.feats === undefined) char.feats = [];
+  if (char.classResources === undefined) char.classResources = {};
+  return char;
+}
+
+function syncCharacterStats() {
+    if (!currentCharacter) return;
+    // Fix XP for level
+    const expectedXp = xpTable[currentCharacter.level] || 0;
+    if ((currentCharacter.xp || 0) < expectedXp) {
+        currentCharacter.xp = expectedXp;
+        console.log("Fixed XP for level", currentCharacter.level);
+    }
+    // Fix max HP for level
+    const cls = classes[currentCharacter.class];
+    if (cls) {
+        const conMod = calculateModifier(currentCharacter.abilityScores.Constitution);
+        const expectedHp = calculateLevelBasedMaxHp(currentCharacter.class, conMod, currentCharacter.level);
+        if (currentCharacter.maxHp !== expectedHp) {
+            currentCharacter.maxHp = expectedHp;
+            if (currentCharacter.hp > currentCharacter.maxHp) currentCharacter.hp = currentCharacter.maxHp;
+            console.log("Fixed max HP for level", currentCharacter.level);
+        }
+    }
+    saveCharacter();
+    updateXPDisplay();
+    updateHPDisplay();
+    // Migrate old equipment data to new structure
+    migrateEquipment();
+}
+
+// ── Migrate old equipment.weapons array to new slot structure ──
+function migrateWeaponData() {
+  if (!currentCharacter || !currentCharacter.equipment) return;
+  const eq = currentCharacter.equipment;
+  // Only migrate if old weapons array exists and new slots are empty
+  if (eq.weapons && eq.weapons.length && !eq.mainHand && !eq.offHand && !eq.ranged) {
+    // First weapon goes to main hand
+    if (eq.weapons[0]) {
+      const w = eq.weapons[0];
+      const wData = weaponsData[w.name];
+      const props = wData && wData.properties ? parseWeaponProperties(wData.properties) : [];
+      if (wData && wData.thrown && !props.includes('Thrown')) props.push('Thrown');
+      eq.mainHand = {
+        name: w.name,
+        quantity: w.quantity || 1,
+        weight: wData ? wData.weight : 0,
+        properties: props,
+        attack: "1d20+0",
+        damage: wData ? wData.damage.match(/(\d+d\d+)/)?.[1] || "1d4" : "1d4"
+      };
+    }
+    // Second weapon goes to off hand (if exists)
+    if (eq.weapons[1]) {
+      const w = eq.weapons[1];
+      const wData = weaponsData[w.name];
+      const props = wData && wData.properties ? parseWeaponProperties(wData.properties) : [];
+      if (wData && wData.thrown && !props.includes('Thrown')) props.push('Thrown');
+      eq.offHand = {
+        name: w.name,
+        quantity: w.quantity || 1,
+        weight: wData ? wData.weight : 0,
+        properties: props,
+        attack: "1d20+0",
+        damage: wData ? wData.damage.match(/(\d+d\d+)/)?.[1] || "1d4" : "1d4"
+      };
+    }
+    delete eq.weapons;
+    saveCharacter();
+  }
+}
+
+// ── Migrate old equipment structure to new format ──
+function migrateEquipment() {
+  if (!currentCharacter || !currentCharacter.equipment) return;
+  const eq = currentCharacter.equipment;
+  let changed = false;
+  // Convert old armor (string) to object
+  if (eq.armor && typeof eq.armor === "string") {
+    const oldName = eq.armor;
+    const info = armorData[oldName] || { weight: 0, ac: 10 };
+    eq.armor = { name: oldName, weight: info.weight, ac: parseInt(info.ac) || 10 };
+    changed = true;
+  } else if (!eq.armor || typeof eq.armor === "string") {
+    eq.armor = { name: "", weight: 0, ac: 10 };
+    changed = true;
+  }
+  // Also migrate if armor exists as old format but missing fields
+  if (eq.armor && typeof eq.armor === "object" && eq.armor.name === undefined) {
+    eq.armor = { name: "", weight: 0, ac: 10 };
+    changed = true;
+  }
+  // Already have migrateWeaponData() – ensure it creates the new structure with attack/damage
+  migrateWeaponData();
+  // For existing weapon slots without attack/damage/properties, generate defaults
+  ["mainHand", "offHand", "ranged"].forEach(slot => {
+    const w = eq[slot];
+    if (w && typeof w === "object") {
+      if (!w.attack) { w.attack = "1d20+0"; changed = true; }
+      if (!w.damage) { w.damage = "1d4"; changed = true; }
+      if (!w.properties) { w.properties = []; changed = true; }
+      if (w.weight === undefined) {
+        const wData = weaponsData[w.name];
+        w.weight = wData ? wData.weight : 0;
+        changed = true;
+      }
+    }
+  });
+  if (changed) saveCharacter();
 }
 
 function populateBackstoryTab() {
@@ -2363,15 +3982,23 @@ function populateInventoryTab() {
   document.getElementById("inventoryEP").value = cur.ep || 0;
   document.getElementById("inventoryGP").value = cur.gp || 0;
   document.getElementById("inventoryPP").value = cur.pp || 0;
-  const customItems = (currentCharacter.equipment?.custom || "").split("\n").filter(l => l.trim());
+  const invItems = currentCharacter.inventory || [];
+  // Fallback: migrate old equipment.custom string into inventory array
+  if (invItems.length === 0 && currentCharacter.equipment?.custom) {
+    const oldItems = currentCharacter.equipment.custom.split("\n").filter(l => l.trim());
+    oldItems.forEach(name => {
+      invItems.push({ name, quantity: 1, weight: '', notes: '' });
+    });
+    currentCharacter.inventory = invItems;
+  }
   const tbody = document.getElementById("inventoryBody");
   if (tbody) {
-    tbody.innerHTML = customItems.map((item, idx) =>
+    tbody.innerHTML = invItems.map((item, idx) =>
       `<tr>
-        <td><input type="text" class="inv-name sheet-input" value="${escapeHtml(item)}"></td>
-        <td><input type="number" class="inv-qty sheet-input small" value="1" min="1"></td>
-        <td><input type="text" class="inv-weight sheet-input small" placeholder="lb"></td>
-        <td><input type="text" class="inv-notes sheet-input" placeholder="Notes"></td>
+        <td><input type="text" class="inv-name sheet-input" value="${escapeHtml(item.name)}"></td>
+        <td><input type="number" class="inv-qty sheet-input small" value="${item.quantity || 1}" min="1"></td>
+        <td><input type="text" class="inv-weight sheet-input small" placeholder="lb" value="${escapeHtml(item.weight || '')}"></td>
+        <td><input type="text" class="inv-notes sheet-input" placeholder="Notes" value="${escapeHtml(item.notes || '')}"></td>
         <td><button class="remove-row small-btn" data-idx="${idx}">✖</button></td>
       </tr>`
     ).join("");
@@ -2381,19 +4008,234 @@ function populateInventoryTab() {
 function populateEquipmentTab() {
   if (!currentCharacter) return;
   const eq = currentCharacter.equipment || {};
-  document.getElementById("equipmentArmor").value = eq.armor || "";
-  document.getElementById("equipmentShield").checked = !!eq.shield;
-  const weaponsContainer = document.getElementById("weaponsList");
-  if (weaponsContainer) {
-    const weapons = eq.weapons || [];
-    weaponsContainer.innerHTML = weapons.map((w, idx) =>
-      `<div class="weapon-edit-row">
-        <input type="text" class="weapon-name sheet-input" value="${escapeHtml(w.name)}" placeholder="Weapon name">
-        <input type="number" class="weapon-qty-sheet sheet-input small" value="${w.quantity || 1}" min="1" max="4">
-        <button class="remove-weapon-row small-btn" data-idx="${idx}">✖</button>
-      </div>`
-    ).join("");
+
+  // Armor
+  const armor = eq.armor || { name: "", weight: 0, ac: 10 };
+  document.getElementById("armorName").value = armor.name || "";
+  document.getElementById("armorWeight").value = armor.weight || 0;
+  document.getElementById("armorAC").value = armor.ac || 10;
+  document.getElementById("armorShield").checked = !!eq.shield;
+
+  // Armor datalist
+  const armorDatalist = document.getElementById("armorList");
+  if (armorDatalist) {
+    armorDatalist.innerHTML = Object.keys(armorData).map(n => `<option value="${escapeHtml(n)}">`).join("");
   }
+
+  // Weapon slots
+  const slots = ["main", "off", "ranged"];
+  slots.forEach(slot => {
+    const slotKey = slot === "main" ? "mainHand" : (slot === "off" ? "offHand" : "ranged");
+    const data = eq[slotKey] || {};
+    const nameInp = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+    if (nameInp) nameInp.value = data.name || "";
+    const qtyInp = document.querySelector(`.weapon-qty[data-slot="${slot}"]`);
+    if (qtyInp) qtyInp.value = data.quantity || 1;
+    const wtInp = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+    if (wtInp) wtInp.value = data.weight || 0;
+    const atkInp = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+    if (atkInp) atkInp.value = data.attack || "";
+    const dmgInp = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+    if (dmgInp) dmgInp.value = data.damage || "";
+
+    // Properties checkboxes
+    const props = data.properties || [];
+    document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`).forEach(cb => {
+      cb.checked = props.includes(cb.value);
+    });
+  });
+
+  // Populate weapon type dropdowns and bind change events
+  populateWeaponDropdowns();
+  ['main', 'off', 'ranged'].forEach(slot => bindWeaponTypeChange(slot));
+
+  // Weapon datalist
+  const weaponDatalist = document.getElementById("weaponList");
+  if (weaponDatalist) {
+    weaponDatalist.innerHTML = Object.keys(weaponsData).map(n => `<option value="${escapeHtml(n)}">`).join("");
+  }
+
+  // Disable off‑hand if main hand has Two‑Handed property
+  const mainProps = Array.from(document.querySelectorAll(`.weapon-prop[data-slot="main"]:checked`)).map(cb => cb.value);
+  const isTwoHanded = mainProps.includes("Two-Handed");
+  const offSlot = document.querySelector(`.weapon-slot[data-slot="off"]`);
+  if (offSlot) {
+    offSlot.querySelectorAll("input").forEach(inp => inp.disabled = isTwoHanded);
+  }
+
+  // Attach listeners to auto‑update AC and encumbrance when fields change
+  attachEquipmentChangeListeners();
+}
+
+// ========== WEAPON TYPE DROPDOWN FUNCTIONS ==========
+function populateWeaponDropdowns() {
+  const slots = ['main', 'off', 'ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    const currentName = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value;
+    select.innerHTML = '<option value="">— Custom —</option>' +
+      Object.keys(weaponsData).sort().map(w => `<option value="${w}">${w}</option>`).join('');
+    if (currentName && weaponsData[currentName]) select.value = currentName;
+  });
+}
+
+function bindWeaponTypeChange(slot) {
+  const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+  if (!select) return;
+  select.addEventListener('change', () => {
+    const weaponName = select.value;
+    const nameInput = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+    const weightInput = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+    const propCheckboxes = document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`);
+    const attackInput = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+    const damageInput = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+
+    if (!weaponName || !weaponsData[weaponName]) {
+      return;
+    }
+    const data = weaponsData[weaponName];
+    nameInput.value = weaponName;
+    weightInput.value = data.weight;
+    const props = parseWeaponProperties(data.properties);
+    propCheckboxes.forEach(cb => {
+      cb.checked = props.includes(cb.value);
+    });
+
+    // Attack and damage formulas
+    const abilityMod = currentCharacter
+      ? getAbilityModifierForWeapon(currentCharacter.abilityScores, props)
+      : 0;
+    const profBonus = currentCharacter ? getProficiencyBonus(currentCharacter.level) : 2;
+    attackInput.value = `1d20+${profBonus + abilityMod}`;
+    const diceMatch = data.damage.match(/(\d+d\d+)/);
+    const dice = diceMatch ? diceMatch[1] : '1d4';
+    damageInput.value = `${dice}+${abilityMod}`;
+  });
+}
+
+// ========== WIZARD WEAPON SLOTS ==========
+function getWeaponPropsHTML(slot) {
+  const props = ['Light','Finesse','Two-Handed','Versatile','Thrown','Reach','Heavy','Loading','Ammunition','Special'];
+  return props.map(p => `<label><input type="checkbox" class="weapon-prop" data-slot="${slot}" value="${p}"> ${p}</label>`).join('');
+}
+
+function initWizardWeaponSlots() {
+  const container = document.getElementById('wizardWeaponSlots');
+  if (!container) return;
+  const wizardSlots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  const slotLabels = ['Main Hand', 'Off Hand', 'Ranged Weapon'];
+  let html = '';
+  wizardSlots.forEach((slot, i) => {
+    html += `
+      <div class="weapon-slot" data-slot="${slot}">
+        <div class="weapon-header">${slotLabels[i]}</div>
+        <div class="weapon-row">
+          <div class="field"><label>Weapon Type</label><select class="weapon-type-select" data-slot="${slot}"><option value="">— Custom —</option></select></div>
+          <div class="field"><label>Name</label><input type="text" class="weapon-name" data-slot="${slot}" placeholder="e.g., Longsword"></div>
+          <div class="field"><label>Qty</label><input type="number" class="weapon-qty" data-slot="${slot}" value="1" min="0"></div>
+          <div class="field"><label>Weight (lbs)</label><input type="number" class="weapon-weight" data-slot="${slot}" value="0" step="0.5" min="0"></div>
+        </div>
+        <div class="weapon-props">
+          <span>Properties:</span>
+          ${getWeaponPropsHTML(slot)}
+        </div>
+        <div class="weapon-attack-damage">
+          <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="${slot}" placeholder="1d20+5"></div>
+          <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="${slot}" placeholder="1d8+3"></div>
+        </div>
+      </div>`;
+  });
+  container.innerHTML = html;
+  populateWizardWeaponDropdowns();
+  bindWizardWeaponTypeChanges();
+}
+
+function populateWizardWeaponDropdowns() {
+  const slots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    select.innerHTML = '<option value="">— Custom —</option>' +
+      Object.keys(weaponsData).sort().map(w => `<option value="${w}">${w}</option>`).join('');
+  });
+}
+
+function bindWizardWeaponTypeChanges() {
+  const slots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    select.addEventListener('change', () => {
+      const weaponName = select.value;
+      if (!weaponName || !weaponsData[weaponName]) return;
+      const data = weaponsData[weaponName];
+      const nameInput = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+      const weightInput = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+      const propCheckboxes = document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`);
+      const attackInput = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+      const damageInput = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+      nameInput.value = weaponName;
+      weightInput.value = data.weight;
+      const props = parseWeaponProperties(data.properties);
+      propCheckboxes.forEach(cb => {
+        cb.checked = props.includes(cb.value);
+      });
+      const abilityMod = getAbilityModifierForWeapon(finalScores, props);
+      const profBonus = getProficiencyBonus(characterLevel);
+      attackInput.value = `1d20+${profBonus + abilityMod}`;
+      const diceMatch = data.damage.match(/(\d+d\d+)/);
+      const dice = diceMatch ? diceMatch[1] : '1d4';
+      damageInput.value = `${dice}+${abilityMod}`;
+    });
+  });
+}
+
+function attachEquipmentChangeListeners() {
+  // When any equipment field changes, update AC and encumbrance
+  const equipFields = [
+    "armorName", "armorWeight", "armorAC", "armorShield"
+  ];
+  equipFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.removeEventListener("change", onEquipmentChange);
+      el.addEventListener("change", onEquipmentChange);
+    }
+  });
+  // Weapon fields: weight, qty, name
+  ["main", "off", "ranged"].forEach(slot => {
+    document.querySelectorAll(`.weapon-weight[data-slot="${slot}"], .weapon-qty[data-slot="${slot}"], .weapon-name[data-slot="${slot}"]`).forEach(el => {
+      if (el) {
+        el.removeEventListener("change", onEquipmentChange);
+        el.addEventListener("change", onEquipmentChange);
+      }
+    });
+  });
+  // Two-Handed checkbox toggles off-hand
+  document.querySelectorAll(`.weapon-prop[data-slot="main"]`).forEach(cb => {
+    cb.removeEventListener("change", onMainPropChange);
+    cb.addEventListener("change", onMainPropChange);
+  });
+}
+
+function onEquipmentChange() {
+  updateACDisplay();
+  updateEncumbranceDisplay();
+}
+
+function onMainPropChange() {
+  const mainProps = Array.from(document.querySelectorAll(`.weapon-prop[data-slot="main"]:checked`)).map(cb => cb.value);
+  const isTwoHanded = mainProps.includes("Two-Handed");
+  const offSlot = document.querySelector(`.weapon-slot[data-slot="off"]`);
+  if (offSlot) {
+    offSlot.querySelectorAll("input").forEach(inp => {
+      inp.disabled = isTwoHanded;
+      if (isTwoHanded && inp.type !== "checkbox") inp.value = "";
+      if (isTwoHanded && inp.type === "checkbox") inp.checked = false;
+    });
+  }
+  onEquipmentChange();
 }
 
 function populateSpellsTab() {
@@ -2428,6 +4270,51 @@ function populateFeatsTab() {
   if (currentCharacter.subclass) classFeatures += " (" + currentCharacter.subclass + ")";
   document.getElementById("classFeaturesList").value = classFeatures;
   document.getElementById("racialTraitsList").value = racialTraitsText;
+
+  // Pact Boon (Warlock)
+  const pactBoonArea = document.getElementById("sheetPactBoonArea");
+  const pactBoonDisplay = document.getElementById("sheetPactBoonDisplay");
+  if (currentCharacter.class === "Warlock" && currentCharacter.pactBoon) {
+    pactBoonArea.style.display = "block";
+    pactBoonDisplay.innerHTML = `<div class="feature-item"><strong>${currentCharacter.pactBoon}</strong></div>`;
+  } else {
+    pactBoonArea.style.display = "none";
+  }
+
+  // Patron Expanded Spells (Warlock)
+  const patronSpellsArea = document.getElementById("sheetPatronSpellsArea");
+  const patronSpellsList = document.getElementById("sheetPatronSpellsList");
+  const patron = warlockPatrons[currentCharacter.subclass];
+  if (currentCharacter.class === "Warlock" && patron) {
+    patronSpellsArea.style.display = "block";
+    let allSpells = [];
+    for (let slvl in patron.expandedSpells) {
+      allSpells = allSpells.concat(patron.expandedSpells[slvl]);
+    }
+    patronSpellsList.innerHTML = allSpells.map(s => `<span class="spell-readonly-item">${s}</span>`).join("");
+  } else {
+    patronSpellsArea.style.display = "none";
+  }
+
+  // Patron Features (Warlock)
+  const patronFeaturesArea = document.getElementById("sheetPatronFeaturesArea");
+  const patronFeaturesList = document.getElementById("sheetPatronFeaturesList");
+  if (currentCharacter.class === "Warlock" && patron) {
+    patronFeaturesArea.style.display = "block";
+    const level = currentCharacter.level || 1;
+    const availableFeatures = patron.features.filter(f => f.level <= level);
+    patronFeaturesList.innerHTML = availableFeatures.map(f =>
+      `<div class="feature-item">
+        <strong>${f.name}</strong>
+        <br><span class="feature-desc">${f.description}</span>
+        ${patron.resource && patron.resource.name === f.name
+          ? `<br><span class="feature-desc" style="color:#C8A96E;">Resource: ${patron.resource.maxUses}</span>`
+          : ""}
+      </div>`
+    ).join("");
+  } else {
+    patronFeaturesArea.style.display = "none";
+  }
 
   // Metamagic in sheet
   const metaArea = document.getElementById("sheetMetamagicArea");
@@ -2511,6 +4398,30 @@ function populateDetailsTab() {
       bgFeatureDiv.innerHTML = `<span class="eq-summary-empty">No background feature available.</span>`;
     }
   }
+  // Custom properties
+  const propsContainer = document.getElementById("customPropertiesDisplay");
+  if (currentCharacter.customProperties && Object.keys(currentCharacter.customProperties).length) {
+    let propsHtml = '<ul>';
+    for (let [key, value] of Object.entries(currentCharacter.customProperties)) {
+      propsHtml += `<li><strong>${escapeHtml(key)}:</strong> ${escapeHtml(value)}</li>`;
+    }
+    propsHtml += '</ul>';
+    propsContainer.innerHTML = propsHtml;
+  } else {
+    propsContainer.innerHTML = '<span class="eq-summary-empty">No custom properties set.</span>';
+  }
+  // Notes
+  const notesContainer = document.getElementById("characterNotesDisplay");
+  if (currentCharacter.notes && currentCharacter.notes.length) {
+    let notesHtml = '<ul>';
+    for (let note of currentCharacter.notes) {
+      notesHtml += `<li>${escapeHtml(note)}</li>`;
+    }
+    notesHtml += '</ul>';
+    notesContainer.innerHTML = notesHtml;
+  } else {
+    notesContainer.innerHTML = '<span class="eq-summary-empty">No notes added.</span>';
+  }
 }
 
 function saveCharacterSheet() {
@@ -2532,10 +4443,45 @@ function saveCharacterSheet() {
     pp: parseInt(document.getElementById("inventoryPP").value) || 0
   };
   currentCharacter.equipment = currentCharacter.equipment || {};
-  currentCharacter.equipment.armor = document.getElementById("equipmentArmor").value;
-  currentCharacter.equipment.shield = document.getElementById("equipmentShield").checked;
-  currentCharacter.equipment.custom = Array.from(document.querySelectorAll("#inventoryBody .inv-name"))
-    .map(inp => inp.value).filter(v => v.trim()).join("\n");
+
+  // Save armor as object
+  currentCharacter.equipment.armor = {
+    name: document.getElementById("armorName").value,
+    weight: parseFloat(document.getElementById("armorWeight").value) || 0,
+    ac: parseInt(document.getElementById("armorAC").value) || 10
+  };
+  currentCharacter.equipment.shield = document.getElementById("armorShield").checked;
+
+  // Save weapons
+  ["main", "off", "ranged"].forEach(slot => {
+    const name = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value.trim();
+    const key = slot === "main" ? "mainHand" : (slot === "off" ? "offHand" : "ranged");
+    if (!name) {
+      currentCharacter.equipment[key] = null;
+      return;
+    }
+    const properties = [];
+    document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]:checked`).forEach(cb => properties.push(cb.value));
+    currentCharacter.equipment[key] = {
+      name: name,
+      quantity: parseInt(document.querySelector(`.weapon-qty[data-slot="${slot}"]`).value) || 1,
+      weight: parseFloat(document.querySelector(`.weapon-weight[data-slot="${slot}"]`).value) || 0,
+      properties: properties,
+      attack: document.querySelector(`.weapon-attack[data-slot="${slot}"]`).value,
+      damage: document.querySelector(`.weapon-damage[data-slot="${slot}"]`).value
+    };
+  });
+  // Clean up old weapons array if present
+  delete currentCharacter.equipment.weapons;
+  // Save full inventory row data as structured array
+  currentCharacter.inventory = Array.from(document.querySelectorAll("#inventoryBody tr"))
+    .map(row => ({
+      name: row.querySelector('.inv-name')?.value || '',
+      quantity: parseInt(row.querySelector('.inv-qty')?.value) || 1,
+      weight: row.querySelector('.inv-weight')?.value || '',
+      notes: row.querySelector('.inv-notes')?.value || ''
+    }))
+    .filter(item => item.name.trim());
   currentCharacter.cantrips = document.getElementById("spellCantrips").value.split("\n").filter(l => l.trim());
   currentCharacter.spells = document.getElementById("spellSpells").value.split("\n").filter(l => l.trim());
   currentCharacter.feats = document.getElementById("featsList").value;
@@ -2582,7 +4528,9 @@ function closeWizard() { if (charCreationWizard) { charCreationWizard.classList.
 /* ── Settings Modal ── */
 const MODEL_OPTIONS = [
   'openrouter/owl-alpha',
-  'openai/gpt-oss-120b:free'
+  'openai/gpt-oss-120b:free',
+  'nex-agi/nex-n2-pro:free',
+  'nvidia/nemotron-3-super-120b-a12b:free'
 ];
 
 const DEFAULT_MODEL = 'openai/gpt-oss-120b:free';
@@ -2960,19 +4908,26 @@ function saveQuestEdit() {
 }
 
 function parseQuestCommands(text) {
-  // Parse [QUEST CREATE: "Name"|"Description"]
-  const createRegex = /\[QUEST CREATE:\s*"([^"]+)"\s*\|\s*"([^"]*)"\s*\]/gi;
+  // Parse [QUEST CREATE: "Name"|"Description"] or [QUEST CREATE: "Name"|"Description"|"Milestone1,Milestone2"]
+  const createRegex = /\[QUEST CREATE:\s*"([^"]+)"\s*\|\s*"([^"]*)"(?:\s*\|\s*"([^"]*)")?\s*\]/gi;
   let match;
   while ((match = createRegex.exec(text)) !== null) {
     const name = match[1];
     const desc = match[2];
+    const milestonesStr = match[3] || '';
     const existing = quests.find(q => q.name.toLowerCase() === name.toLowerCase() && q.status === 'active');
     if (existing) {
       existing.description = desc || existing.description;
       existing.updatedAt = new Date().toISOString();
       addQuestLog(`🤖 AI updated quest "${name}"`);
     } else {
-      createQuest(name, desc, 'ai');
+      const quest = createQuest(name, desc, 'ai');
+      if (milestonesStr) {
+        const milestoneList = milestonesStr.split(',').map(m => m.trim()).filter(Boolean);
+        for (const ms of milestoneList) {
+          addMilestone(quest.id, ms);
+        }
+      }
     }
   }
   // Parse [QUEST COMPLETE: "Name"]
@@ -3105,9 +5060,10 @@ function applyCrop() {
     imageSmoothingQuality: 'high',
   });
   const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
-  closeCropModal();
-  currentCropResolve.resolve(dataUrl);
+  const resolve = currentCropResolve;
   currentCropResolve = null;
+  closeCropModal();
+  resolve.resolve(dataUrl);
 }
 
 function updateCharacterPortrait(base64Data) {
@@ -3320,6 +5276,9 @@ function openCharacterCreationWizard() {
   chosenCantrips = []; chosenSpells = []; characterName = "";
   selectedArmor = ""; hasShield = false; selectedWeapons = []; customItems = "";
   chosenMetamagic = []; chosenInvocations = []; chosenManeuvers = []; chosenArcaneShots = [];
+  selectedPactBoon = "";
+  const pactSelect = document.getElementById("wizardPactBoon");
+  if (pactSelect) pactSelect.innerHTML = "";
   const raceSelect = document.getElementById("wizardRace");
   if (raceSelect) { raceSelect.innerHTML = Object.keys(races).map(r => `<option value="${r}">${r}</option>`).join(""); raceSelect.value = "Dwarf"; updateSubraceDropdown(); }
   const classSelect = document.getElementById("wizardClass");
@@ -3360,6 +5319,62 @@ document.addEventListener('DOMContentLoaded', () => {
   if (newCampaignBtn) newCampaignBtn.onclick = newCampaign;
   if (deleteCampaignBtn) deleteCampaignBtn.onclick = deleteCampaign;
   document.getElementById('closeSelectionBtn').onclick = closeCampaignSelectionModal;
+  // Custom campaign modal wiring
+  const customCampaignModal = document.getElementById('customCampaignModal');
+  document.getElementById('createCustomCampaignBtn').addEventListener('click', () => {
+    closeCampaignSelectionModal();
+    customCampaignModal.style.display = 'flex';
+    setTimeout(() => customCampaignModal.classList.add('show'), 10);
+  });
+  function closeCustomCampaignModal() {
+    customCampaignModal.classList.remove('show');
+    setTimeout(() => { customCampaignModal.style.display = 'none'; }, 200);
+  }
+  document.getElementById('closeCustomCampaignBtn').addEventListener('click', closeCustomCampaignModal);
+  document.getElementById('cancelCustomCampaignBtn').addEventListener('click', closeCustomCampaignModal);
+  document.getElementById('submitCustomCampaignBtn').addEventListener('click', () => {
+    const name = document.getElementById('customCampaignName').value.trim();
+    const nameError = document.getElementById('customCampaignNameError');
+    if (!name) {
+      nameError.style.display = 'block';
+      return;
+    }
+    nameError.style.display = 'none';
+
+    const campaignType = document.querySelector('input[name="campaignType"]:checked').value;
+    const location = document.getElementById('customCampaignLocation').value.trim();
+    const worldDesc = document.getElementById('customWorldDescription').value.trim();
+    const tone = document.getElementById('customCampaignTone').value;
+    const plotHook = document.getElementById('customMainPlotHook').value.trim();
+    const tagsRaw = document.getElementById('customCampaignTags').value.trim();
+    const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()) : [];
+    const houseRules = document.getElementById('customHouseRules').value.trim();
+
+    const newCampaign = {
+      id: Date.now().toString(),
+      name,
+      lastPlayed: new Date().toISOString().slice(0,10),
+      type: campaignType,
+      config: {
+        location: location || (campaignType === 'openworld' ? 'Random' : 'Unknown'),
+        tone: tone,
+      },
+      description: worldDesc,
+      initialHook: plotHook || (campaignType === 'openworld'
+        ? 'The world of Al\'mundi is yours to explore. Where do you begin?'
+        : 'Your journey begins...'),
+      custom: true,
+      tags,
+      houseRules,
+    };
+
+    campaigns.push(newCampaign);
+    saveCampaigns();
+    closeCustomCampaignModal();
+
+    wizardContext = { type: 'custom', campaign: newCampaign };
+    openCharacterCreationWizard();
+  });
   document.getElementById('closeConfigBtn').onclick = closeOpenWorldConfigModal;
   document.getElementById('cancelConfigBtn').onclick = closeOpenWorldConfigModal;
   document.getElementById('submitConfigBtn').onclick = submitOpenWorldConfig;
@@ -3478,13 +5493,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const hitDiceModal = document.getElementById('hitDiceModal');
   const levelUpModal = document.getElementById('levelUpModal');
   const cropModal = document.getElementById('cropModal');
-  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal, cropModal];
-  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (modal === cropModal) closeCropModal(); } }); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (cropModal && cropModal.style.display === 'flex') closeCropModal(); } });
+  const featureChoiceModal = document.getElementById('featureChoiceModal');
+  const modals = [campaignModal, selectionModal, configModal, confirmModal, characterSheetModal, charCreationWizard, settingsModal, questModal, questEditModal, npcModal, npcFormModal, summaryModal, dmGuideModal, combatModal, deathModal, hitDiceModal, levelUpModal, cropModal, customCampaignModal, featureChoiceModal];
+  modals.forEach(modal => { if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) { if (modal === campaignModal) closeCampaignModal(); else if (modal === selectionModal) closeCampaignSelectionModal(); else if (modal === configModal) closeOpenWorldConfigModal(); else if (modal === confirmModal) closeConfirmModal(); else if (modal === characterSheetModal) closeCharacterSheetModal(); else if (modal === charCreationWizard) closeWizard(); else if (modal === settingsModal) closeSettingsModal(); else if (modal === questModal) closeQuestModal(); else if (modal === questEditModal) closeQuestEdit(); else if (modal === npcModal) closeNPCDirectory(); else if (modal === npcFormModal) closeNPCForm(); else if (modal === summaryModal) closeCampaignSummaryModal(); else if (modal === dmGuideModal) closeDMGuideModal(); else if (modal === combatModal) closeCombatTracker(); else if (modal === deathModal) closeDeathSaveModal(); else if (modal === hitDiceModal) { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (modal === levelUpModal) { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (modal === cropModal) closeCropModal(); else if (modal === customCampaignModal) closeCustomCampaignModal(); else if (modal === featureChoiceModal) { featureChoiceModal.classList.remove('show'); setTimeout(function() { featureChoiceModal.style.display = 'none'; }, 200); } } }); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { if (confirmModal && confirmModal.style.display === 'flex') closeConfirmModal(); else if (configModal && configModal.style.display === 'flex') closeOpenWorldConfigModal(); else if (selectionModal && selectionModal.style.display === 'flex') closeCampaignSelectionModal(); else if (campaignModal && campaignModal.style.display === 'flex') closeCampaignModal(); else if (customCampaignModal && customCampaignModal.style.display === 'flex') closeCustomCampaignModal(); else if (characterSheetModal && characterSheetModal.style.display === 'flex') closeCharacterSheetModal(); else if (charCreationWizard && charCreationWizard.style.display === 'flex') closeWizard(); else if (settingsModal && settingsModal.style.display === 'flex') closeSettingsModal(); else if (questModal && questModal.style.display === 'flex') closeQuestModal(); else if (questEditModal && questEditModal.style.display === 'flex') closeQuestEdit(); else if (npcModal && npcModal.style.display === 'flex') closeNPCDirectory(); else if (npcFormModal && npcFormModal.style.display === 'flex') closeNPCForm(); else if (summaryModal && summaryModal.style.display === 'flex') closeCampaignSummaryModal(); else if (dmGuideModal && dmGuideModal.style.display === 'flex') closeDMGuideModal(); else if (combatModal && combatModal.style.display === 'flex') closeCombatTracker(); else if (deathModal && deathModal.style.display === 'flex') closeDeathSaveModal(); else if (hitDiceModal && hitDiceModal.style.display === 'flex') { hitDiceModal.classList.remove('show'); setTimeout(function() { hitDiceModal.style.display = 'none'; }, 200); } else if (levelUpModal && levelUpModal.style.display === 'flex') { levelUpModal.classList.remove('show'); setTimeout(function() { levelUpModal.style.display = 'none'; }, 200); } else if (cropModal && cropModal.style.display === 'flex') closeCropModal(); else if (featureChoiceModal && featureChoiceModal.style.display === 'flex') { featureChoiceModal.classList.remove('show'); setTimeout(function() { featureChoiceModal.style.display = 'none'; }, 200); } } });
   document.getElementById('btn-char').addEventListener('click', () => { setActive('btn-char'); if (currentCharacter) openCharacterSheetModal(); else alert('No character created yet. Start a campaign first.'); });
   initSheetTabs();
   const storedChar = localStorage.getItem('dnd_current_character');
   if (storedChar) currentCharacter = JSON.parse(storedChar);
+  if (currentCharacter) {
+    migrateCharacterState(currentCharacter);
+    syncCharacterStats();
+  }
   
   // ── Initialize Al'mundi worldbuilding reference if not already stored ──
   if (!localStorage.getItem('dnd_worldbuilding')) {
@@ -3555,6 +5575,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (classSelect) classSelect.addEventListener("change", () => { selectedClass = classSelect.value; updateSubclassDropdown(); updateClassSummaryPanel(); if (wizardStep === 4) { updateEquipmentUI(); updateSpellUI(); updateSubclassFeaturesUI(); } updateClassDescription(); updateSubclassDescription(); });
   const subclassSelect = document.getElementById("wizardSubclass");
   if (subclassSelect) subclassSelect.addEventListener("change", () => { selectedSubclass = subclassSelect.value; if (wizardStep === 4) updateSubclassFeaturesUI(); updateSubclassDescription(); });
+  // Pact Boon select
+  const pactBoonSelect = document.getElementById("wizardPactBoon");
+  if (pactBoonSelect) pactBoonSelect.addEventListener("change", () => { selectedPactBoon = pactBoonSelect.value; });
   const levelInput = document.getElementById("wizardLevel");
   if (levelInput) levelInput.addEventListener("change", () => { characterLevel = parseInt(levelInput.value, 10) || 1; if (wizardStep === 4) updateSubclassFeaturesUI(); });
   const variantCheck = document.getElementById("variantHumanCheck");
@@ -3569,8 +5592,35 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("randomAbilitiesBtn")?.addEventListener("click", randomAbilities);
   document.getElementById("resetAbilitiesBtn")?.addEventListener("click", resetAbilities);
   document.getElementById("extraItems")?.addEventListener("input", updateEquipmentSummary);
+
+  // ── Inventory: Add Item button ──
+  document.getElementById('addInventoryRow')?.addEventListener('click', () => {
+    const tbody = document.getElementById('inventoryBody');
+    if (!tbody) return;
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+      <td><input type="text" class="inv-name sheet-input" placeholder="Item name"></td>
+      <td><input type="number" class="inv-qty sheet-input small" value="1" min="1"></td>
+      <td><input type="text" class="inv-weight sheet-input small" placeholder="Weight (lb)"></td>
+      <td><input type="text" class="inv-notes sheet-input" placeholder="Notes"></td>
+      <td><button class="remove-row small-btn">✖</button></td>
+    `;
+    tbody.appendChild(newRow);
+  });
+
+  // ── Inventory: Remove row delegation (handles static & dynamic rows) ──
+  document.getElementById('inventoryBody')?.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.remove-row');
+    if (removeBtn) {
+      const row = removeBtn.closest('tr');
+      if (row) row.remove();
+    }
+  });
+
   initDiceRoller();
   initMonsterDatabase();
+  loadSpellDatabase();
+  loadFeatDatabase();
   applyState();
 });
 /* ═══════════════════════════════════════════════════════
@@ -3582,6 +5632,12 @@ let chatHistory       = [];     // [{role:'user'|'assistant'|'system', content:'
 let activeContextChips = new Set(); // 'char' | 'quest' | 'npc'
 let chatSessionInit   = false;
 let isStreaming        = false;
+
+// ── Context management (summarization) ──
+const MAX_VISIBLE_MESSAGES = 20;        // Keep only last 20 non‑system messages
+const SUMMARY_INTERVAL = 20;            // Summarize every 20 new messages
+let messagesSinceLastSummary = 0;       // Counter since last summarization
+let isSummarizing = false;              // Prevent concurrent summarizations
 
 // ── Init on session start ──
 function initChatSession() {
@@ -3786,7 +5842,8 @@ function renderChatHistory() {
       appendDMMessage(msg.content);
     }
   }
-  scrollToBottom();
+  // Scroll to bottom after a short delay to ensure all messages are rendered
+  setTimeout(scrollToBottom, 50);
 }
 
 function updateChatTopbar() {
@@ -3852,6 +5909,44 @@ function renderActiveContextPills() {
   `).join('');
 }
 
+// ── Subclass Mechanical Essence ──
+function getSubclassMechanicalEssence(className, subclassName) {
+  const text = {
+    "Knowledge Domain": "\n- Level 1: Blessings of Knowledge – gain proficiency in two of: Arcana, History, Nature, Religion.\n- Level 2: Channel Divinity: Knowledge of the Ages – gain proficiency in any skill or tool for 10 minutes.\n- Level 6: Channel Divinity: Read Thoughts – read thoughts of a creature, then cast Suggestion without a spell slot.\n- Level 8: Potent Spellcasting – add Wisdom modifier to cleric cantrip damage.\n- Level 17: Visions of the Past – learn about an object's past or see 24 hours into a location's past.",
+    "Life Domain": "\n- Level 1: Heavy armor proficiency, Disciple of Life – when you cast a healing spell, target regains extra HP = 2 + spell's level.\n- Level 2: Channel Divinity: Preserve Life – restore 5 × cleric level HP (divided among creatures within 30 ft).\n- Level 6: Blessed Healer – when you heal another, you regain 2 + spell level HP.\n- Level 8: Divine Strike – once per turn, add 1d8 radiant damage to a weapon attack.\n- Level 17: Supreme Healing – when you cast a healing spell, you use the maximum possible healing.",
+    "Light Domain": "\n- Level 1: Warding Flare – when a creature within 30 ft attacks you, impose disadvantage (Wisdom modifier times per long rest).\n- Level 2: Channel Divinity: Radiance of the Dawn – each hostile within 30 ft makes Con save, takes 2d10 + cleric level radiant damage (half on save).\n- Level 6: Improved Flare – use Warding Flare to protect an ally within 30 ft.\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Corona of Light – shed bright light 60 ft, enemies have disadvantage on saves against fire/radiant.",
+    "Nature Domain": "\n- Level 1: Acolyte of Nature – gain proficiency in one of Animal Handling, Nature, Survival, plus one druid cantrip.\n- Level 2: Channel Divinity: Charm Animals and Plants – each beast/plant within 30 ft makes Wis save or is charmed.\n- Level 6: Dampen Elements – when you or ally within 30 ft takes acid, cold, fire, lightning, or thunder damage, use reaction to grant resistance.\n- Level 8: Divine Strike – once per turn add 1d8 cold, fire, or lightning damage to weapon attack.\n- Level 17: Master of Nature – beasts and plants have disadvantage on saves against your charm.",
+    "Tempest Domain": "\n- Level 1: Wrath of the Storm – when a creature within 5 ft hits you, use reaction to deal 2d8 lightning or thunder damage (Wis mod times per long rest).\n- Level 2: Channel Divinity: Destructive Wrath – maximize thunder or lightning damage.\n- Level 6: Thunderbolt Strike – when you deal lightning damage to a Large or smaller creature, push it up to 10 ft away.\n- Level 8: Divine Strike – add 1d8 thunder damage to weapon attack.\n- Level 17: Stormborn – gain flying speed while outside.",
+    "Trickery Domain": "\n- Level 1: Blessing of the Trickster – give an ally advantage on Stealth checks.\n- Level 2: Channel Divinity: Invoke Duplicity – create illusory duplicate; cast spells from its space.\n- Level 6: Channel Divinity: Cloak of Shadows – become invisible until end of next turn.\n- Level 8: Divine Strike – add 1d8 poison damage to weapon attack.\n- Level 17: Improved Duplicity – create up to four duplicates.",
+    "War Domain": "\n- Level 1: War Priest – make a bonus action weapon attack (Wis mod times per long rest).\n- Level 2: Channel Divinity: Guided Strike – add +10 to an attack roll.\n- Level 6: Channel Divinity: War God's Blessing – grant an ally +10 to an attack roll.\n- Level 8: Divine Strike – add 1d8 radiant damage to weapon attack.\n- Level 17: Avatar of Battle – resistance to nonmagical bludgeoning, piercing, slashing.",
+    "Forge Domain": "\n- Level 1: Blessing of the Forge – turn a nonmagical weapon or armor into a +1 magic item for 1 day.\n- Level 2: Channel Divinity: Artisan's Blessing – create a metal object worth up to 100 gp.\n- Level 6: Soul of the Forge – resistance to fire, +1 AC with heavy armor.\n- Level 8: Divine Strike – add 1d8 fire damage to weapon attack.\n- Level 17: Saint of Forge and Fire – immunity to fire, resistance to nonmagical bludgeoning/piercing/slashing.",
+    "Grave Domain": "\n- Level 1: Circle of Mortality – maximum healing on unconscious creatures; Spare the Dying is a bonus action.\n- Level 2: Channel Divinity: Path to the Grave – next attack against a creature has vulnerability to all damage.\n- Level 6: Sentinel at Death's Door – cancel a critical hit (Wis mod times per long rest).\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Keeper of Souls – when you slay a creature, heal an ally.",
+    "Order Domain": "\n- Level 1: Voice of Authority – when you cast a spell on an ally, they can use reaction to make a weapon attack.\n- Level 2: Channel Divinity: Order's Demand – each creature of your choice within 30 ft makes Wis save or is charmed.\n- Level 6: Embodiment of the Law – when you cast a spell of 1st level or higher, you can also cast a cantrip as a bonus action.\n- Level 8: Divine Strike – add 1d8 psychic damage to weapon attack.\n- Level 17: Order's Wrath – when you deal Divine Strike damage, the target also takes 2d8 psychic damage.",
+    "Peace Domain": "\n- Level 1: Emboldening Bond – bond up to two creatures; they can add a d4 to an attack, save, or check (proficiency bonus times per long rest).\n- Level 2: Channel Divinity: Balm of Peace – move without provoking opportunity attacks, heal allies you touch.\n- Level 6: Protective Bond – when a bonded creature takes damage, another bonded creature can teleport and take the damage instead.\n- Level 8: Potent Spellcasting – add Wisdom to cantrip damage.\n- Level 17: Expansive Bond – bond range increases to 60 ft, and damage sharing becomes resistance.",
+    "Twilight Domain": "\n- Level 1: Eyes of Night – 300 ft darkvision, grant to allies (shared long rest feature).\n- Level 2: Channel Divinity: Twilight Sanctuary – create a sphere of dim light that grants temporary HP or ends charm/frighten.\n- Level 6: Steps of Night – gain flying speed while in dim light or darkness.\n- Level 8: Divine Strike – add 1d8 radiant damage to weapon attack.\n- Level 17: Twilight Shroud – half cover and advantage on saving throws for allies in sanctuary.",
+    "Oath of Devotion": "\n- Level 3: Channel Divinity: Sacred Weapon (add Cha to attack, weapon sheds light), Turn the Unholy (fiends/undead within 30 ft are turned).\n- Level 7: Aura of Devotion – you and allies within 10 ft cannot be charmed.\n- Level 15: Purity of Spirit – always under protection from evil and good.\n- Level 20: Holy Nimbus – shed light, enemies within 30 ft take 10 radiant damage each turn.",
+    "Oath of the Ancients": "\n- Level 3: Channel Divinity: Nature's Wrath (restrain a creature), Turn the Faithless (fey/fiends are turned).\n- Level 7: Aura of Warding – you and allies within 10 ft have resistance to spell damage.\n- Level 15: Undying Sentinel – when reduced to 0 HP, drop to 1 instead (once per long rest).\n- Level 20: Elder Champion – aura of regeneration and spellcasting.",
+    "Oath of Vengeance": "\n- Level 3: Channel Divinity: Abjure Enemy (frighten one creature), Vow of Enmity (advantage on attacks against one creature for 1 minute).\n- Level 7: Relentless Avenger – opportunity attack reduces target's speed to 0.\n- Level 15: Soul of Vengeance – when a creature under your Vow attacks, you can make an opportunity attack.\n- Level 20: Avenging Angel – gain flying speed, aura of fear.",
+    "Oath of Conquest": "\n- Level 3: Channel Divinity: Conquering Presence (frighten creatures within 30 ft), Guided Strike (+10 to attack).\n- Level 7: Aura of Conquest – frightened creatures have speed 0 and take psychic damage if they start turn in aura.\n- Level 15: Scornful Rebuke – when a creature hits you, it takes psychic damage.\n- Level 20: Invincible Conqueror – resistance to all damage, extra attack.",
+    "Oath of Redemption": "\n- Level 3: Channel Divinity: Emissary of Peace (+10 Persuasion), Rebuke the Violent (deal radiant damage to attacker).\n- Level 7: Aura of the Guardian – take damage meant for an ally within 10 ft.\n- Level 15: Protective Spirit – regain HP each turn when below half HP.\n- Level 20: Emissary of Redemption – resistance to all damage, attackers take radiant damage.",
+    "Champion": "\n- Improved Critical (19-20), Remarkable Athlete (add half proficiency to physical ability checks), Additional Fighting Style, Superior Critical (18-20), Survivor (regain HP each turn).",
+    "Battle Master": "\n- Maneuvers are chosen by the player; use the selected maneuvers.",
+    "Eldritch Knight": "\n- No additional resources beyond spellcasting; AI tracks.",
+    "Arcane Archer": "\n- Arcane Shots are chosen by the player.",
+    "Rune Knight": "\n- Giant's Might (become Large, extra damage), Rune choices (each rune gives passive and active benefits).",
+    "School of Abjuration": "\n- Arcane Ward (temp HP when casting abjuration), Projected Ward (shield ally).",
+    "School of Conjuration": "\n- Benign Transposition (teleport swap once per long rest).",
+    "School of Divination": "\n- Portent (roll two d20s, replace any roll).",
+    "School of Enchantment": "\n- Hypnotic Gaze (incapacitate one creature), Instinctive Charm (redirect attack).",
+    "School of Evocation": "\n- Sculpt Spells (allies auto-save), Potent Cantrip (save for half).",
+    "School of Illusion": "\n- Improved Illusion (make illusion real), Illusory Self (create a duplicate).",
+    "School of Necromancy": "\n- Grim Harvest (heal when you kill with necromancy spell).",
+    "School of Transmutation": "\n- Minor Alchemy (transmute materials), Transmuter's Stone (create a stone with benefits).",
+    "Bladesinging": "\n- Bladesong (bonus to AC, speed, concentration)."
+  };
+  return text[subclassName] || '';
+}
+
 // ── System prompt builder ──
 function buildSystemPrompt() {
   const camp = campaigns.find(c => c.id === selectedCampaignId) || campaigns[0];
@@ -3896,8 +5991,21 @@ This header provides essential time, location, and atmospheric context for the p
 
 ## 1. Story Narration
 
-- **Epic Story:** Create an engaging, epic story shaped by the player's choices.
-- **Never Speak for the Player:** Always stop at a natural point where the player can respond.
+- **Epic Story:** Create an engaging, epic story shaped by the player's choices. 
+- **Player Character Agency – Never Speak for the Player:**
+  - You must **never** write dialogue or internal thoughts for the player’s character.
+  - You must **never** describe what the player’s character does, feels, or decides – except when the player explicitly describes it first.
+  - You must **never** assume the character’s reaction, emotion, or response.
+  - Always end your narration at a point where the player can **choose** what to say or do next.
+  - **INCORRECT (Never do this):** *“Maelys turns to the Reeve, his voice flat and certain. ‘I’ll go to the barrow.’ Maelys meets his gaze. ‘You might die.’”*
+  - **CORRECT (Instead, describe the situation and ask):** *“The Reeve looks at you, his hands trembling. ‘Edric is terrified. Are you sure you want to take him to the barrow?’ What do you do or say?”*
+  - If you accidentally start narrating for the player, stop immediately and ask: *“What does [character name] say or do?”*
+- **Never Force Character Secrets Revealed:**
+  - The player decides **what** their character reveals, **to whom**, and **when**.
+  - You must **never** have the player character volunteer personal secrets (patron identity, backstory trauma, hidden powers, true name, etc.) unless the player explicitly writes that dialogue or action.
+  - If an NPC asks a probing question, you may have the NPC ask – but the player must provide the answer. Do not answer for them.
+  - **INCORRECT:** *“Maelys admits he serves the Raven Queen.”*
+  - **CORRECT:** *“Vessa eyes you suspiciously. ‘Your magic feels… different. What exactly did you bargain for?’ What do you tell her?”*
 - **Adult Themes:** Engage in adult themes, graphic content, and mature narration as the story naturally permits.
 - **Romance:** Factor romance into existing relationships where appropriate. NPCs may initiate relationships as the story develops.
 - **Secret Info:** Never reveal information the player hasn't earned.
@@ -3908,7 +6016,12 @@ This header provides essential time, location, and atmospheric context for the p
 
 - **Narration Language:** Use English for narration. For NPC speech, if the player knows the language, narrate in English with a note (e.g., *"in Elvish"*). If unknown, use a non-English placeholder.
 - **Conversation Flow:** One response at a time. Never skip the player during dialogue.
-- **NPC Knowledge:** NPCs know only what they could realistically learn through their resources and contacts (accounting for travel time).
+- **NPC Knowledge Limits (No Mind-Reading):
+  - NPCs know only what they could realistically learn through their senses, their social position, or information that has been explicitly shared with them in the story.
+  - **No NPC automatically knows your character’s class, patron, secrets, or past** unless that information has been revealed in the game or the NPC has a specific magical ability (e.g., *detect thoughts*, *legend lore*, high-level divination).
+  - If you are unsure what an NPC knows, assume they know **nothing** about the character unless the player has told them or the NPC has witnessed it directly.
+  - **INCORRECT:** *“The Reeve nods knowingly. ‘Ah, a warlock of the Raven Queen. I’ve heard of your kind.’”* (unless the Reeve has a reason to know)
+  - **CORRECT:** *“The Reeve frowns at your pendant. ‘That symbol… I don’t recognize it. What faith do you follow?’”*
 - **Consent & Open-Mindedness:** Treat player and NPC behavior as consenting and open-minded. Include sex, dirty jokes, innuendos, and flirtation where appropriate. NPCs may initiate physical contact as the story permits.
 
 ---
@@ -4114,10 +6227,51 @@ Examples (copy exactly):
 - **Remove weapon:** \`<!-- char_remove_weapon name="Longsword" quantity="1" -->\`
 - **XP award:** \`<!-- xp_award amount="200" reason="Defeated goblin" -->\`
 - **Ability score change (optional):** \`<!-- char_ability strength="+2" constitution="+1" -->\`
+- **Set Fighting Style:** \`<!-- char_set_fighting_style name="Archery" -->\`
+- **Quest Create (HTML tag):** \`<!-- quest_create name="Rescue the Blacksmith" description="The blacksmith has been taken by goblins" milestones="Find the goblin camp,Defeat the goblin chief,Free the blacksmith" -->\`
+- **Quest Create (inline text — alternative):** \`[QUEST CREATE: "Rescue the Blacksmith"|"The blacksmith has been taken by goblins"]\`
+- **Quest Update (HTML tag — updates a specific milestone by index):** \`<!-- quest_update id="quest-id" milestone_index="0" completed="true" -->\`
+- **Quest Complete (inline):** \`[QUEST COMPLETE: "Rescue the Blacksmith"]\`
+- **Quest Milestone (inline):** \`[QUEST MILESTONE: "Rescue the Blacksmith"|"Find the goblin camp"|complete]\`
+- **NPC Add:** \`<!-- npc_add name="Elara" role="Innkeeper" location="Phandalin" description="A friendly halfling with a warm smile" relationship="Friendly" -->\`
+- **Combat Start:** \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin","hp":7,"ac":15}]' -->\`
+- **Combat Damage:** \`<!-- combat damage id="enemy_0" amount="5" -->\`
+- **Combat Heal:** \`<!-- combat heal id="player" amount="5" -->\` (heals a participant during combat)
+- **Combat Next Turn:** \`<!-- combat next_turn -->\`
+- **Combat End:** \`<!-- combat end -->\`
+- **Spell Consume:** \`<!-- spell_consume level="1" -->\`
+- **Short Rest:** \`<!-- short_rest -->\`
+- **Long Rest:** \`<!-- long_rest -->\`
+- **Stabilize:** \`<!-- stabilize -->\`
+- **Condition Add:** \`<!-- char_add_condition name="Poisoned" duration="1 minute" -->\`
+- **Condition Remove:** \`<!-- char_remove_condition name="Poisoned" -->\`
+- **Resource Spend:** \`<!-- resource spend type="Rage" amount="1" -->\`
+- **Store any property:** \`<!-- char_set_property key="Hexblade's Curse" value="1 use per short rest" -->\`
+- **Add a note:** \`<!-- char_add_note text="Hexblade's Curse: As a bonus action, curse a creature. Once per short rest." -->\`
+
+Use \`char_set_property\` for any class feature, racial trait, proficiency, language, resource description, or other text that should be stored as a named entry. Use \`char_add_note\` for longer descriptions or general notes. The player will see these in the character sheet.
 
 Always update the character sheet after any change. Save to localStorage and refresh any open sheet UI.
 
 **Warning: Malformed tags will be silently dropped by the system.** Double-check each tag before including it.
+
+---
+
+## Blood Hunter Class Specifics
+
+If the player character is a Blood Hunter, the AI must track:
+
+- **Hemocraft Die**: Currently \`dX\` (see character sheet). Used for Crimson Rite damage and amplifying Blood Curses.
+- **Crimson Rite**: When activated, the character takes necrotic damage equal to one hemocraft die roll, and their hit point maximum is reduced by the same amount until the rite ends. The character can only have one active rite at a time. Rite damage is added to weapon attacks.
+- **Blood Maledict**: The character has a limited number of uses per short rest (1/2/3/4). Using a Blood Curse consumes one use. Amplifying a curse deals additional necrotic damage equal to one hemocraft die roll (cannot be reduced) and may add extra effects.
+- **Blood Curses**: The player may choose to amplify any curse. The AI should describe the amplified effect when appropriate.
+- **Order Features**:
+  - Ghostslayer: Rite of the Dawn deals radiant damage, no max HP reduction vs undead. Ethereal Step allows phasing through obstacles.
+  - Lycan: Hybrid Transformation grants claws, regeneration, and may cause Bloodlust (Wisdom save when below half HP).
+  - Mutant: Mutagens grant stat bonuses and side effects; the AI should track which mutagens are active.
+  - Profane Soul: Gains warlock spell slots (Intelligence). The AI should allow casting of spells and use patron features.
+
+The AI should use the \`char_set_property\` and \`char_add_note\` tags to record active rite, active mutagens, and blood curse uses.
 
 ---
 
@@ -4127,10 +6281,10 @@ You do not need to provide hp and ac for common monsters. The system will automa
 
 **Examples:**
 - For a standard goblin, you can write:
-  [tag: combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin"}]' close]
+  \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin"}]' -->\`
   The system will fill in HP 7 and AC 15.
 - For a custom monster not in the database, provide full stats:
-  [tag: combat start initiative="Thalion:17, Shadow Beast:9" enemies='[{"name":"Shadow Beast","hp":45,"ac":14}]' close]
+  \`<!-- combat start initiative="Thalion:17, Shadow Beast:9" enemies='[{"name":"Shadow Beast","hp":45,"ac":14}]' -->\`
 
 Always include the monster's name **exactly** as it appears in the database (case-insensitive). The database contains monsters from the official 5e Monster Manual.
 
@@ -4144,6 +6298,119 @@ When generating the opening scene for an open-world campaign, invent an engaging
 
 ---
 
+## 20. COMBAT TRACKER – AUTOMATIC USE
+
+When a fight starts, you MUST output a combat start tag **as the first thing in your message** (after the mandatory header, but before any narrative). The tag uses the format:
+
+\`<!-- combat start initiative="PlayerName:20, Enemy1:15, Enemy2:10" enemies='[{"name":"Enemy1"},{"name":"Enemy2"}]' -->\`
+
+**Rules:**
+- Roll initiative for each participant (1d20 + Dexterity modifier). Use the player's character name exactly as it appears in the character sheet.
+- List all participants in descending initiative order.
+- For enemies, provide the JSON array with at least the \`name\` field. The system will automatically look up their HP and AC from the built‑in monster database. If the monster is custom (not in the database), include \`hp\` and \`ac\` explicitly, e.g.: \`{"name":"Shadow Beast","hp":45,"ac":14}\`.
+- Never put any text before the tag – it must be the very first thing after the header.
+
+**During combat:**
+- When the player or an enemy takes damage, output: \`<!-- combat damage id="player" amount="5" -->\` or \`<!-- combat damage id="enemy_0" amount="8" -->\`.
+- When a participant is healed during combat, output: \`<!-- combat heal id="player" amount="5" -->\` or \`<!-- combat heal id="enemy_0" amount="3" -->\`.
+- To advance to the next turn: \`<!-- combat next_turn -->\`.
+- When combat ends (all enemies defeated or fled): \`<!-- combat end -->\`.
+
+**The system will automatically display the combat tracker UI and update HP.** You do not need to manually track HP in your narrative – just use the tags.
+
+**Example response (first turn of combat):**
+
+\`<!-- combat start initiative="Thalion:18, Goblin Archer:14, Goblin Warrior:11" enemies='[{"name":"Goblin"},{"name":"Goblin"}]' -->
+*The goblins draw rusty scimitars and snarl. One nocks an arrow.*
+Initiative order: Thalion, Goblin Archer, Goblin Warrior. Thalion, what do you do?
+\`
+
+---
+
+## 21. QUEST TRACKER – AUTOMATIC CREATION AND UPDATES
+
+Whenever the story introduces a clear objective, you **must** create a quest using the inline text format (easier for you to generate). The system automatically parses these tags and updates the quest tracker UI.
+
+**Quest creation** – use this pattern inside your narrative (it will be removed from the player's view):
+
+\`[QUEST CREATE: "Quest Name"|"Brief description"]\`
+
+Optionally, you can add initial milestones by appending them after a comma, e.g.:
+
+\`[QUEST CREATE: "Find the Lost Amulet"|"The duke's heirloom was stolen."|"Question the tavern keeper,Search the old well"]\`
+
+**Milestone updates** – when the player achieves part of a quest:
+
+\`[QUEST MILESTONE: "Quest Name"|"Milestone text"|complete]\`
+
+**Quest completion** – when the quest is finished (successfully):
+
+\`[QUEST COMPLETE: "Quest Name"]\`
+
+**Quest failure** – when the quest becomes impossible or abandoned:
+
+\`[QUEST FAIL: "Quest Name"]\`
+
+**When to create a quest:**
+- An NPC gives a task with a clear reward or consequence.
+- The party discovers a problem that needs solving (e.g., a monster to slay, a missing person).
+- The story introduces a long‑term goal (e.g., "defeat the dragon").
+- Any time the player expresses an intent that could become a tracked objective.
+
+**Example:**
+
+\`[QUEST CREATE: "Clear the Cragmaw Hideout"|"Goblins have taken over an old cave near Phandalin."|"Find the hideout entrance,Defeat the goblin chief"]\`
+
+Later, after the player finds the entrance:
+
+\`[QUEST MILESTONE: "Clear the Cragmaw Hideout"|"Find the hideout entrance"|complete]\`
+
+Finally, after defeating the chief:
+
+\`[QUEST COMPLETE: "Clear the Cragmaw Hideout"]\`
+
+The system will show the quest log and progress bars automatically.
+
+---
+
+## 22. AUTOMATIC SUBCLASS FEATURES AND CHOICES
+
+When a character gains a subclass feature (at creation or level‑up), you **must** add it to the character sheet using the \`char_add_feature\` tag. Do this for **every** feature described in the subclass, including passive bonuses and action options.
+
+**Format:** \`<!-- char_add_feature name="Feature Name" description="Short description" level="X" -->\`
+
+If the feature requires a choice from a list (e.g., Eldritch Invocations, Metamagic, Battle Master Maneuvers, Arcane Shots, Pact Boon), you **must** also output a \`char_choice_required\` tag immediately after adding the feature. The system will prompt the player to select the options.
+
+**Example for Warlock (level 2):**
+
+\`<!-- char_add_feature name="Eldritch Invocations" description="You can choose two invocations." level="2" -->\`
+\`<!-- char_choice_required type="invocations" count="2" class="Warlock" -->\`
+
+**For Sorcerer (level 3) with Metamagic:**
+
+\`<!-- char_add_feature name="Metamagic" description="You gain two metamagic options." level="3" -->\`
+\`<!-- char_choice_required type="metamagic" count="2" class="Sorcerer" -->\`
+
+**For Fighter Battle Master (level 3):**
+
+\`<!-- char_add_feature name="Combat Superiority" description="You gain three maneuvers and four superiority dice." level="3" -->\`
+\`<!-- char_choice_required type="maneuvers" count="3" class="Fighter" subclass="Battle Master" -->\`
+
+**For Warlock Pact Boon (level 3):**
+
+\`<!-- char_add_feature name="Pact Boon" description="Choose a pact boon." level="3" -->\`
+\`<!-- char_choice_required type="pactBoon" count="1" class="Warlock" -->\`
+
+**For Dragonborn race – Draconic Ancestry choice:**
+
+\`<!-- char_choice_required type="dragonbornAncestry" count="1" class="Dragonborn" -->\`
+
+After the player makes the selection, the system will store the choices. You do not need to do anything else – the sheet will reflect the chosen features.
+
+When a character levels up (either because you awarded XP or the player manually increased the level), you **must** immediately output the appropriate \`char_add_feature\` and \`char_choice_required\` tags for the new level's subclass features. Do not wait for the player to ask.
+
+---
+
 *End of Guardrails*`;
 
   // Campaign context
@@ -4154,12 +6421,48 @@ When generating the opening scene for an open-world campaign, invent an engaging
     if (camp.config?.location) prompt += `\n**Starting Location:** ${camp.config.location}`;
     if (camp.description) prompt += `\n**Description:** ${camp.description}`;
     if (camp.initialHook) prompt += `\n**Initial Hook:** ${camp.initialHook}`;
+    if (camp.houseRules && camp.houseRules.trim()) {
+      prompt += `\n\n## HOUSE RULES\n${camp.houseRules}`;
+    }
+    if (camp.tags && camp.tags.length) {
+      prompt += `\n\n## CAMPAIGN TAGS\n${camp.tags.join(', ')}`;
+    }
 
     // Open-world plot creation instruction
     if (camp.type === 'openworld') {
       prompt += `\n\nThis is an OPEN WORLD campaign. No main plot is provided. You are free to generate your own overarching plots, faction conflicts, personal character arcs, and side quests as the story unfolds. Introduce interesting NPCs, locations, and events that respond to the player's actions. Aim for a sandbox experience where the player's choices shape the world.`;
     }
   }
+
+  // Campaign summary (compressed long-term memory)
+  const summaryKey = `dnd_campaign_summary_${selectedCampaignId}`;
+  const storedSummary = localStorage.getItem(summaryKey);
+  if (storedSummary) {
+    try {
+      const summaryObj = JSON.parse(storedSummary);
+      if (summaryObj.text) {
+        prompt += `\n\n## CAMPAIGN SUMMARY (compressed history)\n${summaryObj.text}`;
+      }
+    } catch(e) {}
+  }
+
+  // Context management instructions
+  prompt += `
+
+## CONTEXT MANAGEMENT
+
+You are provided with two sources of campaign memory:
+
+1. **CAMPAIGN SUMMARY** (above) – Contains compressed core facts from older events that are no longer in the chat history. Treat this as the character's long‑term memory. Use it to recall past major events, NPCs, quests, and decisions.
+
+2. **RECENT CHAT HISTORY** – The last 20 messages (user + your responses). This is the immediate scene. The player cannot see older messages; you must rely on the Campaign Summary for anything older than 20 exchanges.
+
+**Rules for using the Campaign Summary:**
+- Do not repeat information from the summary verbatim. Instead, use it to maintain consistency (e.g., an NPC you met earlier should remember you).
+- If a player asks about a past event that is not in the recent history but is in the summary, answer based on the summary.
+- When you generate a response, you may refer to events in the summary as if they happened "recently" (the character remembers them).
+- The summary is automatically updated by the system every 20 messages. You do not need to request updates.
+- Keep your responses focused on the current scene. Use the summary only for continuity.`;
 
   // Character sheet
   if (currentCharacter) {
@@ -4170,10 +6473,29 @@ When generating the opening scene for an open-world campaign, invent an engaging
     prompt += `\n**Ability Scores:** ${scores}`;
     if (c.backstory) prompt += `\n**Backstory:** ${c.backstory}`;
     if (c.personalityTraits) prompt += `\n**Personality Traits:** ${c.personalityTraits}`;
+    if (c.fightingStyle) prompt += `\n**Fighting Style:** ${c.fightingStyle}`;
+    if (c.feats?.length) prompt += `\n**Feats:** ${c.feats.join(', ')}`;
+    if (c.subclassChoices && Object.keys(c.subclassChoices).length) prompt += `\n**Subclass Choices:** ${JSON.stringify(c.subclassChoices)}`;
     if (c.cantrips?.length) prompt += `\n**Cantrips:** ${c.cantrips.join(', ')}`;
     if (c.spells?.length) prompt += `\n**Spells:** ${c.spells.join(', ')}`;
-    if (c.equipment?.weapons?.length) prompt += `\n**Weapons:** ${c.equipment.weapons.map(w => w.name + (w.quantity > 1 ? ' x' + w.quantity : '')).join(', ')}`;
-    if (c.equipment?.armor) prompt += `\n**Armor:** ${c.equipment.armor}`;
+    if (c.equipment) {
+      prompt += `\n**Armor:** ${c.equipment.armor?.name || "None"} (AC ${c.equipment.armor?.ac || 10}, Weight ${c.equipment.armor?.weight || 0} lbs)`;
+      if (c.equipment.shield) prompt += `, Shield equipped.`;
+      const addWeapon = (label, w) => {
+        if (w && w.name) {
+          prompt += `\n**${label}:** ${w.name} (Attack: ${w.attack || "?"}, Damage: ${w.damage || "?"}, Properties: ${w.properties?.join(", ") || "none"})`;
+        }
+      };
+      addWeapon("Main Hand", c.equipment.mainHand);
+      addWeapon("Off Hand", c.equipment.offHand);
+      addWeapon("Ranged", c.equipment.ranged);
+    }
+  }
+
+  // Subclass mechanical essence
+  if (currentCharacter && currentCharacter.subclass) {
+    prompt += `\n\n## SUBCLASS: ${currentCharacter.subclass}`;
+    prompt += getSubclassMechanicalEssence(currentCharacter.class, currentCharacter.subclass);
   }
 
   // Active quests
@@ -4201,11 +6523,17 @@ When generating the opening scene for an open-world campaign, invent an engaging
     prompt += `\n\n## Additional instructions from the Dungeon Master Guide:\n${dmGuide}`;
   }
 
-  // Al'mundi worldbuilding reference
-  if (camp && (camp.name === "Al'mundi" || camp.setting === "Al'mundi" || (camp.config?.location && camp.config.location.includes("Al'mundi")))) {
+  // Worldbuilding reference (Al'mundi or Faerûn)
+  if (camp) {
     const worldbuilding = loadWorldbuilding();
-    if (worldbuilding) {
-      prompt += `\n\n## WORLD SETTING: Al'mundi\n\nBelow is the worldbuilding reference for the continent of Al'mundi. Use this to inform your descriptions, NPCs, locations, and plot hooks.\n\n${worldbuilding}`;
+    let worldName = '';
+    if (camp.name === "Al'mundi" || camp.setting === "Al'mundi" || (camp.config?.location && camp.config.location.includes("Al'mundi")) || camp.worldbuildingKey === 'almundi') {
+      worldName = "Al'mundi";
+    } else if (camp.name && camp.name.includes("Faerûn") || camp.setting === "Faerûn" || camp.worldbuildingKey === 'faerun') {
+      worldName = "Faerûn (Forgotten Realms)";
+    }
+    if (worldName && worldbuilding) {
+      prompt += `\n\n## WORLD SETTING: ${worldName}\n\nBelow is the worldbuilding reference for ${worldName}. Use this to inform your descriptions, NPCs, locations, and plot hooks.\n\n${worldbuilding}`;
     }
   }
 
@@ -4358,6 +6686,9 @@ async function sendChatMessage() {
     chatHistory.push({ role: 'assistant', content: fullText });
     saveChatHistory();
 
+    // Trigger summarization check after assistant response
+    await checkAndSummarize();
+
   } catch(err) {
     // Fallback: retry with the default model if the primary model failed
     if (model !== DEFAULT_MODEL) {
@@ -4391,6 +6722,8 @@ async function sendChatMessage() {
             chatHistory.push({ role: 'assistant', content: fallbackText });
             saveChatHistory();
             appendSystemMessage(`⚠️ Used fallback model (${DEFAULT_MODEL})`);
+            // Trigger summarization check after fallback response
+            await checkAndSummarize();
             return; // skip the error message below
           }
         }
@@ -4513,6 +6846,124 @@ function fallbackRoll(btn, formula, result) {
   const rollSummary = result.rolls.map(r => `d${r.sides}: ${r.result}`).join(', ');
   const sysMsg = `🎲 Rolled ${formula}: **${result.total}** — (${rollSummary}${modStr ? ', modifier' + modStr : ''})`;
   appendSystemMessage(sysMsg);
+}
+
+// ── Context summarization ──
+async function summarizeOldMessages(oldMessages) {
+  const saved = localStorage.getItem('dnd_ai_settings');
+  let apiKey = '', model = '';
+  if (saved) {
+    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
+  }
+  if (!apiKey || !model) return;
+
+  // Concatenate old messages into a log string
+  const logLines = oldMessages.map(m => {
+    const prefix = m.role === 'user' ? 'Player' : 'DM';
+    const content = m.content ? m.content.slice(0, 600) : '';
+    return `${prefix}: ${content}`;
+  });
+  const logText = logLines.join('\n');
+
+  const systemPrompt = `You are a campaign scribe. Extract ONLY the core factual details from the recent events below. Follow these rules strictly:
+
+- Output format: bullet points, each line starting with "- ".
+- Include ONLY: major plot developments, character decisions, combat outcomes, new NPCs met (name and disposition), quest updates (started/completed/failed), important items gained or lost.
+- EXCLUDE: dialogue, emotional descriptions, scenery, fluff, repeated information.
+- Write in present tense, third person.
+- Keep the entire output under 500 characters.
+
+Recent events:
+${logText}
+
+Core facts:`;
+
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': window.location.origin,
+        'X-Title': 'DnD DM'
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [{ role: 'user', content: systemPrompt }],
+        max_tokens: 200,
+        temperature: 0.4
+      })
+    });
+
+    if (!response.ok) return;
+    const data = await response.json();
+    const summaryUpdate = data.choices?.[0]?.message?.content;
+    if (!summaryUpdate) return;
+
+    // Store the result (replace, not append)
+    const summaryKey = `dnd_campaign_summary_${selectedCampaignId}`;
+    const stored = localStorage.getItem(summaryKey);
+    let mergedText = summaryUpdate;
+    if (stored) {
+      try {
+        const existing = JSON.parse(stored);
+        if (existing.text) {
+          mergedText = existing.text + '\n' + summaryUpdate;
+        }
+      } catch(e) {}
+    }
+    localStorage.setItem(summaryKey, JSON.stringify({
+      text: mergedText,
+      timestamp: new Date().toISOString()
+    }));
+
+    appendSystemMessage('📜 Campaign summary updated with recent events.');
+  } catch(e) {
+    console.warn('Summarization failed:', e);
+  }
+}
+
+async function checkAndSummarize() {
+  if (isSummarizing) return;
+  const nonSystemCount = chatHistory.filter(m => m.role !== 'system').length;
+  if (messagesSinceLastSummary === 0 && nonSystemCount > 0) {
+    messagesSinceLastSummary = nonSystemCount;
+  }
+  if (nonSystemCount - messagesSinceLastSummary >= SUMMARY_INTERVAL) {
+    await summarizeAndTrim();
+  }
+}
+
+async function summarizeAndTrim() {
+  if (isSummarizing) return;
+  isSummarizing = true;
+  // Disable input
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('chatSendBtn');
+  const wasDisabled = chatInput?.disabled;
+  if (chatInput) chatInput.disabled = true;
+  if (sendBtn) sendBtn.disabled = true;
+  appendSystemMessage('⏳ The Dungeon Master pauses to record recent events... (summarizing)');
+
+  const systemMsg = chatHistory.find(m => m.role === 'system');
+  const nonSystem = chatHistory.filter(m => m.role !== 'system');
+  const toKeep = nonSystem.slice(-MAX_VISIBLE_MESSAGES);
+  const toSummarize = nonSystem.slice(0, -MAX_VISIBLE_MESSAGES);
+
+  if (toSummarize.length > 0) {
+    await summarizeOldMessages(toSummarize);
+  }
+
+  // Rebuild chatHistory
+  chatHistory = systemMsg ? [systemMsg, ...toKeep] : toKeep;
+  messagesSinceLastSummary = toKeep.length;
+  renderChatHistory();
+
+  // Re-enable input
+  if (chatInput) chatInput.disabled = wasDisabled;
+  if (sendBtn) sendBtn.disabled = false;
+  appendSystemMessage('✅ Summary complete. Continue your adventure!');
+  isSummarizing = false;
 }
 
 // ── DOM helpers ──
@@ -4784,7 +7235,13 @@ function parseCharacterTags(content) {
   const setArmorRegex = /<!--\s*char_set_armor\s+name="([^"]*)"\s*-->/g;
   result = result.replace(setArmorRegex, (match, name) => {
     if (!char.equipment) char.equipment = {};
-    char.equipment.armor = name || '';
+    var armorData = window.armorData || {};
+    var armorInfo = armorData[name] || {};
+    char.equipment.armor = {
+      name: name || '',
+      weight: armorInfo.weight || 0,
+      ac: parseInt(armorInfo.ac) || 10
+    };
     localStorage.setItem('dnd_current_character', JSON.stringify(char));
     if (document.getElementById('characterSheetModal').style.display === 'flex') {
       populateEquipmentTab();
@@ -4874,6 +7331,249 @@ function parseCharacterTags(content) {
       recalcDerivedStats();
       updateHPDisplay();
     }
+    return '';
+  });
+
+  // ── Level: <!-- char_level value="5" --> ──
+  const levelRegex = /<!--\s*char_level\s+value="(\d+)"\s*-->/g;
+  result = result.replace(levelRegex, (match, level) => {
+    if (char) {
+      char.level = parseInt(level);
+      const cls = classes[char.class];
+      if (cls) {
+        const hitDieVal = cls.hitDie === "d12" ? 12 : cls.hitDie === "d10" ? 10 : cls.hitDie === "d8" ? 8 : cls.hitDie === "d6" ? 6 : 8;
+        const conMod = calculateModifier(char.abilityScores.Constitution);
+        char.maxHp = hitDieVal + conMod;
+        char.hitDiceTotal = char.level;
+        char.hitDiceRemaining = char.hitDiceTotal;
+        const slots = getSpellSlotsForClass(char.class, char.level, char.subclass);
+        if (!char.spellSlots) char.spellSlots = {};
+        for (let k in slots) {
+          if (!char.spellSlots[k]) char.spellSlots[k] = { used: 0, max: slots[k] };
+          else char.spellSlots[k].max = slots[k];
+        }
+        saveCharacter();
+        updateHPDisplay();
+        updateSpellSlotsUI();
+        updateHitDiceUI();
+        updateSavesAndSkills();
+      }
+    }
+    return '';
+  });
+
+  // ── Max HP: <!-- char_max_hp value="25" --> ──
+  const maxHpRegex = /<!--\s*char_max_hp\s+value="(\d+)"\s*-->/g;
+  result = result.replace(maxHpRegex, (match, value) => {
+    if (char) {
+      char.maxHp = parseInt(value);
+      if (char.hp > char.maxHp) char.hp = char.maxHp;
+      saveCharacter();
+      updateHPDisplay();
+    }
+    return '';
+  });
+
+  // ── Hit Dice: <!-- char_hit_dice total="5" type="d10" --> ──
+  const hitDiceRegex = /<!--\s*char_hit_dice\s+total="(\d+)"\s+type="([^"]+)"\s*-->/g;
+  result = result.replace(hitDiceRegex, (match, total, type) => {
+    if (char) {
+      char.hitDiceTotal = parseInt(total);
+      char.hitDiceRemaining = parseInt(total);
+      char.hitDiceType = type;
+      saveCharacter();
+      updateHitDiceUI();
+    }
+    return '';
+  });
+
+  // ── Spell Slots: <!-- char_spell_slots level="1" count="4" --> ──
+  const spellSlotsRegex = /<!--\s*char_spell_slots\s+level="(\d+)"\s+count="(\d+)"\s*-->/g;
+  result = result.replace(spellSlotsRegex, (match, level, count) => {
+    if (char && char.spellSlots) {
+      if (!char.spellSlots[level]) char.spellSlots[level] = { used: 0, max: 0 };
+      char.spellSlots[level].max = parseInt(count);
+      saveCharacter();
+      updateSpellSlotsUI();
+    }
+    return '';
+  });
+
+  // ── Add Feature: <!-- char_add_feature name="Action Surge" description="..." level="2" --> ──
+  const addFeatureRegex = /<!--\s*char_add_feature\s+name="([^"]+)"\s+description="([^"]*)"(?:\s+level="(\d+)")?\s*-->/g;
+  result = result.replace(addFeatureRegex, (match, name, description, level) => {
+    if (char) {
+      if (!char.classFeatures) char.classFeatures = [];
+      char.classFeatures.push({ name, description, level: level ? parseInt(level) : null });
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') populateFeatsTab();
+    }
+    return '';
+  });
+
+  // ── Add Maneuver: <!-- char_add_maneuver name="Trip Attack" --> ──
+  const addManeuverRegex = /<!--\s*char_add_maneuver\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addManeuverRegex, (match, name) => {
+    if (char) {
+      if (!char.maneuvers) char.maneuvers = [];
+      if (!char.maneuvers.includes(name)) char.maneuvers.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add Metamagic: <!-- char_add_metamagic name="Quickened Spell" --> ──
+  const addMetamagicRegex = /<!--\s*char_add_metamagic\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addMetamagicRegex, (match, name) => {
+    if (char) {
+      if (!char.metamagic) char.metamagic = [];
+      if (!char.metamagic.includes(name)) char.metamagic.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add Arcane Shot: <!-- char_add_arcane_shot name="Banishing Arrow" --> ──
+  const addArcaneShotRegex = /<!--\s*char_add_arcane_shot\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(addArcaneShotRegex, (match, name) => {
+    if (char) {
+      if (!char.arcaneShots) char.arcaneShots = [];
+      if (!char.arcaneShots.includes(name)) char.arcaneShots.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Set Fighting Style: <!-- char_set_fighting_style name="Archery" --> ──
+  result = result.replace(/<!--\s*char_set_fighting_style\s+name="([^"]+)"\s*-->/g, function(match, name) {
+    if (char) {
+      char.fightingStyle = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Set Pact Boon: <!-- char_set_pact_boon name="Pact of the Blade" --> ──
+  const setPactBoonRegex = /<!--\s*char_set_pact_boon\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(setPactBoonRegex, (match, name) => {
+    if (char) {
+      char.pactBoon = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Set Draconic Ancestry: <!-- char_set_draconic_ancestry name="Gold" --> ──
+  const setDraconicRegex = /<!--\s*char_set_draconic_ancestry\s+name="([^"]+)"\s*-->/g;
+  result = result.replace(setDraconicRegex, (match, name) => {
+    if (char) {
+      char.sorcererDragonAncestry = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Resource set/spend: <!-- resource set type="LayOnHands" amount="25" --> or resource spend
+  const resourceSetSpendRegex = /<!--\s*resource\s+(set|spend)\s+type="([^"]+)"\s+amount="(\d+)"\s*-->/g;
+  result = result.replace(resourceSetSpendRegex, (match, action, type, amount) => {
+    if (char) {
+      if (!char.classResources) char.classResources = {};
+      if (!char.classResources[type]) char.classResources[type] = { current: 0, max: parseInt(amount) };
+      const res = char.classResources[type];
+      if (action === 'set') res.current = parseInt(amount);
+      else if (action === 'spend') res.current = Math.max(0, res.current - parseInt(amount));
+      saveCharacter();
+      updateClassResourcesUI();
+    }
+    return '';
+  });
+
+  // ── Accept level= as alias for value= in char_level ──
+  result = result.replace(/<!--\s*char_level\s+level="(\d+)"\s*-->/g, (match, level) => {
+    return `<!-- char_level value="${level}" -->`;
+  });
+
+  // ── Generic property storage: key="value" ──
+  result = result.replace(/<!--\s*char_set_property\s+key="([^"]+)"\s+value="([^"]*)"\s*-->/g, (match, key, value) => {
+    if (char) {
+      if (!char.customProperties) char.customProperties = {};
+      char.customProperties[key] = value;
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') {
+        populateDetailsTab();
+      }
+    }
+    return '';
+  });
+
+  // ── Append a free‑text note ──
+  result = result.replace(/<!--\s*char_add_note\s+text="([^"]*)"\s*-->/g, (match, text) => {
+    if (char) {
+      if (!char.notes) char.notes = [];
+      char.notes.push(text);
+      saveCharacter();
+      if (document.getElementById('characterSheetModal').style.display === 'flex') {
+        populateDetailsTab();
+      }
+    }
+    return '';
+  });
+
+  // ── Add invocation (Eldritch Invocation) with optional description ──
+  result = result.replace(/<!--\s*char_add_invocation\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.invocations) char.invocations = [];
+      if (!char.invocations.includes(name)) char.invocations.push(name);
+      if (description && char.classFeatures) char.classFeatures.push({ name, description, level: null });
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add spell (known) ──
+  result = result.replace(/<!--\s*char_add_spell\s+name="([^"]+)"(?:\s+level="(\d+)")?\s*-->/g, (match, name, level) => {
+    if (char) {
+      if (!char.spells) char.spells = [];
+      if (!char.spells.includes(name)) char.spells.push(name);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add feat ──
+  result = result.replace(/<!--\s*char_feat\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.feats || !Array.isArray(char.feats)) char.feats = [];
+      const featLine = description ? `${name}: ${description}` : name;
+      if (!char.feats.includes(featLine)) char.feats.push(featLine);
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Add racial trait ──
+  result = result.replace(/<!--\s*char_race_trait\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
+    if (char) {
+      if (!char.racialTraits) char.racialTraits = [];
+      char.racialTraits.push({ name, description });
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Alternative pact boon tag (char_pact_boon) ──
+  result = result.replace(/<!--\s*char_pact_boon\s+name="([^"]+)"\s*-->/g, (match, name) => {
+    if (char) {
+      char.pactBoon = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
+  // ── Choice required: <!-- char_choice_required type="invocations" count="2" class="Warlock" subclass="The Fiend" --> ──
+  const choiceRegex = /<!--\s*char_choice_required\s+type="([^"]+)"\s+count="(\d+)"(?:\s+class="([^"]*)")?(?:\s+subclass="([^"]*)")?\s*-->/g;
+  result = result.replace(choiceRegex, (match, type, count, className, subclass) => {
+    showFeatureChoiceModal(type, parseInt(count), className, subclass);
     return '';
   });
 
@@ -5094,11 +7794,11 @@ function parseAITags(content) {
   let result = content;
 
   // ── Pre-processing: recover malformed tag closings ──
-  // Fix: replace arrow/Unicode symbol closings (→, ➔, ➤, etc.) with -->
+  // Fix: replace arrow/Unicode symbol closings (→, ➔, ➤, ➡, ⇒, etc.) with -->
   // Only fix inside HTML comment patterns to avoid touching narrative text
-  result = result.replace(/<!--[^>]*?[\u2192\u2794\u27A4]\s*/g, function(match) {
+  result = result.replace(/<!--[^>]*?[\u2190-\u21FF\u27A0-\u27FF\u2900-\u297F\u2B00-\u2BFF\u2794\u279C-\u27BE]\s*/g, function(match) {
     console.warn("Repaired malformed tag closing: " + match);
-    return match.replace(/[\u2192\u2794\u27A4]\s*$/, '--> ');
+    return match.replace(/[\u2190-\u21FF\u27A0-\u27FF\u2900-\u297F\u2B00-\u2BFF\u2794\u279C-\u27BE]\s*$/, '--> ');
   });
   // Fix: tags that are missing closing --> entirely (tag ends at end of line)
   result = result.replace(/<!--\s*char_hp_change\s+amount="[^"]+"\s*$/gm, function(match) {
@@ -5107,10 +7807,13 @@ function parseAITags(content) {
   });
   // Fix: any HTML comment opened with <!-- but missing --> before end of line
   // that looks like a known tag pattern
-  result = result.replace(/<!--\s*(char_\w+|xp_award|combat|spell_consume|short_rest|long_rest|stabilize|resource|level_up)[^>]*?\s*$/gm, function(match) {
+  result = result.replace(/<!--\s*(char_\w+|xp_award|combat|spell_consume|short_rest|long_rest|stabilize|resource|level_up|quest_create|quest_update|quest_complete|npc_add)[^>]*?\s*$/gm, function(match) {
     console.warn("Repaired missing tag close for known tag: " + match);
     return match + ' -->';
   });
+
+  // Parse inline quest commands [QUEST CREATE: "..."|"..."] etc.
+  result = parseQuestCommands(result);
 
   // Parse quest_create tags
   const questCreateRegex = /<!--\s*quest_create\s+name="([^"]*)"\s+description="([^"]*)"\s+milestones="([^"]*)"\s*-->/g;
@@ -5189,12 +7892,12 @@ function parseAITags(content) {
   // ---- NEW FEATURE TAGS ----
   
   // Combat start: <!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin","hp":7,"ac":15}]' -->
-  const combatStartRegex = /<!--\s*combat start\s+initiative="([^"]+)"\s+enemies='([^']+)'\s*-->/;
+  const combatStartRegex = /<!--\s*combat start\s+initiative="([^"]+)"\s+enemies=(['"])([\s\S]+?)\2\s*-->/;
   const combatStartMatch = result.match(combatStartRegex);
   if (combatStartMatch) {
     try {
       const initiativeStr = combatStartMatch[1];
-      const enemies = JSON.parse(combatStartMatch[2]);
+      const enemies = JSON.parse(combatStartMatch[3]);
       // Look up missing stats from monster database
       if (window.monsterStats) {
         for (var ei = 0; ei < enemies.length; ei++) {
@@ -5227,6 +7930,13 @@ function parseAITags(content) {
   const combatDmgRegex = /<!--\s*combat damage\s+id="([^"]+)"\s+amount="([^"]+)"\s*-->/g;
   result = result.replace(combatDmgRegex, function(match, id, amount) {
     updateCombat({ id: id, damage: amount });
+    return '';
+  });
+
+  // Combat heal: <!-- combat heal id="player" amount="5" -->
+  const combatHealRegex = /<!--\s*combat heal\s+id="([^"]+)"\s+amount="([^"]+)"\s*-->/g;
+  result = result.replace(combatHealRegex, function(match, id, amount) {
+    updateCombat({ id: id, heal: amount });
     return '';
   });
   
@@ -5384,29 +8094,37 @@ function copyMsgText(btn) {
 function calculateAC() {
   if (!currentCharacter) return 10;
   const eq = currentCharacter.equipment || {};
-  const armorName = eq.armor;
+  const armor = eq.armor || { name: "", ac: 10 };
   let ac = 10;
-  const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
-  if (armorName && armorData[armorName]) {
-    const a = armorData[armorName];
-    if (a.category === "Light") { ac = 11 + dex; }
-    else if (a.category === "Medium") { ac = Math.min(12 + dex, 14); }
-    else if (a.category === "Heavy") { ac = parseInt(a.ac); }
-    else { ac = parseInt(a.ac) || 10; }
+  // If a known armor from armorData, use its rules
+  if (armor.name && armorData[armor.name]) {
+    const a = armorData[armor.name];
+    const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
+    if (a.category === "Light") ac = 11 + dex;
+    else if (a.category === "Medium") ac = Math.min(12 + dex, 14);
+    else if (a.category === "Heavy") ac = parseInt(a.ac);
+    else ac = parseInt(a.ac) || 10;
+  } else if (armor.ac) {
+    // Custom armor: use the player-provided AC
+    ac = armor.ac;
   } else {
-    const cls = classes[currentCharacter.class];
-    if (cls) {
-      if (currentCharacter.class === "Barbarian") {
-        const con = calculateModifier(currentCharacter.abilityScores.Constitution);
-        ac = 10 + dex + con;
-      } else if (currentCharacter.class === "Monk") {
-        const wis = calculateModifier(currentCharacter.abilityScores.Wisdom);
-        ac = 10 + dex + wis;
-      }
+    // Unarmored calculation
+    const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
+    if (currentCharacter.class === "Barbarian") {
+      const con = calculateModifier(currentCharacter.abilityScores.Constitution);
+      ac = 10 + dex + con;
+    } else if (currentCharacter.class === "Monk") {
+      const wis = calculateModifier(currentCharacter.abilityScores.Wisdom);
+      ac = 10 + dex + wis;
     }
   }
   if (eq.shield) ac += 2;
   return ac;
+}
+
+function updateACDisplay() {
+  const acSpan = document.getElementById("sheetAC");
+  if (acSpan) acSpan.innerText = calculateAC();
 }
 // ====================================================================
 // COMBAT TRACKER FUNCTIONS
@@ -5651,6 +8369,20 @@ function updateCombat(tagData) {
       if (tagData.damage) { p.hp = Math.max(0, p.hp - parseInt(tagData.damage)); }
       if (tagData.heal) { p.hp = Math.min(p.maxHp, p.hp + parseInt(tagData.heal)); }
     }
+    // Sync player HP with currentCharacter when 'player' takes damage or healing
+    if (tagData.id === "player" && currentCharacter) {
+      if (tagData.damage) {
+        currentCharacter.hp = Math.max(0, (currentCharacter.hp || currentCharacter.maxHp) - parseInt(tagData.damage));
+        if (currentCharacter.hp === 0) {
+          appendSystemMessage("\u26A0\uFE0F " + currentCharacter.name + " is at 0 HP and is unconscious!");
+        }
+      }
+      if (tagData.heal) {
+        currentCharacter.hp = Math.min(currentCharacter.maxHp || currentCharacter.hp, (currentCharacter.hp || 0) + parseInt(tagData.heal));
+      }
+      saveCharacter();
+      updateHPDisplay();
+    }
   }
   if (tagData.action === "next_turn") {
     activeCombat.currentTurnIndex++;
@@ -5672,7 +8404,7 @@ function updateCombat(tagData) {
 function initSpellSlots() {
   if (!currentCharacter) return;
   if (!currentCharacter.spellSlots) {
-    const slots = getSpellSlotsForClass(currentCharacter.class, currentCharacter.level);
+    const slots = getSpellSlotsForClass(currentCharacter.class, currentCharacter.level, currentCharacter.subclass);
     let obj = {};
     for (let k in slots) {
       obj[k] = { used: 0, max: slots[k] };
@@ -5826,7 +8558,23 @@ function applyShortRest() {
   } else {
     appendSystemMessage("\uD83C\uDFD4\uFE0F Short rest taken. No hit dice remaining.");
   }
+  // Restore short rest resources
+  if (currentCharacter.class === "Warlock") {
+    const slots = getSpellSlotsForClass("Warlock", currentCharacter.level, currentCharacter.subclass);
+    if (currentCharacter.spellSlots) {
+      for (let k in slots) {
+        if (currentCharacter.spellSlots[k]) currentCharacter.spellSlots[k].used = 0;
+      }
+    }
+  }
+  if (currentCharacter.classResources) {
+    if (currentCharacter.classResources.ChannelDivinity) currentCharacter.classResources.ChannelDivinity.current = currentCharacter.classResources.ChannelDivinity.max;
+    if (currentCharacter.classResources.ActionSurge) currentCharacter.classResources.ActionSurge.current = currentCharacter.classResources.ActionSurge.max;
+    if (currentCharacter.classResources.SecondWind) currentCharacter.classResources.SecondWind.current = currentCharacter.classResources.SecondWind.max;
+  }
   saveCharacter();
+  updateSpellSlotsUI();
+  updateClassResourcesUI();
 }
 
 function applyLongRest() {
@@ -5856,6 +8604,185 @@ function applyLongRest() {
   updateClassResourcesUI();
   updateConditionIcons();
   appendSystemMessage("\uD83C\uDF1C Long rest complete! HP restored, spell slots and hit dice refreshed.");
+}
+
+// ====================================================================
+// FEATURE CHOICE MODAL (for Eldritch Invocations, Metamagic, Maneuvers, Arcane Shots, Pact Boon, etc.)
+// ====================================================================
+
+function showFeatureChoiceModal(type, count, className, subclass) {
+  const modal = document.getElementById('featureChoiceModal');
+  if (!modal) return;
+  const titleEl = document.getElementById('featureChoiceTitle');
+  const descEl = document.getElementById('featureChoiceDescription');
+  const gridEl = document.getElementById('featureChoiceGrid');
+  if (!titleEl || !descEl || !gridEl) return;
+
+  // Map type to display name and option list
+  let options = [];
+  let displayName = type;
+  let selectionType = 'checkbox'; // 'radio' for single choice
+
+  switch (type) {
+    case 'invocations':
+      displayName = 'Eldritch Invocations';
+      options = eldritchInvocations || [];
+      // Filter by level and pact boon requirements
+      const charLevel = currentCharacter ? currentCharacter.level : 1;
+      const pactBoon = currentCharacter ? currentCharacter.pactBoon : '';
+      options = options.filter(inv => {
+        if (inv.level && inv.level > charLevel) return false;
+        if (inv.prerequisite && inv.prerequisite.pact) {
+          return inv.prerequisite.pact === pactBoon;
+        }
+        return true;
+      });
+      break;
+    case 'metamagic':
+      displayName = 'Metamagic Options';
+      options = metamagicOptions || [];
+      break;
+    case 'maneuvers':
+      displayName = 'Battle Master Maneuvers';
+      options = battleMasterManeuvers || [];
+      break;
+    case 'arcaneShots':
+      displayName = 'Arcane Shots';
+      options = arcaneShots || [];
+      break;
+    case 'pactBoon':
+      displayName = 'Pact Boon';
+      options = [
+        { name: 'Pact of the Blade', description: 'You can create a pact weapon in your empty hand.' },
+        { name: 'Pact of the Chain', description: 'You gain a familiar.' },
+        { name: 'Pact of the Tome', description: 'You gain three cantrips from any class.' },
+        { name: 'Pact of the Talisman', description: 'You gain a talisman that can aid its bearer.' }
+      ];
+      selectionType = 'radio';
+      count = 1;
+      break;
+    case 'dragonbornAncestry':
+      displayName = 'Draconic Ancestry';
+      options = [
+        { name: 'Black', description: 'Acid damage' },
+        { name: 'Blue', description: 'Lightning damage' },
+        { name: 'Brass', description: 'Fire damage' },
+        { name: 'Bronze', description: 'Lightning damage' },
+        { name: 'Copper', description: 'Acid damage' },
+        { name: 'Gold', description: 'Fire damage' },
+        { name: 'Green', description: 'Poison damage' },
+        { name: 'Red', description: 'Fire damage' },
+        { name: 'Silver', description: 'Cold damage' },
+        { name: 'White', description: 'Cold damage' }
+      ];
+      selectionType = 'radio';
+      count = 1;
+      break;
+    default:
+      options = [];
+  }
+
+  if (options.length === 0) {
+    console.warn('Feature choice modal: no options found for type', type);
+    return;
+  }
+
+  titleEl.textContent = `Choose ${count > 1 ? count + ' ' : ''}${displayName}`;
+  descEl.textContent = `Select ${count > 1 ? 'up to ' + count : 'one'} option${count > 1 ? 's' : ''} from the list below.`;
+  
+  // Build the grid
+  gridEl.innerHTML = options.map((opt, idx) => {
+    const inputType = selectionType;
+    const inputName = `feature-choice-${type}`;
+    return `<label class="feature-choice-item" data-index="${idx}">
+      <input type="${inputType}" name="${inputName}" value="${opt.name.replace(/"/g, '&quot;')}" data-type="${type}">
+      <span class="feature-choice-name">${opt.name}</span>
+      ${opt.description ? `<span class="feature-choice-desc">${opt.description}</span>` : ''}
+    </label>`;
+  }).join('');
+
+  // Store state for confirm handler
+  gridEl.dataset.type = type;
+  gridEl.dataset.count = count;
+  gridEl.dataset.selectionType = selectionType;
+
+  modal.style.display = 'flex';
+  setTimeout(() => modal.classList.add('show'), 10);
+  
+  // Clear previous confirm handler and set new one
+  const confirmBtn = document.getElementById('confirmFeatureChoiceBtn');
+  const cancelBtn = document.getElementById('cancelFeatureChoiceBtn');
+  const closeBtn = document.getElementById('closeFeatureChoiceBtn');
+  
+  const newConfirm = function() {
+    const checked = gridEl.querySelectorAll('input:checked');
+    if (checked.length === 0 && count > 0) {
+      // Allow proceeding with 0 if it's optional (e.g., pact boon might be deferred)
+      if (selectionType === 'radio' && count === 1) {
+        // Radio buttons should always have one selected if any
+      }
+    }
+    if (checked.length > 0) {
+      const selected = Array.from(checked).map(cb => cb.value);
+      const choiceType = gridEl.dataset.type;
+      if (currentCharacter) {
+        switch (choiceType) {
+          case 'invocations':
+            if (!currentCharacter.invocations) currentCharacter.invocations = [];
+            for (const name of selected) {
+              if (!currentCharacter.invocations.includes(name)) currentCharacter.invocations.push(name);
+            }
+            break;
+          case 'metamagic':
+            if (!currentCharacter.metamagic) currentCharacter.metamagic = [];
+            for (const name of selected) {
+              if (!currentCharacter.metamagic.includes(name)) currentCharacter.metamagic.push(name);
+            }
+            break;
+          case 'maneuvers':
+            if (!currentCharacter.maneuvers) currentCharacter.maneuvers = [];
+            for (const name of selected) {
+              if (!currentCharacter.maneuvers.includes(name)) currentCharacter.maneuvers.push(name);
+            }
+            break;
+          case 'arcaneShots':
+            if (!currentCharacter.arcaneShots) currentCharacter.arcaneShots = [];
+            for (const name of selected) {
+              if (!currentCharacter.arcaneShots.includes(name)) currentCharacter.arcaneShots.push(name);
+            }
+            break;
+          case 'pactBoon':
+            currentCharacter.pactBoon = selected[0];
+            break;
+          case 'dragonbornAncestry':
+            currentCharacter.dragonbornAncestry = selected[0];
+            break;
+        }
+        saveCharacter();
+        if (document.getElementById('characterSheetModal').style.display === 'flex') {
+          populateFeatsTab();
+        }
+        appendSystemMessage(`✅ ${displayName} updated: ${selected.join(', ')}`);
+      }
+    }
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+    confirmBtn.removeEventListener('click', newConfirm);
+    cancelBtn.removeEventListener('click', newCancel);
+    closeBtn.removeEventListener('click', newCancel);
+  };
+  
+  const newCancel = function() {
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; }, 200);
+    confirmBtn.removeEventListener('click', newConfirm);
+    cancelBtn.removeEventListener('click', newCancel);
+    closeBtn.removeEventListener('click', newCancel);
+  };
+  
+  confirmBtn.addEventListener('click', newConfirm);
+  cancelBtn.addEventListener('click', newCancel);
+  closeBtn.addEventListener('click', newCancel);
 }
 
 // ====================================================================
@@ -5951,29 +8878,29 @@ function calculateEncumbrance() {
   if (!currentCharacter) return { total: 0, capacity: 0, ratio: 0 };
   let total = 0;
   const eq = currentCharacter.equipment || {};
-  if (eq.armor && armorData[eq.armor]) {
-    total += armorData[eq.armor].weight;
-  }
+
+  // Armor weight
+  if (eq.armor && eq.armor.weight) total += eq.armor.weight;
+  // Shield weight (rough estimate 6 lbs)
   if (eq.shield) total += 6;
-  if (eq.weapons) {
-    eq.weapons.forEach(function(w) {
-      const wd = weaponsData[w.name];
-      if (wd) total += wd.weight * (w.quantity || 1);
-    });
-  }
+  // Weapons
+  const weapons = [eq.mainHand, eq.offHand, eq.ranged];
+  weapons.forEach(w => {
+    if (w && w.weight) total += w.weight * (w.quantity || 1);
+  });
+  // Inventory items
   if (currentCharacter.inventory) {
-    currentCharacter.inventory.forEach(function(item) {
+    currentCharacter.inventory.forEach(item => {
       const w = parseFloat(item.weight) || 0;
       total += w * (item.quantity || 1);
     });
   }
-  const currency = currentCharacter.currency || {};
-  const coinWeight = ((currency.cp || 0) + (currency.sp || 0) + (currency.ep || 0) + (currency.gp || 0) + (currency.pp || 0)) / 50;
-  total += coinWeight;
+  // Currency (50 coins = 1 lb)
+  const cur = currentCharacter.currency || {};
+  total += (cur.cp + cur.sp + cur.ep + cur.gp + cur.pp) / 50;
   const str = currentCharacter.abilityScores.Strength || 10;
   const capacity = str * 15;
-  const ratio = total / capacity;
-  return { total: total, capacity: capacity, ratio: ratio, overCapacity: total > capacity, doubleCapacity: total > capacity * 2 };
+  return { total, capacity, ratio: total / capacity, overCapacity: total > capacity, doubleCapacity: total > capacity * 2 };
 }
 
 function updateEncumbranceDisplay() {
@@ -6012,6 +8939,18 @@ function getClassResources(className, subclass, level) {
     resources.SuperiorityDice = { max: Math.min(6, 4 + Math.floor((level - 3) / 2)), current: Math.min(6, 4 + Math.floor((level - 3) / 2)) };
   } else if (className === "Druid") {
     resources.WildShape = { max: 2, current: 2 };
+  }
+  // Missing class resources
+  if (className === "Paladin") {
+    resources.LayOnHands = { max: level * 5, current: level * 5 };
+    resources.ChannelDivinity = { max: 1, current: 1 };
+  } else if (className === "Cleric") {
+    resources.ChannelDivinity = { max: 1, current: 1 };
+  } else if (className === "Fighter") {
+    resources.ActionSurge = { max: 1, current: 1 };
+    resources.SecondWind = { max: 1, current: 1 };
+  } else if (className === "Blood Hunter") {
+    resources.BloodMaledict = { max: getBloodMaledictMax(level), current: getBloodMaledictMax(level) };
   }
   return resources;
 }
@@ -6056,6 +8995,196 @@ function updateClassResourcesUI() {
       }
     });
   });
+}
+
+// ====================================================================
+// BLOOD HUNTER FUNCTIONS
+// ====================================================================
+
+function updateBloodHunterUI() {
+  const section = document.getElementById("bloodHunterSheetSection");
+  if (!section) return;
+  if (!currentCharacter || currentCharacter.class !== "Blood Hunter") {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  const level = currentCharacter.level || 1;
+  const die = hemocraftDieByLevel[level] || "d4";
+  const dieSpan = document.getElementById("hemocraftDie");
+  if (dieSpan) dieSpan.innerText = die;
+
+  // Blood Maledict uses
+  const uses = currentCharacter.classResources?.BloodMaledict?.current || 0;
+  const maxUses = currentCharacter.classResources?.BloodMaledict?.max || 0;
+  const usesSpan = document.getElementById("bloodMaledictUses");
+  if (usesSpan) usesSpan.innerText = uses + " / " + maxUses;
+
+  // Populate rite dropdown
+  const riteSelect = document.getElementById("activeRiteSelect");
+  if (riteSelect) {
+    const learnedRites = currentCharacter.learnedRites || ["Rite of the Flame"];
+    riteSelect.innerHTML = '<option value="">None</option>' +
+      learnedRites.map(function(r) { return '<option value="' + r + '">' + r + '</option>'; }).join("");
+    if (currentCharacter.activeRite) riteSelect.value = currentCharacter.activeRite;
+  }
+
+  // Populate blood curses list
+  const cursesListDiv = document.getElementById("bloodCursesList");
+  if (cursesListDiv) {
+    const knownCurses = currentCharacter.bloodCurses || [];
+    cursesListDiv.innerHTML = knownCurses.map(function(c) {
+      var name = typeof c === "string" ? c : c.name;
+      var curseObj = bloodCurses.find(function(bc) { return bc.name === name; });
+      var desc = curseObj ? curseObj.description : "";
+      var amplifyText = curseObj && curseObj.amplify ? '<br><span class="feature-desc" style="color:#C8A96E;">Amplify: ' + curseObj.amplify + '</span>' : "";
+      return '<div class="feature-item" style="margin-bottom:6px;">' +
+        '<strong>' + name + '</strong><br>' +
+        '<span class="feature-desc">' + desc + '</span>' + amplifyText +
+        '<div style="margin-top:4px;">' +
+          '<button class="small-btn use-curse-btn" data-curse="' + name + '">Use</button> ' +
+          '<label style="font-size:0.85em;"><input type="checkbox" class="amplify-checkbox" data-curse="' + name + '"> Amplify</label>' +
+        '</div></div>';
+    }).join("");
+
+    // Bind curse use buttons
+    cursesListDiv.querySelectorAll(".use-curse-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var curseName = btn.dataset.curse;
+        var amplifyCb = btn.parentElement.querySelector(".amplify-checkbox");
+        var amplified = amplifyCb ? amplifyCb.checked : false;
+        useBloodCurse(curseName, amplified);
+      });
+    });
+  }
+
+  // ── Bind Blood Hunter sheet buttons (one-time setup) ──
+  var activateBtn = document.getElementById("activateRiteBtn");
+  if (activateBtn && !activateBtn._bhBound) {
+    activateBtn._bhBound = true;
+    activateBtn.addEventListener("click", function() {
+      var sel = document.getElementById("activeRiteSelect");
+      if (sel && sel.value && sel.value !== "") {
+        activateCrimsonRite(sel.value);
+      }
+    });
+  }
+  var deactivateBtn = document.getElementById("deactivateRiteBtn");
+  if (deactivateBtn && !deactivateBtn._bhBound) {
+    deactivateBtn._bhBound = true;
+    deactivateBtn.addEventListener("click", function() {
+      deactivateCrimsonRite();
+    });
+  }
+  // Bind Blood Maledict resource buttons in the Blood Hunter section
+  var bhSection = document.getElementById("bloodHunterSheetSection");
+  if (bhSection) {
+    bhSection.querySelectorAll(".resource-btn[data-resource='bloodMaledict']").forEach(function(btn) {
+      if (btn._bhBound) return;
+      btn._bhBound = true;
+      btn.addEventListener("click", function() {
+        var action = btn.dataset.action;
+        if (!currentCharacter.classResources?.BloodMaledict) return;
+        var res = currentCharacter.classResources.BloodMaledict;
+        if (action === "use") {
+          if (res.current > 0) { res.current--; saveCharacter(); updateBloodHunterUI(); updateClassResourcesUI(); }
+        } else if (action === "restore") {
+          if (res.current < res.max) { res.current++; saveCharacter(); updateBloodHunterUI(); updateClassResourcesUI(); }
+        }
+      });
+    });
+  }
+}
+
+function activateCrimsonRite(riteName) {
+  var rite = crimsonRites.find(function(r) { return r.name === riteName; });
+  if (!rite) return;
+  var hemDie = hemocraftDieByLevel[currentCharacter.level] || "d4";
+  var roll = rollDiceExpression("1" + hemDie);
+  if (!roll) return;
+  var dmg = roll.total;
+  var newHp = currentCharacter.hp - dmg;
+  if (newHp < 1) {
+    alert("Not enough HP to activate rite! You would be reduced to 0 HP.");
+    return;
+  }
+  currentCharacter.hp = newHp;
+  currentCharacter.maxHp = (currentCharacter.maxHp || currentCharacter.hp) - dmg;
+  currentCharacter.activeRite = riteName;
+  saveCharacter();
+  updateHPDisplay();
+  updateBloodHunterUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage("\uD83D\uDC0E " + currentCharacter.name + " activates " + riteName + ", losing " + dmg + " HP and reducing max HP by " + dmg + ".");
+  }
+}
+
+function deactivateCrimsonRite() {
+  if (!currentCharacter) return;
+  var restoredHp = currentCharacter.maxHp - (currentCharacter.hp || currentCharacter.maxHp);
+  currentCharacter.hp = (currentCharacter.hp || 0) + restoredHp;
+  currentCharacter.maxHp = currentCharacter.hp;
+  currentCharacter.activeRite = null;
+  saveCharacter();
+  updateHPDisplay();
+  updateBloodHunterUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage(currentCharacter.name + " deactivates their Crimson Rite.");
+  }
+}
+
+function useBloodCurse(curseName, amplified) {
+  if (!currentCharacter || !currentCharacter.classResources?.BloodMaledict) return;
+  var res = currentCharacter.classResources.BloodMaledict;
+  if (res.current <= 0) {
+    alert("No Blood Maledict uses remaining. Finish a short rest to restore them.");
+    return;
+  }
+  res.current--;
+  var curseObj = bloodCurses.find(function(c) { return c.name === curseName; });
+  var msg = "\uD83D\uDC0E " + currentCharacter.name + " uses " + curseName + ".";
+  if (amplified && curseObj && curseObj.amplify) {
+    var hemDie = hemocraftDieByLevel[currentCharacter.level] || "d4";
+    var roll = rollDiceExpression("1" + hemDie);
+    var ampDmg = roll ? roll.total : 0;
+    var newHp = currentCharacter.hp - ampDmg;
+    if (newHp > 0) {
+      currentCharacter.hp = newHp;
+      msg += " (Amplified: " + curseObj.amplify + " — takes " + ampDmg + " necrotic damage.)";
+    } else {
+      msg += " (Amplify attempted but not enough HP — curse used without amplification.)";
+    }
+  } else if (amplified) {
+    msg += " (Amplified.)";
+  }
+  saveCharacter();
+  updateBloodHunterUI();
+  updateClassResourcesUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage(msg);
+  }
+}
+
+function getBloodCurseMax(level) {
+  if (level >= 18) return 5;
+  if (level >= 14) return 4;
+  if (level >= 10) return 3;
+  if (level >= 6) return 2;
+  return 1;
+}
+
+function getBloodMaledictMax(level) {
+  if (level >= 17) return 4;
+  if (level >= 13) return 3;
+  if (level >= 6) return 2;
+  return 1;
+}
+
+function getCrimsonRiteMax(level, subclass) {
+  if (subclass === "Order of the Ghostslayer" && level >= 3) return 2; // Rite of the Flame + Rite of the Dawn
+  if (level >= 14) return 3;
+  if (level >= 7) return 2;
+  return 1;
 }
 
 // ====================================================================
@@ -6129,7 +9258,7 @@ function recalculateStatsOnLevelUp(newLevel, oldLevel) {
   const hpRoll = Math.floor(hitDieVal / 2) + 1;
   const hpIncrease = hpRoll + conMod;
   const newMaxHp = (currentCharacter.maxHp || hitDieVal + conMod) + hpIncrease;
-  const spellSlots = getSpellSlotsForClass(currentCharacter.class, newLevel);
+  const spellSlots = getSpellSlotsForClass(currentCharacter.class, newLevel, currentCharacter.subclass);
   const asiAvailable = (newLevel % 4 === 0);
   let features = [];
   if (currentCharacter.class === "Sorcerer" && newLevel >= 3) features.push("Metamagic (2 options)");
@@ -6157,7 +9286,7 @@ function processLevelUp() {
   currentCharacter.level = prop.newLevel;
   currentCharacter.hitDiceTotal = prop.newLevel;
   currentCharacter.hitDiceRemaining = prop.newLevel;
-  const slots = getSpellSlotsForClass(currentCharacter.class, prop.newLevel);
+  const slots = getSpellSlotsForClass(currentCharacter.class, prop.newLevel, currentCharacter.subclass);
   if (!currentCharacter.spellSlots) currentCharacter.spellSlots = {};
   for (let k in slots) {
     if (!currentCharacter.spellSlots[k]) {
@@ -6177,6 +9306,39 @@ function processLevelUp() {
       }
     }
   }
+  // Add selected spells from level up
+  if (tempLevelUpSpells && tempLevelUpSpells.size > 0) {
+    if (!currentCharacter.spells) currentCharacter.spells = [];
+    for (let spellName of tempLevelUpSpells) {
+      if (!currentCharacter.spells.includes(spellName)) {
+        currentCharacter.spells.push(spellName);
+      }
+    }
+    tempLevelUpSpells.clear();
+  }
+  // Add selected feat (only if feat radio is checked)
+  const asiOrFeatRadio = document.querySelector('input[name="asiOrFeat"]:checked');
+  const featSelect = document.getElementById("featSelect");
+  if (asiOrFeatRadio && asiOrFeatRadio.value === 'feat' && featSelect && featSelect.value) {
+    if (!currentCharacter.feats) currentCharacter.feats = "";
+    if (currentCharacter.feats) {
+      currentCharacter.feats += "\n" + featSelect.value;
+    } else {
+      currentCharacter.feats = featSelect.value;
+    }
+    // Apply feat ability increase if applicable
+    const featDb = featDatabase || (typeof window.featDatabase !== 'undefined' ? window.featDatabase : null);
+    if (featDb) {
+      const feat = Object.values(featDb).find(f => f.name === featSelect.value);
+      if (feat && feat.abilityIncrease) {
+        const ab = feat.abilityIncrease.ability;
+        if (currentCharacter.abilityScores[ab] < 20) {
+          currentCharacter.abilityScores[ab] += feat.abilityIncrease.amount;
+        }
+      }
+    }
+  }
+  // Apply ASI from buttons (handled directly in openLevelUpModal via click handlers, already saved)
   saveCharacter();
   updateHPDisplay();
   updateSpellSlotsUI();
@@ -6195,6 +9357,8 @@ function openLevelUpModal() {
     "<p><strong>HP Increase:</strong> +" + prop.hpIncrease + " (new max: " + prop.newMaxHp + ")</p>" +
     "<p><strong>Hit Dice:</strong> " + prop.hitDice.total + " " + prop.hitDice.type + "</p>" +
     (prop.features.length ? "<p><strong>New Features:</strong> " + prop.features.join(", ") + "</p>" : "");
+  
+  // ASI / Feat section
   const asiSection = document.getElementById("levelUpAsiSection");
   if (prop.asiAvailable) {
     asiSection.style.display = "block";
@@ -6217,14 +9381,78 @@ function openLevelUpModal() {
         }
       });
     });
+    // Feat radio toggle
+    document.querySelectorAll('input[name="asiOrFeat"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        document.getElementById('asiGrid').style.display = this.value === 'asi' ? '' : 'none';
+        document.getElementById('featSelectionDiv').style.display = this.value === 'feat' ? '' : 'none';
+      });
+    });
+    document.getElementById('asiGrid').style.display = '';
+    document.getElementById('featSelectionDiv').style.display = 'none';
+    // Populate feat dropdown
+    const featSelect = document.getElementById("featSelect");
+    if (featSelect) {
+      if (window.featDatabase) {
+        featSelect.innerHTML = '<option value="">— Select a feat —</option>';
+        for (let key in window.featDatabase) {
+          const feat = window.featDatabase[key];
+          featSelect.innerHTML += '<option value="' + feat.name + '">' + feat.name + '</option>';
+        }
+      } else if (typeof featDatabase !== 'undefined' && featDatabase) {
+        featSelect.innerHTML = '<option value="">— Select a feat —</option>';
+        for (let key in featDatabase) {
+          const feat = featDatabase[key];
+          featSelect.innerHTML += '<option value="' + feat.name + '">' + feat.name + '</option>';
+        }
+      } else {
+        featSelect.innerHTML = '<option value="">Feats not loaded</option>';
+      }
+    }
   } else {
     asiSection.style.display = "none";
   }
-  const spellsSection = document.getElementById("levelUpSpellsSection");
+  
+  // Spell selection for known-spell classes
+  const spellSelectionDiv = document.getElementById("levelUpSpellSelection");
   const cls = classes[currentCharacter.class];
-  if (cls && cls.spellcasting) {
+  const isKnownCaster = ["Bard","Sorcerer","Warlock","Ranger"].includes(currentCharacter.class) || 
+    (currentCharacter.class === "Fighter" && currentCharacter.subclass === "Eldritch Knight") ||
+    (currentCharacter.class === "Rogue" && currentCharacter.subclass === "Arcane Trickster");
+  
+  if (cls && cls.spellcasting && isKnownCaster && prop.newLevel) {
+    const oldLevel = prop.newLevel - 1;
+    // Calculate new spells known at this level
+    let newSpellsCount = 0;
+    if (currentCharacter.class === "Sorcerer") newSpellsCount = 1;
+    else if (currentCharacter.class === "Bard") newSpellsCount = 1;
+    else if (currentCharacter.class === "Warlock") newSpellsCount = 1;
+    else if (currentCharacter.class === "Ranger") newSpellsCount = 1;
+    else if (currentCharacter.class === "Fighter" || currentCharacter.class === "Rogue") newSpellsCount = 1;
+    
+    if (newSpellsCount > 0) {
+      spellSelectionDiv.style.display = "block";
+      document.getElementById("levelUpNewSpellsCount").innerText = newSpellsCount;
+      
+      if (!tempLevelUpSpells) tempLevelUpSpells = new Set();
+      const availableSpells = getSpellArray().filter(s =>
+        s.level > 0 && s.level <= Math.min(5, Math.floor((prop.newLevel+1)/2)) &&
+        s.classes && s.classes.includes(currentCharacter.class)
+      );
+      renderSpellGrid("levelUpSpellGrid", availableSpells, false, newSpellsCount, tempLevelUpSpells, function(newSet) {
+        tempLevelUpSpells = newSet;
+      });
+    } else {
+      spellSelectionDiv.style.display = "none";
+    }
+  } else {
+    spellSelectionDiv.style.display = "none";
+  }
+  
+  const spellsSection = document.getElementById("levelUpSpellsSection");
+  if (cls && cls.spellcasting && !isKnownCaster) {
     spellsSection.style.display = "block";
-    document.getElementById("levelUpSpellChoices").innerHTML = "<p class=\"death-subtitle\">Spell slots updated. Check your Spells tab to add new spells.</p>";
+    document.getElementById("levelUpSpellChoices").innerHTML = "<p class=\"death-subtitle\">Spell slots updated. Check your Spells tab to prepare new spells.</p>";
   } else {
     spellsSection.style.display = "none";
   }
@@ -6233,6 +9461,13 @@ function openLevelUpModal() {
 }
 
 function confirmLevelUp() {
+  // Save current feat/asi choice before processing
+  const featSelect = document.getElementById("featSelect");
+  const asiRadio = document.querySelector('input[name="asiOrFeat"]:checked');
+  if (asiRadio && asiRadio.value === 'feat' && featSelect && !featSelect.value) {
+    alert('Please select a feat or switch to Ability Score Improvement.');
+    return;
+  }
   const modal = document.getElementById("levelUpModal");
   if (modal) {
     modal.classList.remove("show");

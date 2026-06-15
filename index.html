@@ -438,8 +438,72 @@
     <div class="selection-list" id="campaignList">
       <!-- dynamic cards will be injected -->
     </div>
+    <div class="selection-footer" style="margin-top: 20px; text-align: center;">
+      <button class="btn-primary" id="createCustomCampaignBtn" style="width: auto; padding: 8px 24px;">✍️ Create Custom Campaign</button>
+    </div>
     <div class="modal-footer selection-footer">
       <div class="footer-note">Story campaigns have pre‑written main plots. Open World is AI‑driven sandbox.</div>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ── CUSTOM CAMPAIGN MODAL ── -->
+<div id="customCampaignModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container config-container" style="width: 600px;">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">Create Custom Campaign</h2>
+        <div class="modal-subtitle">Design your own adventure</div>
+      </div>
+      <button class="modal-close" id="closeCustomCampaignBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="config-form">
+      <div class="form-field">
+        <label>Campaign Name *</label>
+        <input type="text" id="customCampaignName" placeholder="e.g., Shadows of the Old Empire" maxlength="50">
+        <div class="field-error" id="customCampaignNameError" style="display:none;">Name is required.</div>
+      </div>
+      <div class="form-field">
+        <label>Campaign Type</label>
+        <div style="display: flex; gap: 20px;">
+          <label><input type="radio" name="campaignType" value="story" checked> Story Campaign (linear)</label>
+          <label><input type="radio" name="campaignType" value="openworld"> Open World (sandbox)</label>
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Starting Location (optional)</label>
+        <input type="text" id="customCampaignLocation" placeholder="e.g., Neverwinter, Forest of Allanar">
+      </div>
+      <div class="form-field">
+        <label>World Description</label>
+        <textarea id="customWorldDescription" rows="3" placeholder="Describe the setting, factions, key features..."></textarea>
+      </div>
+      <div class="form-field">
+        <label>Theme / Tone</label>
+        <select id="customCampaignTone">
+          <option>Heroic</option><option>Grimdark</option><option>Lighthearted</option><option>Mystery</option><option>Political</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Main Plot Hook</label>
+        <textarea id="customMainPlotHook" rows="3" placeholder="What starts the adventure?"></textarea>
+      </div>
+      <div class="form-field">
+        <label>Tags (comma separated)</label>
+        <input type="text" id="customCampaignTags" placeholder="e.g., Horror, Heist">
+      </div>
+      <div class="form-field">
+        <label>House Rules</label>
+        <textarea id="customHouseRules" rows="2" placeholder="e.g., No flying races, potions as bonus action"></textarea>
+      </div>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-footer config-footer">
+      <button class="btn-secondary" id="cancelCustomCampaignBtn">Cancel</button>
+      <button class="btn-primary" id="submitCustomCampaignBtn">Begin Adventure</button>
     </div>
     <div class="rune-corner rune-tl"></div>
     <div class="rune-corner rune-br"></div>
@@ -466,11 +530,11 @@
       <div class="form-field">
         <label>Starting Location</label>
         <select id="owStartLocation">
-          <option value="Forest of Allanar">Forest of Allanar</option>
-          <option value="Khigvorda Mountains">Khigvorda Mountains</option>
-          <option value="The Fading Swamp">The Fading Swamp</option>
-          <option value="Starview Plains">Starview Plains</option>
-          <option value="The Merchant's Pass">The Merchant's Pass</option>
+          <option value="Baldur's Gate">Baldur's Gate</option>
+          <option value="Waterdeep">Waterdeep</option>
+          <option value="Neverwinter">Neverwinter</option>
+          <option value="Silverymoon">Silverymoon</option>
+          <option value="Menzoberranzan">Menzoberranzan</option>
           <option value="Random" selected>Random</option>
           <option value="random town">random town</option>
           <option value="random village">random village</option>
@@ -557,6 +621,27 @@
         <div id="hitDiceContainer"></div>
         <div class="sidebar-section-title">Class Resources</div>
         <div id="classResourcesContainer"></div>
+        <!-- Blood Hunter section (hidden by default) -->
+        <div id="bloodHunterSheetSection" style="display:none;">
+          <div class="sidebar-section-title">Blood Hunter</div>
+          <div class="stat-readonly">Hemocraft Die: <span id="hemocraftDie">d4</span></div>
+          <div class="resource-row">
+            <span class="resource-name">Blood Maledict</span>
+            <span class="resource-count" id="bloodMaledictUses">0 / 0</span>
+            <button class="small-btn resource-btn" data-resource="bloodMaledict" data-action="use">−</button>
+            <button class="small-btn resource-btn" data-resource="bloodMaledict" data-action="restore">+</button>
+          </div>
+          <div class="sidebar-section-title">Crimson Rite</div>
+          <div id="crimsonRiteSelector">
+            <select id="activeRiteSelect" class="sheet-input">
+              <option value="">None</option>
+            </select>
+            <button class="small-btn" id="activateRiteBtn">Activate Rite</button>
+            <button class="small-btn" id="deactivateRiteBtn">Deactivate</button>
+          </div>
+          <div class="sidebar-section-title">Blood Curses</div>
+          <div id="bloodCursesList" class="feature-list"></div>
+        </div>
         <div class="sidebar-section-title">Encumbrance</div>
         <div id="encumbranceDisplay"></div>
         <div class="sidebar-section-title">Ability Scores</div>
@@ -568,6 +653,7 @@
         <div class="sidebar-section-title">Combat</div>
         <div class="stat-readonly">Passive Perception: <span id="passivePerception">0</span></div>
         <div class="stat-readonly">Initiative: <span id="initiative">0</span></div>
+        <div class="stat-readonly">Armor Class (AC): <span id="sheetAC" class="stat-value">—</span></div>
         <div><label>Speed (ft): <input type="number" id="sheetSpeed" class="sheet-input small" value="30"></label></div>
         <div class="sidebar-section-title">Experience</div>
         <div class="xp-tracker">
@@ -611,11 +697,156 @@
         </div>
         <!-- Equipment tab -->
         <div class="sheet-tab-content" id="tab-equipment" style="display:none;">
-          <div class="form-field"><label>Armor</label><input type="text" id="equipmentArmor" class="sheet-input" placeholder="e.g., Leather armor"></div>
-          <div class="form-field"><label><input type="checkbox" id="equipmentShield"> Shield</label></div>
-          <div class="subsection-title">Weapons</div>
-          <div id="weaponsList"></div>
-          <button class="add-row-btn" id="addWeaponRow">+ Add Weapon</button>
+          <!-- ========== ARMOR SECTION ========== -->
+          <div class="equipment-section">
+            <h4>Armor</h4>
+            <div class="form-row armor-row">
+              <div class="field">
+                <label>Armor Name</label>
+                <input type="text" id="armorName" list="armorList" placeholder="e.g., Leather Armor">
+                <datalist id="armorList"></datalist>
+              </div>
+              <div class="field">
+                <label>Weight (lbs)</label>
+                <input type="number" id="armorWeight" value="0" step="0.5" min="0">
+              </div>
+              <div class="field">
+                <label>AC</label>
+                <input type="number" id="armorAC" value="10" step="1" min="0">
+              </div>
+              <div class="field checkbox">
+                <label><input type="checkbox" id="armorShield"> Shield (+2 AC)</label>
+              </div>
+            </div>
+          </div>
+          <!-- ========== WEAPONS SECTION ========== -->
+          <div class="equipment-section">
+            <h4>Weapons</h4>
+            <datalist id="weaponList"></datalist>
+            <!-- Main Hand -->
+            <div class="weapon-slot" data-slot="main">
+              <div class="weapon-header">Main Hand</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="main">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="main" placeholder="e.g., Longsword">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="main" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="main" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="main" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="main" placeholder="1d8+3"></div>
+              </div>
+            </div>
+            <!-- Off Hand -->
+            <div class="weapon-slot" data-slot="off">
+              <div class="weapon-header">Off Hand</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="off">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="off" placeholder="e.g., Shortsword">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="off" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="off" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="off" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="off" placeholder="1d6+3"></div>
+              </div>
+            </div>
+            <!-- Ranged Weapon -->
+            <div class="weapon-slot" data-slot="ranged">
+              <div class="weapon-header">Ranged Weapon</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="ranged">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="ranged" placeholder="e.g., Longbow">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="ranged" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="ranged" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="ranged" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="ranged" placeholder="1d8+3"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- Spells tab -->
         <div class="sheet-tab-content" id="tab-spells" style="display:none;">
@@ -636,6 +867,21 @@
           <textarea id="classFeaturesList" rows="4"></textarea>
           <div class="subsection-title">Racial Traits</div>
           <textarea id="racialTraitsList" rows="4"></textarea>
+          <!-- Pact Boon (Warlock) -->
+          <div id="sheetPactBoonArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Pact Boon</span></div>
+            <div id="sheetPactBoonDisplay" class="readonly-skill-list"></div>
+          </div>
+          <!-- Patron Expanded Spells (Warlock) -->
+          <div id="sheetPatronSpellsArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Patron Expanded Spells (Always Prepared)</span></div>
+            <div id="sheetPatronSpellsList" class="spell-readonly-list"></div>
+          </div>
+          <!-- Patron Features (Warlock) -->
+          <div id="sheetPatronFeaturesArea" class="feature-category" style="display:none;">
+            <div class="feature-header"><span>Patron Features</span></div>
+            <div id="sheetPatronFeaturesList" class="feature-list"></div>
+          </div>
           <div id="sheetMetamagicArea" class="feature-category" style="display:none;">
             <div class="feature-header"><span>Metamagic</span></div>
             <div id="sheetMetamagicList" class="feature-list"></div>
@@ -666,6 +912,10 @@
             <div id="detailsBackgroundFeature" class="readonly-skill-list"></div>
           </div>
           <div class="form-field"><label>Proficiencies</label><textarea id="detailsProficiencies" rows="3" class="sheet-input" placeholder="Armor, weapons, tools..."></textarea></div>
+          <div class="subsection-title">Custom Properties (AI‑managed)</div>
+          <div id="customPropertiesDisplay" class="readonly-skill-list"></div>
+          <div class="subsection-title">DM / AI Notes</div>
+          <div id="characterNotesDisplay" class="readonly-skill-list"></div>
         </div>
       </div>
     </div>
@@ -910,12 +1160,25 @@
       <div class="levelup-summary" id="levelUpSummary"></div>
       <div class="levelup-asi" id="levelUpAsiSection" style="display:none;">
         <h3 class="combat-col-title">Ability Score Improvement</h3>
-        <p class="death-subtitle">You can increase one ability score by 2 or two ability scores by 1.</p>
-        <div class="asi-grid" id="asiGrid"></div>
+        <p class="death-subtitle">You can increase one ability score by 2 or two ability scores by 1, OR choose a feat.</p>
+        <div>
+          <label><input type="radio" name="asiOrFeat" value="asi" checked> Increase Ability Scores</label>
+          <label><input type="radio" name="asiOrFeat" value="feat"> Gain a Feat</label>
+        </div>
+        <div id="asiGrid"></div>
+        <div id="featSelectionDiv" style="display:none;">
+          <label>Choose a feat:</label>
+          <select id="featSelect" class="sheet-input"></select>
+        </div>
       </div>
       <div class="levelup-spells" id="levelUpSpellsSection" style="display:none;">
         <h3 class="combat-col-title">New Spells</h3>
         <div id="levelUpSpellChoices"></div>
+      </div>
+      <div id="levelUpSpellSelection" class="levelup-spells" style="display:none;">
+        <h3 class="combat-col-title">New Spells / Cantrips</h3>
+        <div id="levelUpSpellGrid" class="spell-grid-container"></div>
+        <div class="field-note">Select up to <span id="levelUpNewSpellsCount">0</span> spells.</div>
       </div>
       <div class="levelup-features" id="levelUpFeaturesSection" style="display:none;">
         <h3 class="combat-col-title">New Class Features</h3>
@@ -925,6 +1188,27 @@
     <div class="modal-divider"></div>
     <div class="modal-footer">
       <button class="btn-primary" id="confirmLevelUpBtn">Confirm Level Up</button>
+    </div>
+    <div class="rune-corner rune-tl"></div>
+    <div class="rune-corner rune-br"></div>
+  </div>
+</div>
+
+<!-- ========== FEATURE CHOICE MODAL ========== -->
+<div id="featureChoiceModal" class="modal-overlay" style="display: none;">
+  <div class="modal-container" style="max-width: 700px;">
+    <div class="modal-header">
+      <h2 class="modal-title" id="featureChoiceTitle">Choose Features</h2>
+      <button class="modal-close" id="closeFeatureChoiceBtn">&times;</button>
+    </div>
+    <div class="modal-divider"></div>
+    <div class="modal-body">
+      <p id="featureChoiceDescription" style="color:#C8A96E;margin-bottom:16px;"></p>
+      <div id="featureChoiceGrid" class="feature-choice-grid"></div>
+      <div class="modal-footer" style="padding:16px 0 0 0;">
+        <button id="cancelFeatureChoiceBtn" class="btn-secondary" style="margin-right:8px;">Cancel</button>
+        <button id="confirmFeatureChoiceBtn" class="btn-primary">Confirm</button>
+      </div>
     </div>
     <div class="rune-corner rune-tl"></div>
     <div class="rune-corner rune-br"></div>
@@ -960,7 +1244,7 @@
     <div class="modal-header">
       <div>
         <h2 class="modal-title">Create Your Hero</h2>
-        <div class="step-indicator" id="stepIndicator">Step 1 of 5</div>
+        <div class="step-indicator" id="stepIndicator">Step 1 of 7</div>
       </div>
       <button class="modal-close" id="closeWizardBtn" aria-label="Close">&times;</button>
     </div>
@@ -970,7 +1254,8 @@
       <div class="step" data-step="2">2. Appearance</div>
       <div class="step" data-step="3">3. Ability Scores</div>
       <div class="step" data-step="4">4. Equipment & Spells</div>
-      <div class="step" data-step="5">5. Review</div>
+      <div class="step" data-step="5">5. Subclass Features</div>
+      <div class="step" data-step="6">6. Review</div>
     </div>
 
     <!-- Step 1: Identity -->
@@ -1002,6 +1287,12 @@
         <div class="form-field">
           <label>Subclass</label>
           <select id="wizardSubclass"></select>
+        </div>
+        <!-- Pact Boon (Warlock only) -->
+        <div class="form-field" id="pactBoonField" style="display:none;">
+          <label>Pact Boon</label>
+          <select id="wizardPactBoon"></select>
+          <div class="field-help">A supernatural gift granted by your patron at 3rd level.</div>
         </div>
         <div class="form-field">
           <label>Background</label>
@@ -1143,6 +1434,7 @@
               <div id="weaponGrid">
                 <div class="eq-placeholder">Select class in Step 1 to see available weapons.</div>
               </div>
+              <div id="wizardWeaponSlots" style="margin-top:12px;"></div>
             </div>
 
             <!-- Adventuring Gear Pack -->
@@ -1280,6 +1572,30 @@
         <div id="classEquipmentChoiceGroups"></div>
       </div>
 
+      <!-- ══ BLOOD HUNTER PANEL (Step 4) ══ -->
+      <div class="eq-panel" id="bloodHunterWizardPanel" style="display:none;">
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M10 2v16M2 10h16" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M6 6l8 8M6 14l8-8" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+          </svg>
+          <h3 class="eq-section-title">Crimson Rites &amp; Blood Curses</h3>
+        </div>
+        <div class="eq-category">
+          <div class="eq-cat-header"><span>Crimson Rites</span></div>
+          <div class="feature-grid" id="crimsonRiteChoices">
+            <!-- populated by JS -->
+          </div>
+        </div>
+        <div class="eq-category">
+          <div class="eq-cat-header"><span>Blood Curses</span></div>
+          <p class="eq-placeholder" style="font-style:italic;padding:4px 0;">You may choose <span id="bloodCurseMaxLabel">1</span> blood curse(s). The amplify option deals necrotic damage equal to one hemocraft die roll.</p>
+          <div class="feature-grid" id="bloodCurseChoices">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+
       <!-- ══ SPELLS PANEL ══ -->
       <div class="spells-section" id="spellsSection" style="display:none;">
 
@@ -1376,7 +1692,42 @@
         <div class="field-note">These spells are granted by your subclass and do not count against your spells known/prepared.</div>
       </div>
 
-      <!-- ══ SUBCLASS FEATURES PANEL ══ -->
+      <!-- ══ SUBCLASS FEATURES (hint in step 4) ══ -->
+      <div id="subclassFeaturesWizardStep" class="eq-panel" style="margin-top:20px; display:none;">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M5 3h10v3L12 8v9H8V8L5 6V3z" stroke="currentColor"/>
+          </svg>
+          <h3 class="eq-section-title">Subclass Features</h3>
+        </div>
+        <div id="wizardSubclassFeaturesContainer">
+          <!-- dynamically populated -->
+        </div>
+      </div>
+
+    </div><!-- /wizard-step-4 -->
+
+    <!-- Step 5: Subclass Specialisation (Fighting Style + Subclass Features) -->
+    <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
+
+      <!-- Fighting Style -->
+      <div id="fightingStyleWizardGroup" class="eq-panel" style="display:none;">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M5 17L14 6M11 3l4 1 2 2-1 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="4" cy="16" r="1.5" stroke="currentColor" stroke-width="1.1"/>
+          </svg>
+          <h3 class="eq-section-title">Fighting Style</h3>
+        </div>
+        <div class="form-field">
+          <label for="wizardFightingStyleSelect">Choose a Fighting Style</label>
+          <select id="wizardFightingStyleSelect" class="sheet-input">
+            <option value="">— Select a style —</option>
+          </select>
+          <div id="fightingStyleDesc" class="field-help" style="margin-top:4px;"></div>
+        </div>
+      </div>
+
       <div id="subclassFeaturesSection" class="eq-panel" style="display:none;">
         <div class="eq-section-header" style="margin-top:8px;">
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
@@ -1434,10 +1785,26 @@
         </div>
       </div>
 
-    </div><!-- /wizard-step-4 -->
+    </div><!-- /wizard-step-5 -->
 
-    <!-- Step 5: Review -->
-    <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
+    <!-- Step 6: ASI & Feats -->
+    <div class="wizard-step-content" id="wizard-step-6" style="display:none;">
+      <div class="eq-panel">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M10 2L4 8v8a2 2 0 002 2h8a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <path d="M8 13h4M10 11v4" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <h3 class="eq-section-title">Ability Score Improvements &amp; Feats</h3>
+          <span class="spell-ability-badge" id="asiCountBadge">0 ASIs</span>
+        </div>
+        <p class="field-note">For each ASI milestone, choose either an ability score increase or a feat. You can't exceed 20 in any ability score.</p>
+        <div id="asiFeatMilestonesContainer" class="asi-milestones-stack"></div>
+      </div>
+    </div>
+
+    <!-- Step 7: Review -->
+    <div class="wizard-step-content" id="wizard-step-7" style="display:none;">
       <div class="review-card" id="reviewCard"></div>
     </div>
 
@@ -1577,6 +1944,43 @@ Key locations: Leskyir Palace, Leskyir Bazaar, The Sandstone Inn, The Iron Oasis
 **Emberden:** Margie (tavern owner), Yavin (cook and fence), Doldren Brumvar (hidden master blacksmith).
 
 **Leskyir:** The Merchant Princess, The Desert Guide, The Blacksmith, The Nomadic Chieftain, The Oasis Guardian, The Tavern Keepers, The Head of the Caravan House, The Tribal Elder, The Sphinx (madame of Oasis of Delights).`;
+
+const FAERUN_WORLDBUILDING = `## 1. The Forgotten Realms – Faerûn Overview
+
+Faerûn is a vast continent of diverse landscapes, from the frozen Spine of the World to the steaming jungles of Chult. Magic ebbs and flows. Empires rise and fall. Adventurers are born in every village.
+
+### Key Regions
+
+**The Sword Coast** – A bustling stretch of cities: Waterdeep, Baldur's Gate, Neverwinter. Centre of trade, intrigue, and adventure.
+
+**The North** – Savage wilderness, orc hordes, ancient dwarven holds. Silverymoon, Mirabar, the High Forest.
+
+**The Dalelands** – Rural farmlands, ancient forests, and forgotten ruins. The Elven Court, Shadowdale, Hillsfar.
+
+**The Western Heartlands** – Rolling hills, trade routes, and the ruins of old Netheril. Elturel, Scornubel, Berdusk.
+
+**The Underdark** – A vast network of caverns beneath the surface. Home to drow, duergar, mind flayers, and worse.
+
+### Major Factions
+
+- **The Harpers** – Secret network of spies and rangers fighting for balance.
+- **The Lord's Alliance** – Coalition of cities for mutual defence.
+- **The Emerald Enclave** – Druids and rangers protecting nature.
+- **The Order of the Gauntlet** – Holy warriors against evil.
+- **The Zhentarim** – Shadowy mercenary company seeking power.
+
+### Deities Commonly Worshipped
+
+Tyr (justice), Torm (duty), Ilmater (compassion), Mystra (magic), Oghma (knowledge), Lathander (dawn), Selûne (moon), Kelemvor (death), Mask (thieves), Tempus (war), Umberlee (sea), Talos (storms), Bane (tyranny), Myrkul (death), Shar (darkness).
+
+### Adventure Hooks (examples)
+
+- A caravan master in Baldur's Gate seeks guards for a dangerous journey north.
+- A strange meteor lands near the High Forest; druids ask for investigation.
+- A Harper agent has gone missing in Waterdeep; last seen near the Dock Ward.
+- Orc raiders are gathering in the Spine of the World – but who leads them?
+
+The AI Dungeon Master will generate dynamic scenes, quests, and encounters based on Faerûn's lore. The player's choices shape the story. No main plot is pre-written.`;
 
 // Store worldbuilding on page load
 if (typeof saveWorldbuilding === 'function' && !localStorage.getItem('dnd_worldbuilding')) {
