@@ -21,8 +21,12 @@ An AI-powered interactive web application that serves as a full-featured virtual
 ### 📜 Complete D&D 5e Reference Data
 - **Races & Subraces:** All core races (Dwarf, Elf, Halfling, Human, Dragonborn, Gnome, Half-Elf, Half-Orc, Tiefling) with full subrace traits, ability scores, and flavor descriptions
 - **Classes & Subclasses:** All 13 core classes with subclass options, hit dice, proficiencies, spellcasting info
-- **Spells Database:** Cantrips through 6th-level spells with full descriptions, components, and class filters
-- **Equipment:** Complete weapons table, armor table, and equipment packs
+- **Blood Hunter Class:** Full Blood Hunter class mechanics including curses, crimson rites, and subclass options
+- **All Classes Mechanics (`DnD_All_Classes_Mechanics.md`):** Comprehensive breakdown of every class's core mechanics, features, and progression tables
+- **Spells Database:** Cantrips through 9th-level spells with full descriptions, components, and class filters — now including Tasha's Cauldron of Everything spells
+- **Fighting Styles:** Complete reference for all class-available fighting styles
+- **Feats Database:** Full list of D&D 5e feats with prerequisites, benefits, and descriptions
+- **Equipment:** Complete weapons table (including melee weapons with full stats), armor table, and equipment packs
 - **Backgrounds:** All 13 official backgrounds with features
 - **Monsters & Combat:** D&D 5e monster rules, stat block reference, and combat tracker
 - **Subclass Features:** Battle Master maneuvers, Eldritch Invocations, Metamagic options, Domain/Oath spell lists
@@ -67,29 +71,38 @@ An AI-powered interactive web application that serves as a full-featured virtual
 ## Project Structure
 
 ```
-e:\DnD AI\
-├── index.html              # Main application shell with sidebar, chat, and modals
-├── main_page.css           # Complete dark-fantasy themed stylesheet
-├── main_page.js            # Core application logic, D&D 5e data structures, AI chat
-├── dice_roller_3d.js       # 3D dice roller using Three.js
-├── package.json            # NPM configuration with http-server
-├── start_server.bat        # Windows batch file to launch the server
-├── _check_syntax.py        # Utility to validate bracket matching in JS
-├── _append_code.py         # Simple utility script
-├── README.md               # This file
+e:\DnD-AI-Dungeon-Master-main\
+├── index.html                       # Main application shell with sidebar, chat, and modals
+├── main_page.css                    # Complete dark-fantasy themed stylesheet
+├── main_page.js                     # Core application logic, D&D 5e data structures, AI chat
+├── dice_roller_3d.js                # 3D dice roller using Three.js
+├── package.json                     # NPM configuration with http-server
+├── start_server.bat                 # Windows batch file to launch the server
+├── _check_syntax.py                 # Utility to validate bracket matching in JS
+├── _append_code.py                  # Simple utility script
+├── README.md                        # This file
 │
-├── AI_Realm_Worldbuilding.md    # Al'mundi campaign world lore by AI Realm
-├── TCoE spells and classes.md   # Tasha's Cauldron of Everything reference
-├── dnd_extracted_reference.md    # Extracted D&D 5e SRD reference
-├── armor.md                      # Armor reference table
-├── monsters.md                   # Monster rules and stat block reference
+├── AI_Realm_Worldbuilding.md        # Al'mundi campaign world lore by AI Realm
+├── TCoE spells and classes.md       # Tasha's Cauldron of Everything reference
+├── dnd_extracted_reference.md       # Extracted D&D 5e SRD reference
+├── armor.md                         # Armor reference table
+├── monsters.md                      # Monster rules and stat block reference
+├── Blood_Hunter_Class_Complete.md   # Full Blood Hunter class mechanics
+├── DnD_All_Classes_Mechanics.md     # Comprehensive class mechanics reference
+├── feats.md                         # Complete feats database
+├── Fighting Styles.md               # Fighting styles reference
+├── melee_weapons.md                 # Melee weapon stats and properties
+├── spells.md                        # Spells database (cantrips through 9th level)
 │
-└── dice model/                   # 3D model assets for dice
+├── Genn.jpg                         # NPC portrait asset
+├── hexblade.jpg                     # Hexblade portrait asset
+├── Map.png                          # Campaign map asset
+├── rpg_dice_set.zip                 # Dice model archive
+│
+└── dice model/                      # 3D model assets for dice
     ├── license.txt
-    ├── scene.bin
-    ├── scene.gltf
-    ├── scene_embedded.gltf
-    └── textures/
+    ├── textures/
+    └── ...
 ```
 
 ## Credits
