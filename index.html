@@ -621,6 +621,27 @@
         <div id="hitDiceContainer"></div>
         <div class="sidebar-section-title">Class Resources</div>
         <div id="classResourcesContainer"></div>
+        <!-- Blood Hunter section (hidden by default) -->
+        <div id="bloodHunterSheetSection" style="display:none;">
+          <div class="sidebar-section-title">Blood Hunter</div>
+          <div class="stat-readonly">Hemocraft Die: <span id="hemocraftDie">d4</span></div>
+          <div class="resource-row">
+            <span class="resource-name">Blood Maledict</span>
+            <span class="resource-count" id="bloodMaledictUses">0 / 0</span>
+            <button class="small-btn resource-btn" data-resource="bloodMaledict" data-action="use">−</button>
+            <button class="small-btn resource-btn" data-resource="bloodMaledict" data-action="restore">+</button>
+          </div>
+          <div class="sidebar-section-title">Crimson Rite</div>
+          <div id="crimsonRiteSelector">
+            <select id="activeRiteSelect" class="sheet-input">
+              <option value="">None</option>
+            </select>
+            <button class="small-btn" id="activateRiteBtn">Activate Rite</button>
+            <button class="small-btn" id="deactivateRiteBtn">Deactivate</button>
+          </div>
+          <div class="sidebar-section-title">Blood Curses</div>
+          <div id="bloodCursesList" class="feature-list"></div>
+        </div>
         <div class="sidebar-section-title">Encumbrance</div>
         <div id="encumbranceDisplay"></div>
         <div class="sidebar-section-title">Ability Scores</div>
@@ -632,6 +653,7 @@
         <div class="sidebar-section-title">Combat</div>
         <div class="stat-readonly">Passive Perception: <span id="passivePerception">0</span></div>
         <div class="stat-readonly">Initiative: <span id="initiative">0</span></div>
+        <div class="stat-readonly">Armor Class (AC): <span id="sheetAC" class="stat-value">—</span></div>
         <div><label>Speed (ft): <input type="number" id="sheetSpeed" class="sheet-input small" value="30"></label></div>
         <div class="sidebar-section-title">Experience</div>
         <div class="xp-tracker">
@@ -675,11 +697,156 @@
         </div>
         <!-- Equipment tab -->
         <div class="sheet-tab-content" id="tab-equipment" style="display:none;">
-          <div class="form-field"><label>Armor</label><input type="text" id="equipmentArmor" class="sheet-input" placeholder="e.g., Leather armor"></div>
-          <div class="form-field"><label><input type="checkbox" id="equipmentShield"> Shield</label></div>
-          <div class="subsection-title">Weapons</div>
-          <div id="weaponsList"></div>
-          <button class="add-row-btn" id="addWeaponRow">+ Add Weapon</button>
+          <!-- ========== ARMOR SECTION ========== -->
+          <div class="equipment-section">
+            <h4>Armor</h4>
+            <div class="form-row armor-row">
+              <div class="field">
+                <label>Armor Name</label>
+                <input type="text" id="armorName" list="armorList" placeholder="e.g., Leather Armor">
+                <datalist id="armorList"></datalist>
+              </div>
+              <div class="field">
+                <label>Weight (lbs)</label>
+                <input type="number" id="armorWeight" value="0" step="0.5" min="0">
+              </div>
+              <div class="field">
+                <label>AC</label>
+                <input type="number" id="armorAC" value="10" step="1" min="0">
+              </div>
+              <div class="field checkbox">
+                <label><input type="checkbox" id="armorShield"> Shield (+2 AC)</label>
+              </div>
+            </div>
+          </div>
+          <!-- ========== WEAPONS SECTION ========== -->
+          <div class="equipment-section">
+            <h4>Weapons</h4>
+            <datalist id="weaponList"></datalist>
+            <!-- Main Hand -->
+            <div class="weapon-slot" data-slot="main">
+              <div class="weapon-header">Main Hand</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="main">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="main" placeholder="e.g., Longsword">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="main" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="main" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="main" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="main" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="main" placeholder="1d8+3"></div>
+              </div>
+            </div>
+            <!-- Off Hand -->
+            <div class="weapon-slot" data-slot="off">
+              <div class="weapon-header">Off Hand</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="off">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="off" placeholder="e.g., Shortsword">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="off" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="off" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="off" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="off" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="off" placeholder="1d6+3"></div>
+              </div>
+            </div>
+            <!-- Ranged Weapon -->
+            <div class="weapon-slot" data-slot="ranged">
+              <div class="weapon-header">Ranged Weapon</div>
+              <div class="weapon-row">
+                <div class="field">
+                  <label>Weapon Type</label>
+                  <select class="weapon-type-select" data-slot="ranged">
+                    <option value="">— Custom —</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Name</label>
+                  <input type="text" class="weapon-name" data-slot="ranged" placeholder="e.g., Longbow">
+                </div>
+                <div class="field">
+                  <label>Qty</label>
+                  <input type="number" class="weapon-qty" data-slot="ranged" value="1" min="0">
+                </div>
+                <div class="field">
+                  <label>Weight (lbs)</label>
+                  <input type="number" class="weapon-weight" data-slot="ranged" value="0" step="0.5" min="0">
+                </div>
+              </div>
+              <div class="weapon-props">
+                <span>Properties:</span>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Light"> Light</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Finesse"> Finesse</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Two-Handed"> Two-Handed</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Versatile"> Versatile</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Thrown"> Thrown</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Reach"> Reach</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Heavy"> Heavy</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Loading"> Loading</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Ammunition"> Ammunition</label>
+                <label><input type="checkbox" class="weapon-prop" data-slot="ranged" value="Special"> Special</label>
+              </div>
+              <div class="weapon-attack-damage">
+                <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="ranged" placeholder="1d20+5"></div>
+                <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="ranged" placeholder="1d8+3"></div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- Spells tab -->
         <div class="sheet-tab-content" id="tab-spells" style="display:none;">
@@ -773,33 +940,44 @@
     </div>
     <div class="modal-divider"></div>
     <div class="modal-body settings-body">
-      <!-- API Key -->
+      <!-- Provider Dropdown -->
       <div class="form-field">
-        <label>OpenRouter API Key</label>
-        <input type="password" id="settingsApiKey" class="sheet-input" placeholder="sk-or-v1-..." autocomplete="off">
-        <div class="field-help">Get your API key at <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" class="settings-link">openrouter.ai/keys</a></div>
+        <label>AI Provider</label>
+        <select id="settingsProviderSelect" class="sheet-input">
+          <option value="google">Google AI Studio</option>
+          <option value="openrouter">OpenRouter</option>
+        </select>
       </div>
 
-      <!-- Model Selection -->
+      <!-- API Key (common) -->
       <div class="form-field">
-        <label>AI Model</label>
-        <div class="settings-model-row">
-          <select id="settingsModelSelect" class="sheet-input" disabled>
-            <option value="">— Enter API key and fetch models —</option>
-          </select>
-          <button id="fetchModelsBtn" class="btn-secondary small-btn" disabled>Fetch Models</button>
+        <label>API Key</label>
+        <input type="password" id="settingsApiKey" class="sheet-input" placeholder="Enter your API key..." autocomplete="off">
+        <div class="field-help" id="settingsApiHelp">Get your key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="settings-link">aistudio.google.com/apikey</a></div>
+      </div>
+
+      <!-- Conditional Section -->
+      <div class="form-field" id="settingsConditionalSection">
+        <!-- Google view (default) -->
+        <div id="settingsGoogleView">
+          <div class="settings-model-display">
+            <span>🧠 Model:</span>
+            <strong>gemini-2.5-flash</strong>
+            <span class="settings-badge">default</span>
+          </div>
         </div>
-        <div id="modelStatus" class="settings-status"></div>
-        <div class="settings-model-note">
-          <span>Also available:</span>
-          <code>openrouter/owl-alpha</code>
-          <code>openai/gpt-oss-120b:free</code>
+        <!-- OpenRouter view (hidden by default) -->
+        <div id="settingsOpenrouterView" style="display:none;">
+          <label>OpenRouter Model</label>
+          <select id="settingsModelSelect" class="sheet-input">
+            <option value="openai/gpt-oss-120b:free">openai/gpt-oss-120b:free</option>
+          </select>
         </div>
       </div>
 
       <!-- Test Connection -->
       <div class="form-field">
-        <button id="testConnectionBtn" class="btn-secondary small-btn" disabled>Test Connection</button>
+        <button id="testConnectionBtn" class="btn-secondary small-btn">Test Connection</button>
         <span id="testConnectionStatus" class="settings-status" style="display:inline-block; margin-left:12px;"></span>
       </div>
     </div>
@@ -828,12 +1006,15 @@
       <div id="summaryLoading" class="summary-loading" style="display:none;">
         <span class="streaming-cursor"></span> Weaving the tale...
       </div>
-      <div id="summaryContent" class="summary-content">No summary yet. Click "Refresh Summary" to generate one.</div>
+      <div id="summaryDisplay" class="summary-content" style="white-space:pre-wrap;">No summary yet. Click "Refresh Summary" to generate one.</div>
+      <textarea id="summaryEditor" style="display:none; width:100%; height:200px; background:#1A1714; border:1px solid #3A3028; color:#E8E0D0; padding:8px; border-radius:4px; resize:vertical;"></textarea>
     </div>
     <div class="modal-divider"></div>
     <div class="summary-footer">
       <div class="summary-timestamp" id="summaryTimestamp"></div>
       <div class="summary-actions">
+        <button class="btn-secondary" id="editSummaryBtn">✏️ Edit</button>
+        <button class="btn-secondary" id="saveSummaryBtn" style="display:none;">💾 Save</button>
         <button class="btn-secondary" id="refreshSummaryBtn">Refresh Summary</button>
         <button class="btn-secondary" id="copySummaryBtn">Copy to Clipboard</button>
       </div>
@@ -1077,7 +1258,7 @@
     <div class="modal-header">
       <div>
         <h2 class="modal-title">Create Your Hero</h2>
-        <div class="step-indicator" id="stepIndicator">Step 1 of 6</div>
+        <div class="step-indicator" id="stepIndicator">Step 1 of 7</div>
       </div>
       <button class="modal-close" id="closeWizardBtn" aria-label="Close">&times;</button>
     </div>
@@ -1267,6 +1448,7 @@
               <div id="weaponGrid">
                 <div class="eq-placeholder">Select class in Step 1 to see available weapons.</div>
               </div>
+              <div id="wizardWeaponSlots" style="margin-top:12px;"></div>
             </div>
 
             <!-- Adventuring Gear Pack -->
@@ -1404,6 +1586,30 @@
         <div id="classEquipmentChoiceGroups"></div>
       </div>
 
+      <!-- ══ BLOOD HUNTER PANEL (Step 4) ══ -->
+      <div class="eq-panel" id="bloodHunterWizardPanel" style="display:none;">
+        <div class="eq-section-header" style="margin-top:8px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M10 2v16M2 10h16" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M6 6l8 8M6 14l8-8" stroke="currentColor" stroke-width="1.1" opacity="0.5"/>
+          </svg>
+          <h3 class="eq-section-title">Crimson Rites &amp; Blood Curses</h3>
+        </div>
+        <div class="eq-category">
+          <div class="eq-cat-header"><span>Crimson Rites</span></div>
+          <div class="feature-grid" id="crimsonRiteChoices">
+            <!-- populated by JS -->
+          </div>
+        </div>
+        <div class="eq-category">
+          <div class="eq-cat-header"><span>Blood Curses</span></div>
+          <p class="eq-placeholder" style="font-style:italic;padding:4px 0;">You may choose <span id="bloodCurseMaxLabel">1</span> blood curse(s). The amplify option deals necrotic damage equal to one hemocraft die roll.</p>
+          <div class="feature-grid" id="bloodCurseChoices">
+            <!-- populated by JS -->
+          </div>
+        </div>
+      </div>
+
       <!-- ══ SPELLS PANEL ══ -->
       <div class="spells-section" id="spellsSection" style="display:none;">
 
@@ -1515,8 +1721,27 @@
 
     </div><!-- /wizard-step-4 -->
 
-    <!-- Step 5: Subclass Features (new) -->
+    <!-- Step 5: Subclass Specialisation (Fighting Style + Subclass Features) -->
     <div class="wizard-step-content" id="wizard-step-5" style="display:none;">
+
+      <!-- Fighting Style -->
+      <div id="fightingStyleWizardGroup" class="eq-panel" style="display:none;">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M5 17L14 6M11 3l4 1 2 2-1 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            <circle cx="4" cy="16" r="1.5" stroke="currentColor" stroke-width="1.1"/>
+          </svg>
+          <h3 class="eq-section-title">Fighting Style</h3>
+        </div>
+        <div class="form-field">
+          <label for="wizardFightingStyleSelect">Choose a Fighting Style</label>
+          <select id="wizardFightingStyleSelect" class="sheet-input">
+            <option value="">— Select a style —</option>
+          </select>
+          <div id="fightingStyleDesc" class="field-help" style="margin-top:4px;"></div>
+        </div>
+      </div>
+
       <div id="subclassFeaturesSection" class="eq-panel" style="display:none;">
         <div class="eq-section-header" style="margin-top:8px;">
           <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
@@ -1576,8 +1801,24 @@
 
     </div><!-- /wizard-step-5 -->
 
-    <!-- Step 6: Review -->
+    <!-- Step 6: ASI & Feats -->
     <div class="wizard-step-content" id="wizard-step-6" style="display:none;">
+      <div class="eq-panel">
+        <div class="eq-section-header">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#C8A96E">
+            <path d="M10 2L4 8v8a2 2 0 002 2h8a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+            <path d="M8 13h4M10 11v4" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          <h3 class="eq-section-title">Ability Score Improvements &amp; Feats</h3>
+          <span class="spell-ability-badge" id="asiCountBadge">0 ASIs</span>
+        </div>
+        <p class="field-note">For each ASI milestone, choose either an ability score increase or a feat. You can't exceed 20 in any ability score.</p>
+        <div id="asiFeatMilestonesContainer" class="asi-milestones-stack"></div>
+      </div>
+    </div>
+
+    <!-- Step 7: Review -->
+    <div class="wizard-step-content" id="wizard-step-7" style="display:none;">
       <div class="review-card" id="reviewCard"></div>
     </div>
 

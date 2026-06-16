@@ -82,7 +82,8 @@ const classes = {
   "Rogue": { hitDie: "d8", primaryAbility: "Dexterity", savingThrows: ["Dexterity","Intelligence"], armorProficiencies: ["Light armor"], weaponProficiencies: ["Simple","hand crossbows","longswords","rapiers","shortswords"], skillChoices: 4, skillOptions: ["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"], spellcasting: false, subclassLevel: 3, subclasses: ["Thief","Assassin","Arcane Trickster","Swashbuckler","Soulknife"] },
   "Sorcerer": { hitDie: "d6", primaryAbility: "Charisma", savingThrows: ["Constitution","Charisma"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","Deception","Insight","Intimidation","Persuasion","Religion"], spellcasting: true, spellcastingAbility: "Charisma", spellList: "Sorcerer", subclassLevel: 1, subclasses: ["Draconic Bloodline","Wild Magic","Divine Soul","Shadow Magic","Storm Sorcery"] },
   "Warlock": { hitDie: "d8", primaryAbility: "Charisma", savingThrows: ["Wisdom","Charisma"], armorProficiencies: ["Light armor"], weaponProficiencies: ["Simple"], skillChoices: 2, skillOptions: ["Arcana","Deception","History","Intimidation","Investigation","Nature","Religion"], spellcasting: true, spellcastingAbility: "Charisma", spellList: "Warlock", subclassLevel: 1, subclasses: ["The Archfey","The Fiend","The Great Old One","The Hexblade","The Fathomless"] },
-  "Wizard": { hitDie: "d6", primaryAbility: "Intelligence", savingThrows: ["Intelligence","Wisdom"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","History","Insight","Investigation","Medicine","Religion"], spellcasting: true, spellcastingAbility: "Intelligence", spellList: "Wizard", subclassLevel: 2, subclasses: ["School of Abjuration","School of Conjuration","School of Divination","School of Enchantment","School of Evocation","School of Illusion","School of Necromancy","School of Transmutation","Bladesinging"] }
+  "Wizard": { hitDie: "d6", primaryAbility: "Intelligence", savingThrows: ["Intelligence","Wisdom"], armorProficiencies: ["None"], weaponProficiencies: ["Daggers","darts","slings","quarterstaffs","light crossbows"], skillChoices: 2, skillOptions: ["Arcana","History","Insight","Investigation","Medicine","Religion"], spellcasting: true, spellcastingAbility: "Intelligence", spellList: "Wizard", subclassLevel: 2, subclasses: ["School of Abjuration","School of Conjuration","School of Divination","School of Enchantment","School of Evocation","School of Illusion","School of Necromancy","School of Transmutation","Bladesinging"] },
+  "Blood Hunter": { hitDie: "d10", primaryAbility: "Dexterity or Intelligence", savingThrows: ["Dexterity","Intelligence"], armorProficiencies: ["Light armor","Medium armor","Shields"], weaponProficiencies: ["Simple","Martial"], skillChoices: 3, skillOptions: ["Acrobatics","Arcana","Athletics","History","Insight","Investigation","Religion","Survival"], spellcasting: false, subclassLevel: 3, subclasses: ["Order of the Ghostslayer","Order of the Lycan","Order of the Mutant","Order of the Profane Soul"] }
 };
 
 // Backgrounds
@@ -696,6 +697,7 @@ const classDescriptions = {
   "Artificer": "Artificers are magical engineers who infuse objects with power. They create wondrous items, use gadgets, and can heal, blast, or support with their inventions.",
   "Barbarian": "Barbarians tap into raw, primal fury. They are unstoppable warriors who shrug off blows and deal devastating damage when enraged.",
   "Bard": "Bards are storytellers, musicians, and masters of inspiration. They use their charisma to support allies, debuff enemies, and cast versatile spells.",
+  "Blood Hunter": "Blood Hunters are fearsome warriors who harness their own life force to empower weapons with elemental rites and unleash blood curses upon their foes. They walk a razor's edge between power and self-destruction.",
   "Cleric": "Clerics are divine agents of a god or pantheon. They heal, protect, and smite, with domain spells that reflect their deity's nature.",
   "Druid": "Druids draw power from nature itself. They can shape-shift into beasts, summon animals, and wield elemental magic to protect the wild.",
   "Fighter": "Fighters are weapon-masters, skilled in all forms of combat. They are durable, adaptable, and can specialize in anything from archery to heavy armor.",
@@ -709,6 +711,89 @@ const classDescriptions = {
 };
 
 const subclassDescriptions = {
+  // Blood Hunter
+  "Order of the Ghostslayer": "Ghostslayers are the oldest order, specializing in hunting undead. They gain radiant rites, resist necrotic damage, and can phase through obstacles.",
+  "Order of the Lycan": "Lycan blood hunters undergo the Taming, gaining hybrid transformation with claws, regeneration, and heightened senses, but risk bloodlust.",
+  "Order of the Mutant": "Mutants brew alchemical mutagens to enhance themselves, trading temporary side effects for powerful stat boosts and unique abilities.",
+  "Order of the Profane Soul": "Profane Souls make pacts with otherworldly patrons, gaining warlock spellcasting and patron-specific bonuses to their Crimson Rite.",
+  // Artificer
+  "Alchemist": "Alchemists brew experimental elixirs that heal, buff, or transform allies. They excel at support and utility through potions and acid-based attacks.",
+  "Armorer": "Armorers craft powerful magical armor that grants protection and integrated weapons, allowing them to tank damage or strike from range.",
+  "Artillerist": "Artillerists create eldritch cannons that blast foes or shield allies. They are magical artillery experts who control the battlefield.",
+  "Battle Smith": "Battle Smiths bond with a steel defender companion and blend swordplay with magic, acting as a durable support-and-damage hybrid.",
+  // Barbarian
+  "Path of the Berserker": "Berserkers embrace pure rage, entering a frenzy that lets them make extra attacks at the cost of exhaustion. They are relentless, reckless destroyers.",
+  "Path of the Totem Warrior": "Totem Warriors gain spirit animal powers, choosing between wolf (ally support), bear (tankiness), or eagle (mobility) totems.",
+  "Path of the Ancestral Guardian": "Ancestral Guardians summon spectral spirits of their forebears to protect allies and taunt enemies, making them peerless defenders.",
+  "Path of the Beast": "Beast Barbarians manifest natural weapons — claws, fangs, or a tail — and gain bestial mobility and ferocity while raging.",
+  "Path of Wild Magic": "Wild Magic Barbarians tap into chaotic primal forces, causing random magical surges that erupt from their rage.",
+  // Bard
+  "College of Lore": "Lore Bards are knowledge-seekers who gain extra skills, cutting words to hinder foes, and can steal spells from other classes.",
+  "College of Valor": "Valor Bards inspire courage in battle, gaining martial weapons, shields, and the ability to attack while inspiring allies.",
+  "College of Swords": "Swords Bards are flamboyant duelists who use their weapon as a focus, performing flourishes that grant extra damage or mobility.",
+  "College of Eloquence": "Eloquence Bards are silver-tongued orators whose persuasion and deception are nearly irresistible, able to debuff enemy saving throws.",
+  // Cleric
+  "Knowledge Domain": "Knowledge clerics are scholars of forgotten lore, gaining divination spells and expertise in two knowledge skills.",
+  "Nature Domain": "Nature clerics protect the wild, gaining druid cantrips, elemental damage, and the ability to charm beasts and plants.",
+  "Tempest Domain": "Tempest clerics command storms and seas, blasting foes with thunder and lightning, and can push enemies back with divine fury.",
+  "Trickery Domain": "Trickery clerics are agents of deception, creating illusory duplicates, granting allies stealth, and charming their enemies.",
+  "Forge Domain": "Forge clerics are master smiths who bless armor and weapons with divine fire, gaining fire resistance and creating magic items.",
+  "Grave Domain": "Grave clerics ward death itself, sensing undead, negating critical hits, and maximizing healing on fallen allies.",
+  "Order Domain": "Order clerics enforce law and discipline, compelling allies to attack when buffed and charming enemies with divine authority.",
+  "Twilight Domain": "Twilight clerics shroud themselves in shadow and moonlight, granting darkvision, flying, and a protective aura to allies.",
+  // Druid
+  "Circle of the Land": "Land Druids are tied to a specific terrain (forest, coast, etc.), gaining bonus spells and recovering spell slots in natural settings.",
+  "Circle of the Moon": "Moon Druids are masters of wild shape, transforming into more powerful beasts earlier and healing while shapeshifted.",
+  "Circle of the Shepherd": "Shepherd Druids summon and empower animals and fey spirits, shielding allies and bolstering summoned creatures.",
+  "Circle of Spores": "Spores Druids command decay and fungus, using necrotic damage, raising zombie-like spores, and spreading toxic clouds.",
+  "Circle of Stars": "Stars Druids channel celestial power, using starry forms that boost healing, damage, or concentration. They read the cosmos for guidance.",
+  "Circle of Wildfire": "Wildfire Druids cultivate a fiery spirit companion, balancing destruction and renewal with flames that heal or burn.",
+  // Fighter
+  "Rune Knight": "Rune Knights inscribe giant runes on their gear, growing in size, gaining runic powers like fire damage or teleportation.",
+  // Monk
+  "Way of the Open Hand": "Open Hand monks are masters of unarmed combat, pushing, knocking prone, and denying reactions with precise strikes.",
+  "Way of Shadow": "Shadow monks move through darkness, teleporting between shadows, becoming invisible, and casting minor illusion spells.",
+  "Way of the Four Elements": "Four Elements monks channel ki to cast elemental spells — fireball, gust of wind, or shape water — bending nature to their will.",
+  "Way of the Drunken Master": "Drunken Masters sway unpredictably in combat, redirecting attacks against enemies and moving with fluid, disorienting grace.",
+  "Way of the Sun Soul": "Sun Soul monks radiate inner light, firing radiant energy bolts and creating blinding flashes that sear undead.",
+  "Way of Mercy": "Mercy monks are healers and harmers, using the Hand of Healing to restore or Hand of Harm to poison enemies with a touch.",
+  // Paladin
+  "Oath of Devotion": "Devotion paladins are paragons of honor, gaining immunity to charm, a sacred weapon enhancement, and radiating a holy aura.",
+  "Oath of the Ancients": "Ancients paladins preserve light and life, turning foes into rooted plants and gaining resistance to spell damage.",
+  "Oath of Vengeance": "Vengeance paladins relentlessly hunt a single foe, gaining advantage on pursuit and bonus damage against their sworn enemy.",
+  "Oath of Conquest": "Conquest paladins dominate through fear, causing terror in enemies and immobilizing anyone frightened near them.",
+  "Oath of Redemption": "Redemption paladins seek peaceful solutions, absorbing damage meant for allies and rebuking attackers with radiant retribution.",
+  // Ranger
+  "Hunter": "Hunters choose a prey and a defensive style, gaining bonus damage against wounded foes, multi-target attacks, or evasion.",
+  "Beast Master": "Beast Masters bond with a primal animal companion that fights alongside them, growing stronger as the ranger levels up.",
+  "Gloom Stalker": "Gloom Stalkers are ambush predators who excel in darkness, gaining invisibility to darkvision and devastating first-round attacks.",
+  "Monster Slayer": "Monster Slayers specialize in hunting supernatural threats, marking a quarry and gaining defenses against its spells and attacks.",
+  "Swarmkeeper": "Swarmkeepers command a swarm of nature spirits (insects, birds, or pixies) that can damage, move, or scout for them.",
+  // Rogue
+  "Thief": "Thieves are fast-fingered scoundrels who climb, sneak, and pilfer with unmatched speed. They can use items as a bonus action.",
+  "Assassin": "Assassins excel at stealth kills, gaining automatic crits on surprised foes and expertise in disguise and poison.",
+  "Arcane Trickster": "Arcane Tricksters blend thievery with wizard magic, using mage hand for larceny and casting illusions to baffle foes.",
+  "Swashbuckler": "Swashbucklers are daring duelists who taunt enemies into single combat, dart in and out of melee, and ignore opportunity attacks.",
+  "Soulknife": "Soulknives manifest psychic blades from their mind, striking telepathically and using psionic talents for skills and communication.",
+  // Sorcerer
+  "Divine Soul": "Divine Souls carry celestial blood, accessing both cleric and sorcerer spells, able to heal allies and empower their magic.",
+  "Shadow Magic": "Shadow Magic sorcerers draw power from the Shadowfell, seeing in darkness, surviving death, and summoning a shadow hound.",
+  "Storm Sorcery": "Storm Sorcerers command wind and lightning, flying when they cast spells, zapping nearby enemies, and controlling the weather.",
+  // Warlock
+  "The Great Old One": "Great Old One warlocks tap into alien cosmic minds, causing insanity, reading thoughts, and shielding themselves with psychic wards.",
+  "The Hexblade": "Hexblade warlocks forge a pact with a sentient weapon from the Shadowfell, gaining martial prowess and a cursed strike ability.",
+  "The Fathomless": "Fathomless warlocks draw power from deep-sea leviathans, summoning a spectral tentacle, breathing water, and controlling oceans.",
+  // Wizard
+  "School of Abjuration": "Abjurers specialize in protective magic, creating a magical ward that absorbs damage and excelling at countering spells.",
+  "School of Conjuration": "Conjurers summon creatures and objects from thin air, teleport short distances, and can conjure matter temporarily.",
+  "School of Divination": "Diviners see the future, replacing dice rolls with portent predictions and gaining clairvoyance to spy on distant locations.",
+  "School of Enchantment": "Enchanters bewitch and beguile, charming crowds, hypnotizing enemies, and making foes forget they were attacked.",
+  "School of Evocation": "Evokers wield raw elemental force, sculpting explosive spells around allies and maximizing damage with Overchannel.",
+  "School of Illusion": "Illusionists create convincing phantasms, making illusions semi-real and even manifesting their imaginings into reality.",
+  "School of Necromancy": "Necromancers command life and death, raising undead minions, siphoning vitality from foes, and resisting the grave.",
+  "School of Transmutation": "Transmuters reshape matter and biology, turning foes to stone, transforming into beasts, and brewing alchemical transmutations.",
+  "Bladesinging": "Bladesingers are elven sword-mages who enter a graceful combat trance, gaining AC, speed, and concentration bonuses while wielding a blade.",
+  // Original entries (preserved)
   "Champion": "Champions focus on raw athleticism and critical hits. They are simple but deadly, improving their chance to land devastating blows.",
   "Battle Master": "Battle Masters use maneuvers to control the battlefield – tripping, disarming, or goading enemies while commanding allies.",
   "Eldritch Knight": "Eldritch Knights blend magic with martial skill, casting defensive spells and summoning their bonded weapon.",
@@ -722,6 +807,167 @@ const subclassDescriptions = {
   "The Archfey": "Archfey warlocks charm and frighten, teleporting away when hit and spreading beguiling magic."
 };
 
+// ========== BLOOD HUNTER DATA ==========
+
+const hemocraftDieByLevel = {
+  1: "d4", 2: "d4", 3: "d4", 4: "d4",
+  5: "d6", 6: "d6", 7: "d6", 8: "d6", 9: "d6", 10: "d6",
+  11: "d8", 12: "d8", 13: "d8", 14: "d8", 15: "d8", 16: "d8",
+  17: "d10", 18: "d10", 19: "d10", 20: "d10"
+};
+
+const bloodCurses = [
+  { name: "Blood Curse of the Anxious", description: "As a bonus action, make a creature more susceptible to coercion. Intimidation checks against it have advantage until end of your next turn.", amplify: "Target also has disadvantage on its next Wisdom saving throw." },
+  { name: "Blood Curse of Binding", description: "As a bonus action, attempt to bind an enemy within 30 ft (Str save) or its speed becomes 0 until end of your next turn.", amplify: "Lasts 1 minute, save at end of each turn." },
+  { name: "Blood Curse of Bloated Agony", description: "Curse a creature to swell; it has disadvantage on Str/Dex checks and takes 1d8 necrotic if it makes more than one attack on its turn.", amplify: "Lasts 1 minute, save ends." },
+  { name: "Blood Curse of Exposure", description: "When a creature takes damage, use reaction to make it lose resistance to that damage type.", amplify: "Lose invulnerability (becomes resistance)." },
+  { name: "Blood Curse of the Eyeless", description: "When a creature makes an attack roll, use reaction to subtract one hemocraft die from the roll.", amplify: "Applies to all attack rolls until end of turn." },
+  { name: "Blood Curse of the Fallen Puppet", description: "When a creature falls unconscious or dies within 30 ft, use reaction to make it attack a target.", amplify: "Add Int mod to attack and damage." },
+  { name: "Blood Curse of the Marked", description: "As a bonus action, mark a creature; your Crimson Rite deals double damage to it until end of turn.", amplify: "Next attack roll against it has advantage." },
+  { name: "Blood Curse of the Muddled Mind", description: "Curse a creature concentrating on a spell; the next concentration save has disadvantage.", amplify: "Target also takes 3d6 psychic if it fails." }
+];
+
+const crimsonRites = [
+  { name: "Rite of the Flame", damageType: "Fire", level: 2, description: "Weapon deals extra fire damage equal to hemocraft die." },
+  { name: "Rite of the Frozen", damageType: "Cold", level: 2, description: "Weapon deals extra cold damage equal to hemocraft die." },
+  { name: "Rite of the Storm", damageType: "Lightning", level: 2, description: "Weapon deals extra lightning damage equal to hemocraft die." },
+  { name: "Rite of the Dead", damageType: "Necrotic", level: 14, esoteric: true, description: "Weapon deals extra necrotic damage equal to hemocraft die." },
+  { name: "Rite of the Oracle", damageType: "Psychic", level: 14, esoteric: true, description: "Weapon deals extra psychic damage equal to hemocraft die." },
+  { name: "Rite of the Roar", damageType: "Thunder", level: 14, esoteric: true, description: "Weapon deals extra thunder damage equal to hemocraft die." },
+  { name: "Rite of the Dawn", damageType: "Radiant", level: 3, order: "Ghostslayer", note: "Special: no HP max reduction vs undead.", description: "Weapon deals extra radiant damage equal to hemocraft die." }
+];
+
+// ========== FIGHTING STYLE DATABASE ==========
+
+const fightingStyleDatabase = {
+  "Fighter": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Protection", description: "Use reaction to impose disadvantage on an attack against an ally within 5 ft while wielding a shield." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ],
+  "Paladin": [
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Protection", description: "Use reaction to impose disadvantage on an attack against an ally within 5 ft while wielding a shield." }
+  ],
+  "Ranger": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ],
+  "Blood Hunter": [
+    { name: "Archery", description: "+2 bonus to attack rolls with ranged weapons." },
+    { name: "Defense", description: "+1 bonus to AC while wearing armor." },
+    { name: "Dueling", description: "+2 bonus to damage rolls when wielding a melee weapon in one hand and no other weapons." },
+    { name: "Great Weapon Fighting", description: "Reroll 1s and 2s on damage dice for two-handed melee weapons." },
+    { name: "Two-Weapon Fighting", description: "Add ability modifier to damage of off-hand attacks." }
+  ]
+};
+
+// ========== FEAT DATABASE (fallback for wizard) ==========
+
+const defaultFeatList = [
+  { name: "Alert", description: "+5 bonus to initiative, can't be surprised, no advantage to hidden attackers.", abilityIncrease: null },
+  { name: "Athlete", description: "+1 Strength or Dexterity, climb speed, standing up from prone costs only 5 ft.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Charger", description: "Can bonus action melee attack or shove after Dash, +5 damage or push 10 ft.", abilityIncrease: null },
+  { name: "Crossbow Expert", description: "Ignore loading property, no disadvantage when adjacent, bonus attack with hand crossbow.", abilityIncrease: null },
+  { name: "Defensive Duelist", description: "Add proficiency bonus to AC as a reaction when hit with melee attack.", abilityIncrease: null, prerequisite: "Dexterity 13+" },
+  { name: "Dual Wielder", description: "+1 AC when dual-wielding, can use non-light one-handed weapons, draw/stow two weapons.", abilityIncrease: null },
+  { name: "Dungeon Delver", description: "Advantage on Perception/Investigation for secret doors, advantage vs. traps, trap resistance.", abilityIncrease: null },
+  { name: "Durable", description: "+1 Constitution, minimum regained HP from Hit Dice is twice CON mod.", abilityIncrease: { options: ["Constitution"], amount: 1 } },
+  { name: "Elemental Adept", description: "Spells ignore resistance to chosen damage type; treat 1s on damage dice as 2s.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Grappler", description: "Advantage on attacks vs. grappled target; Action to pin, both restrained.", abilityIncrease: null, prerequisite: "Strength 13+" },
+  { name: "Great Weapon Master", description: "Bonus melee attack on crit or kill; -5 to hit / +10 to damage.", abilityIncrease: null },
+  { name: "Healer", description: "Stabilize to 1 HP; restore 1d6+4+HD HP (1/LR) with healer's kit.", abilityIncrease: null },
+  { name: "Heavily Armored", description: "+1 Strength, gain heavy armor proficiency.", abilityIncrease: { options: ["Strength"], amount: 1 } },
+  { name: "Heavy Armor Master", description: "+1 Strength, reduce nonmagical B/P/S damage by 3 when in heavy armor.", abilityIncrease: { options: ["Strength"], amount: 1 } },
+  { name: "Inspiring Leader", description: "Grant temporary HP equal to level + CHA mod to 6 allies.", abilityIncrease: null, prerequisite: "Charisma 13+" },
+  { name: "Keen Mind", description: "+1 Intelligence, always know north, time until sunrise/sunset, accurately recall last month.", abilityIncrease: { options: ["Intelligence"], amount: 1 } },
+  { name: "Lightly Armored", description: "+1 Strength or Dexterity, gain light armor proficiency.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Linguist", description: "+1 Intelligence, learn three languages, create ciphers.", abilityIncrease: { options: ["Intelligence"], amount: 1 } },
+  { name: "Lucky", description: "3 luck points: reroll d20 for attack, save, or check, or force attacker to reroll.", abilityIncrease: null },
+  { name: "Mage Slayer", description: "Reaction melee attack vs. adjacent caster; disadvantage on concentration saves.", abilityIncrease: null },
+  { name: "Magic Initiate", description: "Learn two cantrips and one 1st-level spell from a class's spell list.", abilityIncrease: null },
+  { name: "Martial Adept", description: "Learn two Battle Master maneuvers, gain one superiority die (d6).", abilityIncrease: null },
+  { name: "Medium Armor Master", description: "No Stealth disadvantage; +3 AC (instead of +2) when DEX 16+.", abilityIncrease: null, prerequisite: "Medium armor proficiency" },
+  { name: "Mobile", description: "+10 ft. speed; Dash ignores difficult terrain; no opportunity attacks from targets you attack.", abilityIncrease: null },
+  { name: "Moderately Armored", description: "+1 Strength or Dexterity, gain medium armor and shield proficiency.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Mounted Combatant", description: "Advantage vs. smaller unmounted; redirect attacks to self; mount takes half damage.", abilityIncrease: null },
+  { name: "Observant", description: "+1 Intelligence or Wisdom, read lips, +5 passive Perception/Investigation.", abilityIncrease: { options: ["Intelligence","Wisdom"], amount: 1 } },
+  { name: "Polearm Master", description: "Bonus d4 attack with opposite end; opportunity attacks when enemies enter reach.", abilityIncrease: null },
+  { name: "Resilient", description: "+1 to chosen ability score, gain proficiency in that saving throw.", abilityIncrease: { options: ["Strength","Dexterity","Constitution","Intelligence","Wisdom","Charisma"], amount: 1 } },
+  { name: "Ritual Caster", description: "Gain ritual book with two 1st-level ritual spells from a class list.", abilityIncrease: null, prerequisite: "Intelligence or Wisdom 13+" },
+  { name: "Savage Attacker", description: "Once per turn, reroll melee weapon damage dice and use either total.", abilityIncrease: null },
+  { name: "Sentinel", description: "Opportunity attack reduces speed to 0; enemies provoke even with Disengage.", abilityIncrease: null },
+  { name: "Sharpshooter", description: "No long-range disadvantage; ignore cover; -5 to hit / +10 to damage.", abilityIncrease: null },
+  { name: "Shield Master", description: "Bonus action shove; add shield's AC to DEX saves vs. single-target.", abilityIncrease: null },
+  { name: "Skilled", description: "Gain proficiency in three skills or tools.", abilityIncrease: null },
+  { name: "Skulker", description: "Hide when lightly obscured; missing a ranged attack doesn't reveal position.", abilityIncrease: null, prerequisite: "Dexterity 13+" },
+  { name: "Spell Sniper", description: "Double spell range; ignore cover; learn one cantrip that requires an attack roll.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Tavern Brawler", description: "+1 Strength or Constitution; improvised weapon proficiency; unarmed strike 1d4.", abilityIncrease: { options: ["Strength","Constitution"], amount: 1 } },
+  { name: "Tough", description: "+2 HP per character level.", abilityIncrease: null },
+  { name: "War Caster", description: "Advantage on concentration saves; perform somatic components with weapons/shield.", abilityIncrease: null, prerequisite: "Spellcasting" },
+  { name: "Weapon Master", description: "+1 Strength or Dexterity, gain proficiency with four simple or martial weapons.", abilityIncrease: { options: ["Strength","Dexterity"], amount: 1 } },
+  { name: "Actor", description: "+1 Charisma, advantage on Deception and Performance checks to impersonate others.", abilityIncrease: { options: ["Charisma"], amount: 1 } },
+  { name: "Chef", description: "+1 Constitution or Wisdom; cook special food to recover extra HP during short rest.", abilityIncrease: { options: ["Constitution","Wisdom"], amount: 1 } },
+  { name: "Crusher", description: "+1 Strength or Constitution; move target 5 ft. with bludgeoning damage.", abilityIncrease: { options: ["Strength","Constitution"], amount: 1 } }
+];
+
+// Helper: get the feat list (from cached DB or fallback)
+function getFeatList() {
+  if (typeof featDatabase !== "undefined" && featDatabase && Object.keys(featDatabase).length > 0) {
+    // The dynamically loaded featDatabase is an object keyed by name; convert to array
+    return Object.keys(featDatabase).map(function(k) {
+      var f = featDatabase[k];
+      return { name: f.name || k, description: f.description || "", abilityIncrease: f.abilityIncrease || null, prerequisite: f.prerequisite || null };
+    });
+  }
+  return defaultFeatList;
+}
+
+function getFeatByName(name) {
+  var list = getFeatList();
+  return list.find(function(f) { return f.name === name; }) || null;
+}
+
+// ========== SUBCLASS FEATURE REGISTRY ==========
+
+const subclassFeatureRegistry = {
+  "Barbarian": {
+    "Path of the Totem Warrior": [
+      { minLevel: 3, id: "totem_3", label: "Totem Spirit", type: "choice", options: ["Bear", "Eagle", "Wolf"] },
+      { minLevel: 6, id: "totem_6", label: "Aspect of the Beast", type: "choice", options: ["Bear", "Eagle", "Wolf"] }
+    ],
+    "Path of the Beast": [
+      { minLevel: 3, id: "beast_form", label: "Form of the Beast", type: "choice", options: ["Bite", "Claws", "Tail"] }
+    ]
+  },
+  "Druid": {
+    "Circle of the Land": [
+      { minLevel: 2, id: "land_circle", label: "Circle Territory", type: "choice", options: ["Arctic", "Coast", "Desert", "Forest", "Grassland", "Mountain", "Swamp", "Underdark"] }
+    ]
+  },
+  "Ranger": {
+    "Hunter": [
+      { minLevel: 3, id: "hunter_prey", label: "Hunter's Prey", type: "choice", options: ["Colossus Slayer", "Giant Killer", "Horde Breaker"] },
+      { minLevel: 7, id: "hunter_def", label: "Defensive Tactics", type: "choice", options: ["Escape the Horde", "Multiattack Defense", "Steel Will"] }
+    ]
+  },
+  "Blood Hunter": {
+    "Order of the Mutant": [
+      { minLevel: 3, id: "mutant_formulas", label: "Mutagen Formulas", type: "multiChoice", count: 4, options: ["Celerity", "Potency", "Sagacity", "Reconstruction", "Cruelty"] }
+    ],
+    "Order of the Profane Soul": [
+      { minLevel: 3, id: "profane_patron", label: "Patron Focus", type: "choice", options: ["The Archfey", "The Celestial", "The Fathomless", "The Fiend", "The Genie", "The Great Old One", "The Hexblade", "The Undying"] }
+    ]
+  }
+};
+
 const equipmentPacks = {
   "Burglar's Pack": { cost: 16, classes: ["Rogue","Ranger"], contents: ["Backpack","bag of 1,000 ball bearings","10 ft of string","bell","5 candles","crowbar","hammer","10 pitons","hooded lantern","2 flasks of oil","5 days rations","tinderbox","waterskin","50 ft hempen rope"] },
   "Diplomat's Pack": { cost: 39, classes: ["Cleric","Bard","Druid"], contents: ["Chest","2 map/scroll cases","fine clothes","bottle of ink","ink pen","lamp","2 flasks of oil","5 sheets of paper","vial of perfume","sealing wax","soap"] },
@@ -731,6 +977,31 @@ const equipmentPacks = {
   "Priest's Pack": { cost: 19, classes: ["Cleric","Paladin"], contents: ["Backpack","blanket","10 candles","tinderbox","alms box","2 blocks of incense","censer","vestments","2 days rations","waterskin"] },
   "Scholar's Pack": { cost: 40, classes: ["Warlock","Wizard","Artificer"], contents: ["Backpack","book of lore","bottle of ink","ink pen","10 sheets of parchment","bag of sand","small knife"] }
 };
+
+// ========== WEAPON UTILITY FUNCTIONS ==========
+function parseWeaponProperties(propString) {
+  if (!propString) return [];
+  const parts = propString.split(',').map(p => p.trim().toLowerCase());
+  const mapping = {
+    'light': 'Light', 'finesse': 'Finesse', 'two-handed': 'Two-Handed',
+    'versatile': 'Versatile', 'thrown': 'Thrown', 'reach': 'Reach',
+    'heavy': 'Heavy', 'loading': 'Loading', 'ammunition': 'Ammunition',
+    'special': 'Special'
+  };
+  return parts
+    .filter(p => mapping[p])
+    .map(p => mapping[p]);
+}
+
+function getAbilityModifierForWeapon(abilityScores, weaponProps) {
+  let ability = 'Strength';
+  if (weaponProps.includes('Finesse')) {
+    const dex = calculateModifier(abilityScores.Dexterity);
+    const str = calculateModifier(abilityScores.Strength);
+    ability = dex >= str ? 'Dexterity' : 'Strength';
+  }
+  return calculateModifier(abilityScores[ability]);
+}
 
 // ========== SUBCLASS SPELLS ==========
 const subclassSpells = {
@@ -751,8 +1022,6 @@ const subclassSpells = {
   "Oath of Vengeance": ["bane","hunter's mark","hold person","misty step","haste","protection from energy","banishment","dimension door","hold monster","scrying"],
   "Oath of Conquest": ["armor of Agathys","command","hold person","spiritual weapon","fear","spirit guardians","dominate beast","stoneskin","dominate person","hold monster"],
   "Oath of Redemption": ["sanctuary","sleep","calm emotions","hold person","counterspell","hypnotic pattern","Otiluke's resilient sphere","stoneskin","hold monster","wall of force"],
-  "Oath of Glory": ["guiding bolt","heroism","enhance ability","magic weapon","haste","protection from energy","compulsion","freedom of movement","commune","flame strike"],
-  "Oath of the Watchers": ["alarm","detect magic","moonbeam","see invisibility","counterspell","nondetection","aura of purity","banishment","hold monster","scrying"],
   "Circle of the Land": ["speak with animals","animal friendship","barkskin","spike growth","plant growth","wind wall","dominate beast","grasping vine","insect plague","tree stride"],
   "Circle of the Moon": [],
   "Circle of Dreams": [],
@@ -975,6 +1244,7 @@ let activeBtn     = null;
 let currentCharacter = null;
 let campaigns = [];
 let selectedCampaignId = null;
+let isEditingSummary = false;
 let wizardContext = null;
 let wizardStep = 1;
 
@@ -1565,7 +1835,7 @@ function updateSubclassDescription() {
   }
 }
 
-function getSpellSlotsForClass(className, level) {
+function getSpellSlotsForClass(className, level, subclass) {
   // Full casters
   if (["Bard","Cleric","Druid","Sorcerer","Wizard"].includes(className)) {
     if (level === 1) return {1:2};
@@ -1579,9 +1849,9 @@ function getSpellSlotsForClass(className, level) {
     if (level === 9) return {1:4,2:3,3:3,4:3,5:1};
     if (level >= 10) return {1:4,2:3,3:3,4:3,5:2};
   }
-  // Warlock
-  else if (className === "Warlock") {
-    let slotLevel = Math.min(5, Math.ceil(level / 2));
+  // Warlock or Profane Soul Blood Hunter (pact magic)
+  else if (className === "Warlock" || (className === "Blood Hunter" && subclass === "Order of the Profane Soul")) {
+    let slotLevel = Math.min(4, Math.ceil(level / 2));
     let slotCount = 2;
     if (level >= 17) slotCount = 4;
     else if (level >= 11) slotCount = 3;
@@ -1904,14 +2174,15 @@ function renderSpellGrid(containerId, spellList, isCantrip, maxSelections, selec
 
 function updateSpellUI() {
   const cls = classes[selectedClass];
-  if (!cls || !cls.spellcasting) {
+  const isProfaneSoul = selectedClass === "Blood Hunter" && selectedSubclass === "Order of the Profane Soul";
+  if (!cls || (!cls.spellcasting && !isProfaneSoul)) {
     document.getElementById("spellsSection").style.display = "none";
     return;
   }
   document.getElementById("spellsSection").style.display = "block";
-  document.getElementById("spellcastingAbility").innerText = cls.spellcastingAbility;
+  document.getElementById("spellcastingAbility").innerText = isProfaneSoul ? "Intelligence" : (cls.spellcastingAbility || "Intelligence");
   const level = characterLevel;
-  const spellSlots = getSpellSlotsForClass(selectedClass, level);
+  const spellSlots = getSpellSlotsForClass(selectedClass, level, selectedSubclass);
   let slotsHtml = `<table><tr><th>Level</th><th>Slots</th></tr>`;
   for (let i=1; i<=5; i++) if (spellSlots[i]) slotsHtml += `<tr><td>${i}</td><td>${spellSlots[i]}</td></tr>`;
   slotsHtml += `</table>`;
@@ -1922,11 +2193,12 @@ function updateSpellUI() {
   else if (selectedClass === "Cleric") maxCantrips = 3 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Druid") maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Sorcerer") maxCantrips = 4 + (level>=4?1:0) + (level>=10?1:0);
-  else if (selectedClass === "Warlock") maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
+  else if (selectedClass === "Warlock" || isProfaneSoul) maxCantrips = 2 + (level>=4?1:0) + (level>=10?1:0);
   else if (selectedClass === "Wizard") maxCantrips = 3 + (level>=4?1:0) + (level>=10?1:0);
   document.getElementById("maxCantrips").innerText = maxCantrips;
   
-  const availableCantrips = classSpellLists[selectedClass]?.filter(s => s.level === 0) || [];
+  const spellListKey = isProfaneSoul ? "Warlock" : selectedClass;
+  const availableCantrips = classSpellLists[spellListKey]?.filter(s => s.level === 0) || [];
   renderSpellGrid("cantripGrid", availableCantrips, true, maxCantrips, new Set(chosenCantrips), (newSet) => {
     chosenCantrips = Array.from(newSet);
     document.getElementById("cantripsKnown").innerText = chosenCantrips.length;
@@ -1936,13 +2208,13 @@ function updateSpellUI() {
   let maxSpells = 0;
   if (selectedClass === "Bard") maxSpells = 4 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0) + (level>4?1:0);
   else if (selectedClass === "Sorcerer") maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0) + (level>4?1:0);
-  else if (selectedClass === "Warlock") maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0);
+  else if (selectedClass === "Warlock" || isProfaneSoul) maxSpells = 2 + (level>1?1:0) + (level>2?1:0) + (level>3?1:0);
   else if (["Cleric","Druid","Wizard","Paladin","Ranger","Artificer"].includes(selectedClass)) {
     const abilityMod = calculateModifier(finalScores[cls.spellcastingAbility]);
     maxSpells = level + abilityMod;
   }
   document.getElementById("maxSpells").innerText = maxSpells;
-  const availableSpells = classSpellLists[selectedClass]?.filter(s => s.level > 0 && s.level <= Math.min(5, Math.floor((level+1)/2))) || [];
+  const availableSpells = classSpellLists[spellListKey]?.filter(s => s.level > 0 && s.level <= Math.min(4, Math.floor((level+1)/2))) || [];
   renderSpellGrid("spellGrid", availableSpells, false, maxSpells, new Set(chosenSpells), (newSet) => {
     chosenSpells = Array.from(newSet);
     document.getElementById("spellsKnownCount").innerText = chosenSpells.length;
@@ -2153,6 +2425,16 @@ function updateEquipmentUI() {
   updateEquipmentSummary();
   updateSkillUI();
   renderPackSelection();
+  
+  // ── Blood Hunter: Crimson Rite & Blood Curse selection ──
+  const bhPanel = document.getElementById("bloodHunterWizardPanel");
+  if (!bhPanel) return;
+  if (selectedClass === "Blood Hunter") {
+    bhPanel.style.display = "block";
+    renderBloodHunterWizardChoices();
+  } else {
+    bhPanel.style.display = "none";
+  }
 }
 
 /* ── Subclass Features UI ── */
@@ -2264,6 +2546,279 @@ function getArcaneShotsMax(level) {
   return 0;
 }
 
+// ========== BLOOD HUNTER WIZARD CHOICES ==========
+
+// Global state for wizard choices
+var chosenRites = [];
+var chosenBloodCurses = [];
+var selectedFightingStyle = "";
+var tempAsiChoices = []; // [{ type: "asi"|"feat", ability?: string, amount?: number, featName?: string }]
+var tempSubclassSelections = {}; // { "totem_3": "Bear", "land_circle": "Coast" }
+
+function renderBloodHunterWizardChoices() {
+  var level = characterLevel || 1;
+  var subclass = selectedSubclass || "";
+  
+  // Crimson Rites
+  var riteMax = getCrimsonRiteMax(level, subclass);
+  var availableRites = crimsonRites.filter(function(r) {
+    if (r.order && r.order !== subclass) return false;
+    if (r.esoteric && level < 14) return false;
+    if (r.level > level) return false;
+    return true;
+  });
+  
+  var riteContainer = document.getElementById("crimsonRiteChoices");
+  if (riteContainer) {
+    var riteHtml = '<div class="feature-grid">';
+    availableRites.forEach(function(r) {
+      var checked = chosenRites.includes(r.name);
+      riteHtml += '<div class="feature-card">' +
+        '<label><input type="checkbox" value="' + r.name + '" ' + (checked ? 'checked' : '') + '> <strong>' + r.name + '</strong> <span class="eq-prop-badge">' + r.damageType + '</span></label>' +
+        '<div class="feature-desc">' + (r.description || "Weapon deals extra " + r.damageType.toLowerCase() + " damage.") + '</div>' +
+        (r.note ? '<div class="feature-desc" style="color:#C8A96E;">' + r.note + '</div>' : '') +
+        '</div>';
+    });
+    riteHtml += '</div>';
+    riteContainer.innerHTML = riteHtml;
+    
+    // Bind checkboxes
+    riteContainer.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener("change", function() {
+        if (cb.checked) {
+          if (!chosenRites.includes(cb.value)) chosenRites.push(cb.value);
+          // Enforce max
+          var checkedCount = chosenRites.length;
+          if (checkedCount > riteMax) {
+            cb.checked = false;
+            chosenRites = chosenRites.filter(function(r) { return r !== cb.value; });
+            alert("You can select at most " + riteMax + " crimson rite(s) at level " + level + ".");
+          }
+        } else {
+          chosenRites = chosenRites.filter(function(r) { return r !== cb.value; });
+        }
+      });
+    });
+  }
+  
+  // Blood Curses
+  var curseMax = getBloodCurseMax(level);
+  var curseLabel = document.getElementById("bloodCurseMaxLabel");
+  if (curseLabel) curseLabel.innerText = curseMax;
+  
+  var curseContainer = document.getElementById("bloodCurseChoices");
+  if (curseContainer) {
+    var curseHtml = '<div class="feature-grid">';
+    bloodCurses.forEach(function(c) {
+      var checked = chosenBloodCurses.includes(c.name);
+      curseHtml += '<div class="feature-card">' +
+        '<label><input type="checkbox" value="' + c.name + '" ' + (checked ? 'checked' : '') + '> <strong>' + c.name + '</strong></label>' +
+        '<div class="feature-desc">' + c.description + '</div>' +
+        '<div class="feature-desc" style="color:#C8A96E;">Amplify: ' + c.amplify + '</div>' +
+        '</div>';
+    });
+    curseHtml += '</div>';
+    curseContainer.innerHTML = curseHtml;
+    
+    curseContainer.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+      cb.addEventListener("change", function() {
+        if (cb.checked) {
+          if (!chosenBloodCurses.includes(cb.value)) chosenBloodCurses.push(cb.value);
+          var checkedCount = chosenBloodCurses.length;
+          if (checkedCount > curseMax) {
+            cb.checked = false;
+            chosenBloodCurses = chosenBloodCurses.filter(function(c) { return c !== cb.value; });
+            alert("You can select at most " + curseMax + " blood curse(s) at level " + level + ".");
+          }
+        } else {
+          chosenBloodCurses = chosenBloodCurses.filter(function(c) { return c !== cb.value; });
+        }
+      });
+    });
+  }
+}
+
+// ========== FIGHTING STYLE UI ==========
+
+function updateFightingStyleUI() {
+  const container = document.getElementById("fightingStyleWizardGroup");
+  const select = document.getElementById("wizardFightingStyleSelect");
+  const desc = document.getElementById("fightingStyleDesc");
+  const eligible = ["Fighter","Paladin","Ranger","Blood Hunter"];
+  if (!eligible.includes(selectedClass) || characterLevel < 2) {
+    container.style.display = "none";
+    return;
+  }
+  container.style.display = "block";
+  const styles = fightingStyleDatabase[selectedClass] || [];
+  select.innerHTML = '<option value="">— Select a style —</option>';
+  styles.forEach(function(s) {
+    select.innerHTML += '<option value="' + s.name + '">' + s.name + '</option>';
+  });
+  if (selectedFightingStyle) select.value = selectedFightingStyle;
+  // Show description on change
+  select.onchange = function() {
+    selectedFightingStyle = select.value;
+    const style = styles.find(function(s) { return s.name === select.value; });
+    desc.innerText = style ? style.description : "";
+  };
+  // Initial description
+  const initialStyle = styles.find(function(s) { return s.name === select.value; });
+  if (initialStyle) desc.innerText = initialStyle.description;
+}
+
+// ========== ASI & FEAT MILESTONES ==========
+
+function getASIMilestonesCount(className, level) {
+  if (level < 4) return 0;
+  if (className === "Fighter") {
+    if (level >= 19) return 7;
+    if (level >= 16) return 6;
+    if (level >= 14) return 5;
+    if (level >= 12) return 4;
+    if (level >= 8)  return 3;
+    if (level >= 6)  return 2;
+    return 1;
+  }
+  if (className === "Rogue") {
+    if (level >= 19) return 6;
+    if (level >= 16) return 5;
+    if (level >= 12) return 4;
+    if (level >= 10) return 3;
+    if (level >= 8)  return 2;
+    return 1;
+  }
+  // Standard classes
+  var count = 0;
+  if (level >= 4) count++;
+  if (level >= 8) count++;
+  if (level >= 12) count++;
+  if (level >= 16) count++;
+  if (level >= 19) count++;
+  return count;
+}
+
+function getASILevels(className, level) {
+  var levels = [];
+  if (className === "Fighter") {
+    [4,6,8,12,14,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+    return levels;
+  }
+  if (className === "Rogue") {
+    [4,8,10,12,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+    return levels;
+  }
+  [4,8,12,16,19].forEach(function(l) { if (l <= level) levels.push(l); });
+  return levels;
+}
+
+function renderASIMilestonePanels() {
+  var container = document.getElementById("asiFeatMilestonesContainer");
+  var badge = document.getElementById("asiCountBadge");
+  if (!container) return;
+  var asiLevels = getASILevels(selectedClass, characterLevel);
+  if (asiLevels.length === 0) {
+    container.innerHTML = '<p class="field-note">No Ability Score Improvements available at level ' + characterLevel + '. ASIs start at level 4.</p>';
+    if (badge) badge.innerText = "0 ASIs";
+    tempAsiChoices = [];
+    return;
+  }
+  if (badge) badge.innerText = asiLevels.length + " ASI" + (asiLevels.length > 1 ? "s" : "");
+  
+  // Ensure tempAsiChoices has enough entries
+  while (tempAsiChoices.length < asiLevels.length) {
+    tempAsiChoices.push({ type: "asi", ability: "Strength", amount: 1, featName: "" });
+  }
+  
+  var html = "";
+  asiLevels.forEach(function(lvl, idx) {
+    var choice = tempAsiChoices[idx] || { type: "asi", ability: "Strength", amount: 1, featName: "" };
+    var asiChecked = choice.type === "asi" ? "checked" : "";
+    var featChecked = choice.type === "feat" ? "checked" : "";
+    var featSel = choice.featName || "";
+    html += '<div class="asi-milestone-panel" data-idx="' + idx + '">' +
+      '<div class="asi-milestone-header">Level ' + lvl + ' – ASI Milestone ' + (idx + 1) + '</div>' +
+      '<div class="asi-choice-row">' +
+        '<label class="asi-radio-label"><input type="radio" name="asi_type_' + idx + '" value="asi" ' + asiChecked + ' onchange="onAsiTypeChange(' + idx + ', \'asi\')"> Ability Score Increase</label>' +
+        '<label class="asi-radio-label"><input type="radio" name="asi_type_' + idx + '" value="feat" ' + featChecked + ' onchange="onAsiTypeChange(' + idx + ', \'feat\')"> Feat</label>' +
+      '</div>' +
+      '<div class="asi-fields" id="asi_fields_' + idx + '" style="' + (choice.type === "feat" ? "display:none;" : "") + '">' +
+        '<label>Ability: <select class="sheet-input asi-ability-select" data-idx="' + idx + '">' +
+          abilities.map(function(a) { return '<option value="' + a + '" ' + (choice.ability === a ? "selected" : "") + '>' + a + '</option>'; }).join("") +
+        '</select></label>' +
+        '<label>Increase: <select class="sheet-input asi-amount-select" data-idx="' + idx + '">' +
+          '<option value="2" ' + (choice.amount === 2 ? "selected" : "") + '>+2</option>' +
+          '<option value="1" ' + (choice.amount === 1 ? "selected" : "") + '>+1 (pick another +1 below)</option>' +
+        '</select></label>' +
+        '<div class="asi-second-ability" id="asi_second_' + idx + '" style="' + (choice.amount === 2 ? "display:none;" : "") + '">' +
+          '<label>Second Ability: <select class="sheet-input asi-ability-second-select" data-idx="' + idx + '">' +
+            abilities.map(function(a) { return '<option value="' + a + '" ' + ((choice.secondAbility || "Strength") === a ? "selected" : "") + '>' + a + '</option>'; }).join("") +
+          '</select></label>' +
+        '</div>' +
+      '</div>' +
+      '<div class="asi-feat-select" id="asi_feat_fields_' + idx + '" style="' + (choice.type === "feat" ? "" : "display:none;") + '">' +
+        '<label>Choose a Feat: <select class="sheet-input asi-feat-select" data-idx="' + idx + '">' +
+          '<option value="">— Select a feat —</option>' +
+          getFeatList().map(function(f) { return '<option value="' + f.name + '" ' + (featSel === f.name ? "selected" : "") + '>' + f.name + '</option>'; }).join("") +
+        '</select></label>' +
+        '<div class="field-help" id="asi_feat_desc_' + idx + '">' + (featSel ? (getFeatByName(featSel)?.description || "") : "") + '</div>' +
+      '</div>' +
+    '</div>';
+  });
+  container.innerHTML = html;
+  
+  // Bind change events
+  container.querySelectorAll(".asi-ability-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].ability = sel.value;
+    };
+  });
+  container.querySelectorAll(".asi-amount-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].amount = parseInt(sel.value);
+      document.getElementById("asi_second_" + idx).style.display = sel.value === "1" ? "" : "none";
+    };
+  });
+  container.querySelectorAll(".asi-ability-second-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].secondAbility = sel.value;
+    };
+  });
+  container.querySelectorAll(".asi-feat-select").forEach(function(sel) {
+    sel.onchange = function() {
+      var idx = parseInt(sel.dataset.idx);
+      tempAsiChoices[idx].featName = sel.value;
+      var descEl = document.getElementById("asi_feat_desc_" + idx);
+      var feat = getFeatByName(sel.value);
+      descEl.innerText = feat ? feat.description : "";
+    };
+  });
+}
+
+function onAsiTypeChange(idx, type) {
+  tempAsiChoices[idx] = tempAsiChoices[idx] || { type: "asi", ability: "Strength", amount: 1, featName: "" };
+  tempAsiChoices[idx].type = type;
+  document.getElementById("asi_fields_" + idx).style.display = type === "asi" ? "" : "none";
+  document.getElementById("asi_feat_fields_" + idx).style.display = type === "feat" ? "" : "none";
+}
+
+function validateAsiFeatChoices() {
+  var asiLevels = getASILevels(selectedClass, characterLevel);
+  if (asiLevels.length === 0) return true;
+  for (var i = 0; i < asiLevels.length; i++) {
+    var c = tempAsiChoices[i];
+    if (!c) return false;
+    if (c.type === "feat" && !c.featName) {
+      alert("Please select a feat for ASI milestone " + (i + 1) + " (level " + asiLevels[i] + ").");
+      return false;
+    }
+  }
+  return true;
+}
+
 function updateSubclassFeaturesUI() {
   const section = document.getElementById("subclassFeaturesSection");
   if (!section) return;
@@ -2335,7 +2890,7 @@ function updateSubclassFeaturesUI() {
 }
 
 function updateWizardUI() {
-  for (let i=1; i<=6; i++) {
+  for (let i=1; i<=7; i++) {
     const stepDiv = document.getElementById(`wizard-step-${i}`);
     if (stepDiv) stepDiv.style.display = i === wizardStep ? "block" : "none";
   }
@@ -2343,12 +2898,14 @@ function updateWizardUI() {
     if (idx+1 === wizardStep) step.classList.add("active");
     else step.classList.remove("active");
   });
-  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 6`;
+  document.getElementById("stepIndicator").innerText = `Step ${wizardStep} of 7`;
   const backBtn = document.getElementById("wizardBackBtn"), nextBtn = document.getElementById("wizardNextBtn"), finishBtn = document.getElementById("wizardFinishBtn");
   backBtn.disabled = (wizardStep === 1);
-  if (wizardStep === 6) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
+  if (wizardStep === 7) { nextBtn.style.display = "none"; finishBtn.style.display = "inline-block"; generateReview(); }
   else { nextBtn.style.display = "inline-block"; finishBtn.style.display = "none"; }
 }
+
+function prevStep() { wizardStep--; updateWizardUI(); }
 
 function nextStep() {
   if (wizardStep === 1) {
@@ -2381,6 +2938,19 @@ function nextStep() {
     }
   } else if (wizardStep === 4) {
     customItems = document.getElementById("extraItems").value;
+  } else if (wizardStep === 5) {
+    // Validate fighting style selection for eligible classes
+    const eligibleFS = ["Fighter","Paladin","Ranger","Blood Hunter"];
+    if (eligibleFS.includes(selectedClass) && characterLevel >= 2) {
+      selectedFightingStyle = document.getElementById("wizardFightingStyleSelect")?.value || "";
+      if (!selectedFightingStyle) {
+        alert("Please select a Fighting Style before proceeding.");
+        return;
+      }
+    }
+  } else if (wizardStep === 6) {
+    // Validate ASI/feat selections
+    if (!validateAsiFeatChoices()) return;
   }
   wizardStep++;
   updateWizardUI();
@@ -2392,11 +2962,14 @@ function nextStep() {
   } else if (wizardStep === 4) {
     updateEquipmentUI();
     updateSpellUI();
+    initWizardWeaponSlots();
   } else if (wizardStep === 5) {
+    updateFightingStyleUI();
     updateSubclassFeaturesUI();
+  } else if (wizardStep === 6) {
+    renderASIMilestonePanels();
   }
 }
-function prevStep() { wizardStep--; updateWizardUI(); }
 function generateReview() {
   const racialBonuses = getCurrentRacialBonuses();
   const hp = (classes[selectedClass].hitDie === "d6"?6: classes[selectedClass].hitDie === "d8"?8: classes[selectedClass].hitDie === "d10"?10:12) + calculateModifier(finalScores.Constitution);
@@ -2413,10 +2986,14 @@ function generateReview() {
     <p><strong>Proficiency Bonus:</strong> +${getProficiencyBonus(characterLevel)}</p>
     <p><strong>Equipment:</strong> Armor: ${selectedArmor || "None"}, Shield: ${hasShield ? "Yes" : "No"}, Weapons: ${selectedWeapons.map(w => `${w.name} (${w.quantity})`).join(", ") || "None"}, Extra: ${customItems || "None"}</p>
     <p><strong>Spells:</strong> Cantrips: ${chosenCantrips.join(", ")} | Spells: ${chosenSpells.join(", ")}</p>
+    ${selectedFightingStyle ? `<p><strong>Fighting Style:</strong> ${selectedFightingStyle}</p>` : ""}
+    ${tempAsiChoices.filter(c => c.type === "feat" && c.featName).length ? `<p><strong>Feats:</strong> ${tempAsiChoices.filter(c => c.type === "feat").map(c => c.featName).join(", ")}</p>` : ""}
     ${chosenMetamagic.length ? `<p><strong>Metamagic:</strong> ${chosenMetamagic.join(", ")}</p>` : ""}
     ${chosenInvocations.length ? `<p><strong>Eldritch Invocations:</strong> ${chosenInvocations.join(", ")}</p>` : ""}
     ${chosenManeuvers.length ? `<p><strong>Maneuvers:</strong> ${chosenManeuvers.join(", ")}</p>` : ""}
     ${chosenArcaneShots.length ? `<p><strong>Arcane Shots:</strong> ${chosenArcaneShots.join(", ")}</p>` : ""}
+    ${selectedClass === "Blood Hunter" && chosenRites.length ? `<p><strong>Crimson Rites:</strong> ${chosenRites.join(", ")}</p>` : ""}
+    ${selectedClass === "Blood Hunter" && chosenBloodCurses.length ? `<p><strong>Blood Curses:</strong> ${chosenBloodCurses.join(", ")}</p>` : ""}
   `;
   document.getElementById("reviewCard").innerHTML = reviewHtml;
 }
@@ -2448,13 +3025,36 @@ function finishWizard() {
     tempHp: 0,
     appearance: characterAppearance, backstory: characterBackstory, personalityTraits: characterTraits,
     cantrips: chosenCantrips.slice(), spells: chosenSpells.slice(),
-    equipment: { armor: selectedArmor, shield: hasShield, weapons: selectedWeapons.slice(), custom: document.getElementById("extraItems").value },
+    equipment: (function() {
+      const eq = { armor: { name: selectedArmor, weight: (armorData[selectedArmor]?.weight || 0), ac: parseInt(armorData[selectedArmor]?.ac) || 10 }, shield: hasShield, mainHand: null, offHand: null, ranged: null, custom: document.getElementById("extraItems").value };
+      // Read wizard weapon slots
+      const wizardSlots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+      const slotKeys = ['mainHand', 'offHand', 'ranged'];
+      wizardSlots.forEach((slot, idx) => {
+        const name = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value.trim();
+        if (!name) return;
+        const properties = [];
+        document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]:checked`).forEach(cb => properties.push(cb.value));
+        eq[slotKeys[idx]] = {
+          name: name,
+          quantity: parseInt(document.querySelector(`.weapon-qty[data-slot="${slot}"]`).value) || 1,
+          weight: parseFloat(document.querySelector(`.weapon-weight[data-slot="${slot}"]`).value) || 0,
+          properties: properties,
+          attack: document.querySelector(`.weapon-attack[data-slot="${slot}"]`).value,
+          damage: document.querySelector(`.weapon-damage[data-slot="${slot}"]`).value
+        };
+      });
+      return eq;
+    })(),
     currency: { cp: parseInt(document.getElementById("coinCP").value) || 0, sp: parseInt(document.getElementById("coinSP").value) || 0, ep: parseInt(document.getElementById("coinEP").value) || 0, gp: parseInt(document.getElementById("coinGP").value) || 0, pp: parseInt(document.getElementById("coinPP").value) || 0 },
     xp: xpTable[characterLevel] || 0,
     metamagic: chosenMetamagic.slice(),
     invocations: chosenInvocations.slice(),
     maneuvers: chosenManeuvers.slice(),
     arcaneShots: chosenArcaneShots.slice(),
+    learnedRites: chosenRites.slice(),
+    bloodCurses: (function() { return chosenBloodCurses.map(function(c) { var obj = bloodCurses.find(function(bc) { return bc.name === c; }); return obj || { name: c }; }); })(),
+    activeRite: null,
     pactBoon: selectedPactBoon || "",
     dragonbornAncestry: selectedDragonbornAncestry,
     sorcererDragonAncestry: selectedSorcererAncestry,
@@ -2477,7 +3077,7 @@ function finishWizard() {
     // Inventory items
     inventory: [],
     // New feature fields
-    spellSlots: (function() { const s = getSpellSlotsForClass(selectedClass, characterLevel); let o = {}; for (let k in s) { o[k] = { used: 0, max: s[k] }; } return o; })(),
+    spellSlots: (function() { const s = getSpellSlotsForClass(selectedClass, characterLevel, selectedSubclass); let o = {}; for (let k in s) { o[k] = { used: 0, max: s[k] }; } return o; })(),
     hitDiceRemaining: characterLevel,
     hitDiceTotal: characterLevel,
     hitDiceType: charClass ? charClass.hitDie : "d8",
@@ -2486,8 +3086,39 @@ function finishWizard() {
     classResources: getClassResources(selectedClass, selectedSubclass, characterLevel),
     deathSaveSuccesses: 0,
     deathSaveFailures: 0,
-    isUnconscious: false
+    isUnconscious: false,
+    fightingStyle: selectedFightingStyle || null,
+    feats: (function() {
+      var feats = [];
+      tempAsiChoices.forEach(function(c) {
+        if (c.type === "feat" && c.featName) {
+          feats.push(c.featName);
+          // Apply feat ability increase
+          var featObj = getFeatByName(c.featName);
+          if (featObj && featObj.abilityIncrease && featObj.abilityIncrease.options && featObj.abilityIncrease.options.length === 1) {
+            var ab = featObj.abilityIncrease.options[0];
+            if (finalScores[ab] && finalScores[ab] < 20) finalScores[ab] += featObj.abilityIncrease.amount;
+          }
+        } else if (c.type === "asi") {
+          if (c.ability && finalScores[c.ability] && finalScores[c.ability] < 20) {
+            finalScores[c.ability] += c.amount || 0;
+          }
+          if (c.amount === 1 && c.secondAbility && finalScores[c.secondAbility] && finalScores[c.secondAbility] < 20) {
+            finalScores[c.secondAbility] += 1;
+          }
+        }
+      });
+      return feats;
+    })(),
+    subclassChoices: JSON.parse(JSON.stringify(tempSubclassSelections))
   };
+  // Update abilityScores in character with ASI-applied values
+  character.abilityScores = {...finalScores};
+  // Recalculate HP after potential CON changes from ASI
+  const newConMod = calculateModifier(finalScores.Constitution);
+  const newMaxHp = calculateLevelBasedMaxHp(selectedClass, newConMod, characterLevel);
+  character.hp = newMaxHp;
+  character.maxHp = newMaxHp;
   
   currentCharacter = character;
   localStorage.setItem('dnd_current_character', JSON.stringify(currentCharacter));
@@ -2633,7 +3264,10 @@ function resumeCampaign(id) {
   if (campaign.characterId) {
     const storedChar = localStorage.getItem('dnd_current_character');
     if (storedChar) currentCharacter = JSON.parse(storedChar);
-    if (currentCharacter) syncCharacterStats();
+    if (currentCharacter) {
+      migrateCharacterState(currentCharacter);
+      syncCharacterStats();
+    }
   }
   closeCampaignModal();
   // Don't call applyState() first — it would init a fresh session.
@@ -2959,6 +3593,7 @@ function recalcDerivedStats() {
     if (el) el.innerText = (mod >= 0 ? "+" : "") + mod;
   }
   updateSavesAndSkills();
+  updateACDisplay();
 }
 
 /**
@@ -2974,10 +3609,14 @@ function updateHPDisplay() {
   if (cls) {
     const hitDieVal = cls.hitDie === "d12" ? 12 : cls.hitDie === "d10" ? 10 : cls.hitDie === "d8" ? 8 : cls.hitDie === "d6" ? 6 : 8;
     const conMod = calculateModifier(char.abilityScores.Constitution);
-    // Level 1: max hit die + Con mod; for higher levels we use stored maxHp or compute
     const computedMax = hitDieVal + conMod;
-    // Allow stored maxHp to override (in case of level ups or manual edits)
-    if (!char.maxHp || char.maxHp < computedMax) {
+    // Only set maxHp if it's not yet defined, or if it's lower than computed base
+    // (Blood Hunter may have reduced maxHp from Crimson Rite, so don't override)
+    if (!char.maxHp) {
+      char.maxHp = computedMax;
+    }
+    // For non-Blood Hunters, ensure maxHp is at least the computed base
+    if (char.class !== "Blood Hunter" && char.maxHp < computedMax) {
       char.maxHp = computedMax;
     }
   }
@@ -3134,7 +3773,7 @@ function populateCharacterSheet() {
         currentCharacter.level = newLevel;
         syncCharacterStats();    // recalc HP and XP
         // Also update spell slots and hit dice
-        const slots = getSpellSlotsForClass(currentCharacter.class, newLevel);
+        const slots = getSpellSlotsForClass(currentCharacter.class, newLevel, currentCharacter.subclass);
         if (!currentCharacter.spellSlots) currentCharacter.spellSlots = {};
         for (let k in slots) {
           if (!currentCharacter.spellSlots[k]) currentCharacter.spellSlots[k] = { used: 0, max: slots[k] };
@@ -3142,10 +3781,14 @@ function populateCharacterSheet() {
         }
         currentCharacter.hitDiceTotal = newLevel;
         currentCharacter.hitDiceRemaining = newLevel;
+        // Recalculate class resources (Blood Maledict uses scale with level)
+        currentCharacter.classResources = getClassResources(currentCharacter.class, currentCharacter.subclass, newLevel);
         saveCharacter();
         updateSpellSlotsUI();
         updateHitDiceUI();
         updateHPDisplay();
+        updateBloodHunterUI();
+        updateClassResourcesUI();
         recalcDerivedStats();
       }
     });
@@ -3197,6 +3840,7 @@ function populateCharacterSheet() {
     const subrace = race.subraces.find(s => s.name === char.subrace);
     if (subrace) document.getElementById("sheetSpeed").value = subrace.speed || 30;
   }
+  updateBloodHunterUI();
   updateXPDisplay();
   recalcDerivedStats();
   populateBackstoryTab();
@@ -3206,6 +3850,16 @@ function populateCharacterSheet() {
   populateFeatsTab();
   populateDetailsTab();
   syncCharacterStats();
+}
+
+// ========== BACKWARD COMPATIBILITY ==========
+
+function migrateCharacterState(char) {
+  if (char.fightingStyle === undefined) char.fightingStyle = null;
+  if (char.subclassChoices === undefined) char.subclassChoices = {};
+  if (char.feats === undefined) char.feats = [];
+  if (char.classResources === undefined) char.classResources = {};
+  return char;
 }
 
 function syncCharacterStats() {
@@ -3230,6 +3884,88 @@ function syncCharacterStats() {
     saveCharacter();
     updateXPDisplay();
     updateHPDisplay();
+    // Migrate old equipment data to new structure
+    migrateEquipment();
+}
+
+// ── Migrate old equipment.weapons array to new slot structure ──
+function migrateWeaponData() {
+  if (!currentCharacter || !currentCharacter.equipment) return;
+  const eq = currentCharacter.equipment;
+  // Only migrate if old weapons array exists and new slots are empty
+  if (eq.weapons && eq.weapons.length && !eq.mainHand && !eq.offHand && !eq.ranged) {
+    // First weapon goes to main hand
+    if (eq.weapons[0]) {
+      const w = eq.weapons[0];
+      const wData = weaponsData[w.name];
+      const props = wData && wData.properties ? parseWeaponProperties(wData.properties) : [];
+      if (wData && wData.thrown && !props.includes('Thrown')) props.push('Thrown');
+      eq.mainHand = {
+        name: w.name,
+        quantity: w.quantity || 1,
+        weight: wData ? wData.weight : 0,
+        properties: props,
+        attack: "1d20+0",
+        damage: wData ? wData.damage.match(/(\d+d\d+)/)?.[1] || "1d4" : "1d4"
+      };
+    }
+    // Second weapon goes to off hand (if exists)
+    if (eq.weapons[1]) {
+      const w = eq.weapons[1];
+      const wData = weaponsData[w.name];
+      const props = wData && wData.properties ? parseWeaponProperties(wData.properties) : [];
+      if (wData && wData.thrown && !props.includes('Thrown')) props.push('Thrown');
+      eq.offHand = {
+        name: w.name,
+        quantity: w.quantity || 1,
+        weight: wData ? wData.weight : 0,
+        properties: props,
+        attack: "1d20+0",
+        damage: wData ? wData.damage.match(/(\d+d\d+)/)?.[1] || "1d4" : "1d4"
+      };
+    }
+    delete eq.weapons;
+    saveCharacter();
+  }
+}
+
+// ── Migrate old equipment structure to new format ──
+function migrateEquipment() {
+  if (!currentCharacter || !currentCharacter.equipment) return;
+  const eq = currentCharacter.equipment;
+  let changed = false;
+  // Convert old armor (string) to object
+  if (eq.armor && typeof eq.armor === "string") {
+    const oldName = eq.armor;
+    const info = armorData[oldName] || { weight: 0, ac: 10 };
+    eq.armor = { name: oldName, weight: info.weight, ac: parseInt(info.ac) || 10 };
+    changed = true;
+  } else if (!eq.armor || typeof eq.armor === "string") {
+    eq.armor = { name: "", weight: 0, ac: 10 };
+    changed = true;
+  }
+  // Also migrate if armor exists as old format but missing fields
+  if (eq.armor && typeof eq.armor === "object" && eq.armor.name === undefined) {
+    eq.armor = { name: "", weight: 0, ac: 10 };
+    changed = true;
+  }
+  // Already have migrateWeaponData() – ensure it creates the new structure with attack/damage
+  migrateWeaponData();
+  // For existing weapon slots without attack/damage/properties, generate defaults
+  ["mainHand", "offHand", "ranged"].forEach(slot => {
+    const w = eq[slot];
+    if (w && typeof w === "object") {
+      if (!w.attack) { w.attack = "1d20+0"; changed = true; }
+      if (!w.damage) { w.damage = "1d4"; changed = true; }
+      if (!w.properties) { w.properties = []; changed = true; }
+      if (w.weight === undefined) {
+        const wData = weaponsData[w.name];
+        w.weight = wData ? wData.weight : 0;
+        changed = true;
+      }
+    }
+  });
+  if (changed) saveCharacter();
 }
 
 function populateBackstoryTab() {
@@ -3273,19 +4009,234 @@ function populateInventoryTab() {
 function populateEquipmentTab() {
   if (!currentCharacter) return;
   const eq = currentCharacter.equipment || {};
-  document.getElementById("equipmentArmor").value = eq.armor || "";
-  document.getElementById("equipmentShield").checked = !!eq.shield;
-  const weaponsContainer = document.getElementById("weaponsList");
-  if (weaponsContainer) {
-    const weapons = eq.weapons || [];
-    weaponsContainer.innerHTML = weapons.map((w, idx) =>
-      `<div class="weapon-edit-row">
-        <input type="text" class="weapon-name sheet-input" value="${escapeHtml(w.name)}" placeholder="Weapon name">
-        <input type="number" class="weapon-qty-sheet sheet-input small" value="${w.quantity || 1}" min="1" max="4">
-        <button class="remove-weapon-row small-btn" data-idx="${idx}">✖</button>
-      </div>`
-    ).join("");
+
+  // Armor
+  const armor = eq.armor || { name: "", weight: 0, ac: 10 };
+  document.getElementById("armorName").value = armor.name || "";
+  document.getElementById("armorWeight").value = armor.weight || 0;
+  document.getElementById("armorAC").value = armor.ac || 10;
+  document.getElementById("armorShield").checked = !!eq.shield;
+
+  // Armor datalist
+  const armorDatalist = document.getElementById("armorList");
+  if (armorDatalist) {
+    armorDatalist.innerHTML = Object.keys(armorData).map(n => `<option value="${escapeHtml(n)}">`).join("");
   }
+
+  // Weapon slots
+  const slots = ["main", "off", "ranged"];
+  slots.forEach(slot => {
+    const slotKey = slot === "main" ? "mainHand" : (slot === "off" ? "offHand" : "ranged");
+    const data = eq[slotKey] || {};
+    const nameInp = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+    if (nameInp) nameInp.value = data.name || "";
+    const qtyInp = document.querySelector(`.weapon-qty[data-slot="${slot}"]`);
+    if (qtyInp) qtyInp.value = data.quantity || 1;
+    const wtInp = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+    if (wtInp) wtInp.value = data.weight || 0;
+    const atkInp = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+    if (atkInp) atkInp.value = data.attack || "";
+    const dmgInp = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+    if (dmgInp) dmgInp.value = data.damage || "";
+
+    // Properties checkboxes
+    const props = data.properties || [];
+    document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`).forEach(cb => {
+      cb.checked = props.includes(cb.value);
+    });
+  });
+
+  // Populate weapon type dropdowns and bind change events
+  populateWeaponDropdowns();
+  ['main', 'off', 'ranged'].forEach(slot => bindWeaponTypeChange(slot));
+
+  // Weapon datalist
+  const weaponDatalist = document.getElementById("weaponList");
+  if (weaponDatalist) {
+    weaponDatalist.innerHTML = Object.keys(weaponsData).map(n => `<option value="${escapeHtml(n)}">`).join("");
+  }
+
+  // Disable off‑hand if main hand has Two‑Handed property
+  const mainProps = Array.from(document.querySelectorAll(`.weapon-prop[data-slot="main"]:checked`)).map(cb => cb.value);
+  const isTwoHanded = mainProps.includes("Two-Handed");
+  const offSlot = document.querySelector(`.weapon-slot[data-slot="off"]`);
+  if (offSlot) {
+    offSlot.querySelectorAll("input").forEach(inp => inp.disabled = isTwoHanded);
+  }
+
+  // Attach listeners to auto‑update AC and encumbrance when fields change
+  attachEquipmentChangeListeners();
+}
+
+// ========== WEAPON TYPE DROPDOWN FUNCTIONS ==========
+function populateWeaponDropdowns() {
+  const slots = ['main', 'off', 'ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    const currentName = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value;
+    select.innerHTML = '<option value="">— Custom —</option>' +
+      Object.keys(weaponsData).sort().map(w => `<option value="${w}">${w}</option>`).join('');
+    if (currentName && weaponsData[currentName]) select.value = currentName;
+  });
+}
+
+function bindWeaponTypeChange(slot) {
+  const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+  if (!select) return;
+  select.addEventListener('change', () => {
+    const weaponName = select.value;
+    const nameInput = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+    const weightInput = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+    const propCheckboxes = document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`);
+    const attackInput = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+    const damageInput = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+
+    if (!weaponName || !weaponsData[weaponName]) {
+      return;
+    }
+    const data = weaponsData[weaponName];
+    nameInput.value = weaponName;
+    weightInput.value = data.weight;
+    const props = parseWeaponProperties(data.properties);
+    propCheckboxes.forEach(cb => {
+      cb.checked = props.includes(cb.value);
+    });
+
+    // Attack and damage formulas
+    const abilityMod = currentCharacter
+      ? getAbilityModifierForWeapon(currentCharacter.abilityScores, props)
+      : 0;
+    const profBonus = currentCharacter ? getProficiencyBonus(currentCharacter.level) : 2;
+    attackInput.value = `1d20+${profBonus + abilityMod}`;
+    const diceMatch = data.damage.match(/(\d+d\d+)/);
+    const dice = diceMatch ? diceMatch[1] : '1d4';
+    damageInput.value = `${dice}+${abilityMod}`;
+  });
+}
+
+// ========== WIZARD WEAPON SLOTS ==========
+function getWeaponPropsHTML(slot) {
+  const props = ['Light','Finesse','Two-Handed','Versatile','Thrown','Reach','Heavy','Loading','Ammunition','Special'];
+  return props.map(p => `<label><input type="checkbox" class="weapon-prop" data-slot="${slot}" value="${p}"> ${p}</label>`).join('');
+}
+
+function initWizardWeaponSlots() {
+  const container = document.getElementById('wizardWeaponSlots');
+  if (!container) return;
+  const wizardSlots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  const slotLabels = ['Main Hand', 'Off Hand', 'Ranged Weapon'];
+  let html = '';
+  wizardSlots.forEach((slot, i) => {
+    html += `
+      <div class="weapon-slot" data-slot="${slot}">
+        <div class="weapon-header">${slotLabels[i]}</div>
+        <div class="weapon-row">
+          <div class="field"><label>Weapon Type</label><select class="weapon-type-select" data-slot="${slot}"><option value="">— Custom —</option></select></div>
+          <div class="field"><label>Name</label><input type="text" class="weapon-name" data-slot="${slot}" placeholder="e.g., Longsword"></div>
+          <div class="field"><label>Qty</label><input type="number" class="weapon-qty" data-slot="${slot}" value="1" min="0"></div>
+          <div class="field"><label>Weight (lbs)</label><input type="number" class="weapon-weight" data-slot="${slot}" value="0" step="0.5" min="0"></div>
+        </div>
+        <div class="weapon-props">
+          <span>Properties:</span>
+          ${getWeaponPropsHTML(slot)}
+        </div>
+        <div class="weapon-attack-damage">
+          <div class="field"><label>Attack Roll</label><input type="text" class="weapon-attack" data-slot="${slot}" placeholder="1d20+5"></div>
+          <div class="field"><label>Damage Roll</label><input type="text" class="weapon-damage" data-slot="${slot}" placeholder="1d8+3"></div>
+        </div>
+      </div>`;
+  });
+  container.innerHTML = html;
+  populateWizardWeaponDropdowns();
+  bindWizardWeaponTypeChanges();
+}
+
+function populateWizardWeaponDropdowns() {
+  const slots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    select.innerHTML = '<option value="">— Custom —</option>' +
+      Object.keys(weaponsData).sort().map(w => `<option value="${w}">${w}</option>`).join('');
+  });
+}
+
+function bindWizardWeaponTypeChanges() {
+  const slots = ['wizard_main', 'wizard_off', 'wizard_ranged'];
+  slots.forEach(slot => {
+    const select = document.querySelector(`.weapon-type-select[data-slot="${slot}"]`);
+    if (!select) return;
+    select.addEventListener('change', () => {
+      const weaponName = select.value;
+      if (!weaponName || !weaponsData[weaponName]) return;
+      const data = weaponsData[weaponName];
+      const nameInput = document.querySelector(`.weapon-name[data-slot="${slot}"]`);
+      const weightInput = document.querySelector(`.weapon-weight[data-slot="${slot}"]`);
+      const propCheckboxes = document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]`);
+      const attackInput = document.querySelector(`.weapon-attack[data-slot="${slot}"]`);
+      const damageInput = document.querySelector(`.weapon-damage[data-slot="${slot}"]`);
+      nameInput.value = weaponName;
+      weightInput.value = data.weight;
+      const props = parseWeaponProperties(data.properties);
+      propCheckboxes.forEach(cb => {
+        cb.checked = props.includes(cb.value);
+      });
+      const abilityMod = getAbilityModifierForWeapon(finalScores, props);
+      const profBonus = getProficiencyBonus(characterLevel);
+      attackInput.value = `1d20+${profBonus + abilityMod}`;
+      const diceMatch = data.damage.match(/(\d+d\d+)/);
+      const dice = diceMatch ? diceMatch[1] : '1d4';
+      damageInput.value = `${dice}+${abilityMod}`;
+    });
+  });
+}
+
+function attachEquipmentChangeListeners() {
+  // When any equipment field changes, update AC and encumbrance
+  const equipFields = [
+    "armorName", "armorWeight", "armorAC", "armorShield"
+  ];
+  equipFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.removeEventListener("change", onEquipmentChange);
+      el.addEventListener("change", onEquipmentChange);
+    }
+  });
+  // Weapon fields: weight, qty, name
+  ["main", "off", "ranged"].forEach(slot => {
+    document.querySelectorAll(`.weapon-weight[data-slot="${slot}"], .weapon-qty[data-slot="${slot}"], .weapon-name[data-slot="${slot}"]`).forEach(el => {
+      if (el) {
+        el.removeEventListener("change", onEquipmentChange);
+        el.addEventListener("change", onEquipmentChange);
+      }
+    });
+  });
+  // Two-Handed checkbox toggles off-hand
+  document.querySelectorAll(`.weapon-prop[data-slot="main"]`).forEach(cb => {
+    cb.removeEventListener("change", onMainPropChange);
+    cb.addEventListener("change", onMainPropChange);
+  });
+}
+
+function onEquipmentChange() {
+  updateACDisplay();
+  updateEncumbranceDisplay();
+}
+
+function onMainPropChange() {
+  const mainProps = Array.from(document.querySelectorAll(`.weapon-prop[data-slot="main"]:checked`)).map(cb => cb.value);
+  const isTwoHanded = mainProps.includes("Two-Handed");
+  const offSlot = document.querySelector(`.weapon-slot[data-slot="off"]`);
+  if (offSlot) {
+    offSlot.querySelectorAll("input").forEach(inp => {
+      inp.disabled = isTwoHanded;
+      if (isTwoHanded && inp.type !== "checkbox") inp.value = "";
+      if (isTwoHanded && inp.type === "checkbox") inp.checked = false;
+    });
+  }
+  onEquipmentChange();
 }
 
 function populateSpellsTab() {
@@ -3493,8 +4444,36 @@ function saveCharacterSheet() {
     pp: parseInt(document.getElementById("inventoryPP").value) || 0
   };
   currentCharacter.equipment = currentCharacter.equipment || {};
-  currentCharacter.equipment.armor = document.getElementById("equipmentArmor").value;
-  currentCharacter.equipment.shield = document.getElementById("equipmentShield").checked;
+
+  // Save armor as object
+  currentCharacter.equipment.armor = {
+    name: document.getElementById("armorName").value,
+    weight: parseFloat(document.getElementById("armorWeight").value) || 0,
+    ac: parseInt(document.getElementById("armorAC").value) || 10
+  };
+  currentCharacter.equipment.shield = document.getElementById("armorShield").checked;
+
+  // Save weapons
+  ["main", "off", "ranged"].forEach(slot => {
+    const name = document.querySelector(`.weapon-name[data-slot="${slot}"]`).value.trim();
+    const key = slot === "main" ? "mainHand" : (slot === "off" ? "offHand" : "ranged");
+    if (!name) {
+      currentCharacter.equipment[key] = null;
+      return;
+    }
+    const properties = [];
+    document.querySelectorAll(`.weapon-prop[data-slot="${slot}"]:checked`).forEach(cb => properties.push(cb.value));
+    currentCharacter.equipment[key] = {
+      name: name,
+      quantity: parseInt(document.querySelector(`.weapon-qty[data-slot="${slot}"]`).value) || 1,
+      weight: parseFloat(document.querySelector(`.weapon-weight[data-slot="${slot}"]`).value) || 0,
+      properties: properties,
+      attack: document.querySelector(`.weapon-attack[data-slot="${slot}"]`).value,
+      damage: document.querySelector(`.weapon-damage[data-slot="${slot}"]`).value
+    };
+  });
+  // Clean up old weapons array if present
+  delete currentCharacter.equipment.weapons;
   // Save full inventory row data as structured array
   currentCharacter.inventory = Array.from(document.querySelectorAll("#inventoryBody tr"))
     .map(row => ({
@@ -3548,48 +4527,74 @@ function initSheetTabs() { const tabs = document.querySelectorAll('.sheet-tab');
 function closeWizard() { if (charCreationWizard) { charCreationWizard.classList.remove('show'); setTimeout(() => { charCreationWizard.style.display = 'none'; }, 200); } pendingOpenWorldConfig = null; pendingStoryCampaign = null; }
 
 /* ── Settings Modal ── */
-const MODEL_OPTIONS = [
-  'openrouter/owl-alpha',
-  'openai/gpt-oss-120b:free'
-];
 
-const DEFAULT_MODEL = 'openai/gpt-oss-120b:free';
+const GOOGLE_MODEL = 'gemini-2.5-flash';
+const OPENROUTER_MODELS = ['openai/gpt-oss-120b:free'];
+const DEFAULT_OPENROUTER_MODEL = 'openai/gpt-oss-120b:free';
 
-function populateModelDroplist(select, savedModel) {
-  select.innerHTML = '';
-  MODEL_OPTIONS.forEach(id => {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.text = id;
-    select.add(opt);
-  });
-  select.value = savedModel && MODEL_OPTIONS.includes(savedModel) ? savedModel : DEFAULT_MODEL;
-  select.disabled = false;
-}
+const DEFAULT_SETTINGS = {
+  provider: 'google',
+  apiKey: '',
+  openRouterModel: DEFAULT_OPENROUTER_MODEL
+};
 
-function loadSettings() {
+function getSettings() {
   const saved = localStorage.getItem('dnd_ai_settings');
   if (saved) {
     try {
-      const settings = JSON.parse(saved);
-      document.getElementById('settingsApiKey').value = settings.apiKey || '';
-      const select = document.getElementById('settingsModelSelect');
-      populateModelDroplist(select, settings.model);
-      return settings;
-    } catch (e) { /* ignore */ }
+      return JSON.parse(saved);
+    } catch(e) {}
   }
-  // Default settings
-  const select = document.getElementById('settingsModelSelect');
-  if (select) {
-    populateModelDroplist(select, DEFAULT_MODEL);
+  return { ...DEFAULT_SETTINGS };
+}
+
+function getApiKey() {
+  return getSettings().apiKey || '';
+}
+
+function getActiveModel() {
+  const s = getSettings();
+  if (s.provider === 'openrouter') return s.openRouterModel || DEFAULT_OPENROUTER_MODEL;
+  return GOOGLE_MODEL;
+}
+
+function getActiveProvider() {
+  return getSettings().provider || 'google';
+}
+
+function toggleConditionalView(provider) {
+  const googleView = document.getElementById('settingsGoogleView');
+  const orView = document.getElementById('settingsOpenrouterView');
+  const apiHelp = document.getElementById('settingsApiHelp');
+  if (provider === 'google') {
+    if (googleView) googleView.style.display = '';
+    if (orView) orView.style.display = 'none';
+    if (apiHelp) apiHelp.innerHTML = 'Get your key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" class="settings-link">aistudio.google.com/apikey</a>';
+  } else {
+    if (googleView) googleView.style.display = 'none';
+    if (orView) orView.style.display = '';
+    if (apiHelp) apiHelp.innerHTML = 'Get your key at <a href="https://openrouter.ai/keys" target="_blank" rel="noopener" class="settings-link">openrouter.ai/keys</a>';
   }
-  return { apiKey: '', model: DEFAULT_MODEL };
+}
+
+function loadSettings() {
+  const settings = getSettings();
+  const providerSelect = document.getElementById('settingsProviderSelect');
+  const apiInput = document.getElementById('settingsApiKey');
+  const modelSelect = document.getElementById('settingsModelSelect');
+  if (providerSelect) providerSelect.value = settings.provider || 'google';
+  if (apiInput) apiInput.value = settings.apiKey || '';
+  if (modelSelect) modelSelect.value = (settings.provider === 'openrouter' && settings.openRouterModel) || DEFAULT_OPENROUTER_MODEL;
+  toggleConditionalView(settings.provider || 'google');
+  return settings;
 }
 
 function saveSettings() {
+  const provider = document.getElementById('settingsProviderSelect').value;
   const apiKey = document.getElementById('settingsApiKey').value.trim();
-  const model = document.getElementById('settingsModelSelect').value || DEFAULT_MODEL;
-  const settings = { apiKey, model };
+  const modelSelect = document.getElementById('settingsModelSelect');
+  const openRouterModel = provider === 'openrouter' ? (modelSelect ? modelSelect.value : DEFAULT_OPENROUTER_MODEL) : DEFAULT_OPENROUTER_MODEL;
+  const settings = { provider, apiKey, openRouterModel };
   localStorage.setItem('dnd_ai_settings', JSON.stringify(settings));
   updateModelBadge();
 }
@@ -3609,56 +4614,29 @@ function closeSettingsModal() {
   setTimeout(() => { modal.style.display = 'none'; }, 200);
 }
 
-async function fetchModels() {
-  const apiKey = document.getElementById('settingsApiKey').value.trim();
-  const statusEl = document.getElementById('modelStatus');
-  const select = document.getElementById('settingsModelSelect');
-  if (!apiKey) { statusEl.innerText = '❌ Please enter an API key first.'; return; }
-  statusEl.innerText = '🔄 Validating API key...';
-  statusEl.style.color = '#C8A96E';
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
-      headers: { 'Authorization': `Bearer ${apiKey}` }
-    });
-    if (!response.ok) {
-      statusEl.innerText = `❌ API key rejected (${response.status}).`;
-      statusEl.style.color = '#C85A3A';
-      return;
-    }
-    // Repopulate our fixed model droplist
-    populateModelDroplist(select, localStorage.getItem('dnd_ai_settings')
-      ? (JSON.parse(localStorage.getItem('dnd_ai_settings')).model || DEFAULT_MODEL)
-      : DEFAULT_MODEL);
-    select.disabled = false;
-    statusEl.innerText = `✅ API key valid. Models ready.`;
-    statusEl.style.color = '#4CAF50';
-  } catch (err) {
-    statusEl.innerText = `❌ Network error: ${err.message}`;
-    statusEl.style.color = '#C85A3A';
-  }
-}
-
 async function testConnection() {
+  const provider = document.getElementById('settingsProviderSelect').value;
   const apiKey = document.getElementById('settingsApiKey').value.trim();
   const statusEl = document.getElementById('testConnectionStatus');
-  if (!apiKey) { statusEl.innerText = '❌ Enter an API key first.'; return; }
-  statusEl.innerText = '🔄 Testing connection...';
+  if (!apiKey) { statusEl.innerText = '❌ Enter API key first.'; statusEl.style.color = '#C85A3A'; return; }
+  statusEl.innerText = '🔄 Testing...';
   statusEl.style.color = '#C8A96E';
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
-      headers: { 'Authorization': `Bearer ${apiKey}` }
-    });
+    const url = provider === 'google'
+      ? `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(apiKey)}`
+      : 'https://openrouter.ai/api/v1/auth/key';
+    const headers = provider === 'openrouter'
+      ? { 'Authorization': `Bearer ${apiKey}` }
+      : {};
+    const response = await fetch(url, { headers });
     if (response.ok) {
-      statusEl.innerText = '✅ Connection successful! API key is valid.';
+      statusEl.innerText = `✅ ${provider === 'google' ? 'Google' : 'OpenRouter'} API key valid.`;
       statusEl.style.color = '#4CAF50';
-    } else if (response.status === 401) {
-      statusEl.innerText = '❌ Invalid API key (401).';
-      statusEl.style.color = '#C85A3A';
     } else {
-      statusEl.innerText = `❌ Error (${response.status}).`;
+      statusEl.innerText = `❌ Invalid key (${response.status}).`;
       statusEl.style.color = '#C85A3A';
     }
-  } catch (err) {
+  } catch(err) {
     statusEl.innerText = `❌ Network error: ${err.message}`;
     statusEl.style.color = '#C85A3A';
   }
@@ -3928,19 +4906,26 @@ function saveQuestEdit() {
 }
 
 function parseQuestCommands(text) {
-  // Parse [QUEST CREATE: "Name"|"Description"]
-  const createRegex = /\[QUEST CREATE:\s*"([^"]+)"\s*\|\s*"([^"]*)"\s*\]/gi;
+  // Parse [QUEST CREATE: "Name"|"Description"] or [QUEST CREATE: "Name"|"Description"|"Milestone1,Milestone2"]
+  const createRegex = /\[QUEST CREATE:\s*"([^"]+)"\s*\|\s*"([^"]*)"(?:\s*\|\s*"([^"]*)")?\s*\]/gi;
   let match;
   while ((match = createRegex.exec(text)) !== null) {
     const name = match[1];
     const desc = match[2];
+    const milestonesStr = match[3] || '';
     const existing = quests.find(q => q.name.toLowerCase() === name.toLowerCase() && q.status === 'active');
     if (existing) {
       existing.description = desc || existing.description;
       existing.updatedAt = new Date().toISOString();
       addQuestLog(`🤖 AI updated quest "${name}"`);
     } else {
-      createQuest(name, desc, 'ai');
+      const quest = createQuest(name, desc, 'ai');
+      if (milestonesStr) {
+        const milestoneList = milestonesStr.split(',').map(m => m.trim()).filter(Boolean);
+        for (const ms of milestoneList) {
+          addMilestone(quest.id, ms);
+        }
+      }
     }
   }
   // Parse [QUEST COMPLETE: "Name"]
@@ -4405,15 +5390,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('closeSettingsBtn').onclick = closeSettingsModal;
   document.getElementById('cancelSettingsBtn').onclick = closeSettingsModal;
   document.getElementById('saveSettingsBtn').onclick = () => { saveSettings(); closeSettingsModal(); };
-  document.getElementById('fetchModelsBtn').onclick = fetchModels;
   document.getElementById('testConnectionBtn').onclick = testConnection;
   document.getElementById('btn-settings').onclick = () => { setActive('btn-settings'); openSettingsModal(); };
-  // Enable/disable buttons based on API key input
-  document.getElementById('settingsApiKey').addEventListener('input', function() {
-    const hasKey = this.value.trim().length > 0;
-    document.getElementById('fetchModelsBtn').disabled = !hasKey;
-    document.getElementById('testConnectionBtn').disabled = !hasKey;
-  });
+  // Provider dropdown toggle
+  const provSelect = document.getElementById('settingsProviderSelect');
+  if (provSelect) {
+    provSelect.addEventListener('change', function() {
+      toggleConditionalView(this.value);
+    });
+  }
   // Quest modal wiring
   const questModal = document.getElementById('questModal');
   const questEditModal = document.getElementById('questEditModal');
@@ -4475,6 +5460,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryModal = document.getElementById('campaignSummaryModal');
   document.getElementById('btn-summary').onclick = () => { setActive('btn-summary'); openCampaignSummaryModal(); };
   document.getElementById('closeSummaryBtn').onclick = closeCampaignSummaryModal;
+  document.getElementById('editSummaryBtn').onclick = toggleSummaryEdit;
+  document.getElementById('saveSummaryBtn').onclick = saveSummaryEdit;
   document.getElementById('refreshSummaryBtn').onclick = refreshCampaignSummary;
   document.getElementById('copySummaryBtn').onclick = copyCampaignSummary;
   // Manual XP button
@@ -4514,7 +5501,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initSheetTabs();
   const storedChar = localStorage.getItem('dnd_current_character');
   if (storedChar) currentCharacter = JSON.parse(storedChar);
-  if (currentCharacter) syncCharacterStats();
+  if (currentCharacter) {
+    migrateCharacterState(currentCharacter);
+    syncCharacterStats();
+  }
   
   // ── Initialize Al'mundi worldbuilding reference if not already stored ──
   if (!localStorage.getItem('dnd_worldbuilding')) {
@@ -4644,8 +5634,8 @@ let chatSessionInit   = false;
 let isStreaming        = false;
 
 // ── Context management (summarization) ──
-const MAX_VISIBLE_MESSAGES = 20;        // Keep only last 20 non‑system messages
-const SUMMARY_INTERVAL = 20;            // Summarize every 20 new messages
+const MAX_VISIBLE_MESSAGES = 15;        // Keep only last 15 non‑system messages
+const SUMMARY_INTERVAL = 15;            // Summarize every 15 new messages
 let messagesSinceLastSummary = 0;       // Counter since last summarization
 let isSummarizing = false;              // Prevent concurrent summarizations
 
@@ -4714,18 +5704,11 @@ async function generateOpeningScene() {
   }
 
   // Try to generate an AI opening for open-world campaigns
-  const saved = localStorage.getItem('dnd_ai_settings');
-  let apiKey = '', model = '';
-  if (saved) {
-    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
-  }
-
-  // Load worldbuilding for richer scene generation
   const worldbuilding = (() => {
     try { return localStorage.getItem('dnd_worldbuilding') || ''; } catch(e) { return ''; }
   })();
 
-  if (apiKey && model && currentCharacter) {
+  if (getApiKey() && currentCharacter) {
     try {
       const charInfo = `${currentCharacter.name}, a Level ${currentCharacter.level} ${currentCharacter.race} ${currentCharacter.class}.${currentCharacter.backstory ? ' Backstory: ' + currentCharacter.backstory : ''}${currentCharacter.personalityTraits ? ' Traits: ' + currentCharacter.personalityTraits : ''}`;
       const location = camp.config?.location || 'a frontier settlement';
@@ -4740,81 +5723,25 @@ async function generateOpeningScene() {
         wbSnippet = `\n\nWorldbuilding reference for this setting:\n${truncated}`;
       }
 
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'DnD DM'
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: [
-            { role: 'system', content: `You are a D&D Dungeon Master writing an immersive opening scene for an open-world campaign set in the world of Al'mundi. Write in second person ("You see...", "You hear..."). Use **bold** for emphasis and *italics* for atmosphere. Keep it to 3-5 paragraphs. End by asking the player what they do. Do NOT use any HTML comment tags. Do NOT include game mechanics or dice rolls.\n\nIMPORTANT: Use the worldbuilding information provided by the user to ground the scene. Mention specific locations (e.g. the Forest of Allanar, Khigvorda Mountains, etc.), factions, NPCs, or cultural details from the world. Weave the character's backstory and personality traits into the scene. Make it feel authentic to Al'mundi.` },
-            { role: 'user', content: `Write an opening scene for an open-world D&D 5e campaign. The setting is ${location} with a ${tone} tone. The character is ${charInfo}.${wbSnippet}\n\nIntroduce the setting, hint at possible adventures (a rumor, a mystery, a nearby danger), and end with "What do you do?"` }
-          ],
-          max_tokens: 600,
-          temperature: 0.85
-        })
-      });
+      const systemPrompt = `You are a D&D Dungeon Master writing an immersive opening scene for an open-world campaign set in the world of Al'mundi. Write in second person ("You see...", "You hear..."). Use **bold** for emphasis and *italics* for atmosphere. Keep it to 3-5 paragraphs. End by asking the player what they do. Do NOT use any HTML comment tags. Do NOT include game mechanics or dice rolls.\n\nIMPORTANT: Use the worldbuilding information provided by the user to ground the scene. Mention specific locations (e.g. the Forest of Allanar, Khigvorda Mountains, etc.), factions, NPCs, or cultural details from the world. Weave the character's backstory and personality traits into the scene. Make it feel authentic to Al'mundi.`;
 
-      if (response.ok) {
-        const data = await response.json();
-        const opening = data.choices?.[0]?.message?.content;
-        if (opening) {
-          appendDMMessage(opening);
-          chatHistory.push({ role: 'assistant', content: opening });
-          saveChatHistory();
-          return;
-        }
+      const userContent = `Write an opening scene for an open-world D&D 5e campaign. The setting is ${location} with a ${tone} tone. The character is ${charInfo}.${wbSnippet}\n\nIntroduce the setting, hint at possible adventures (a rumor, a mystery, a nearby danger), and end with "What do you do?"`;
+
+      const opening = await callAI(
+        [{ role: 'user', content: userContent }],
+        systemPrompt,
+        600,
+        0.85
+      );
+
+      if (opening) {
+        appendDMMessage(opening);
+        chatHistory.push({ role: 'assistant', content: opening });
+        saveChatHistory();
+        return;
       }
     } catch (e) {
       console.warn('AI opening scene failed, using fallback:', e);
-    }
-  }
-
-  // ── AI-driven fallback: try to create a scene if we have API key, worldbuilding, and character ──
-  if (apiKey && model && currentCharacter && worldbuilding && worldbuilding.length > 20) {
-    try {
-      const charInfo = `${currentCharacter.name}, a Level ${currentCharacter.level} ${currentCharacter.race} ${currentCharacter.class}.${currentCharacter.backstory ? ' Backstory: ' + currentCharacter.backstory : ''}${currentCharacter.personalityTraits ? ' Traits: ' + currentCharacter.personalityTraits : ''}`;
-      const location = camp.config?.location || 'a frontier settlement';
-      const tone = camp.config?.tone || 'Heroic';
-      const truncated = worldbuilding.length > 3000
-        ? worldbuilding.slice(0, 3000) + '\n\n[...worldbuilding continues...]'
-        : worldbuilding;
-
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'DnD DM'
-        },
-        body: JSON.stringify({
-          model: model,
-          messages: [
-            { role: 'system', content: 'You are a creative D&D Dungeon Master. No pre-written hook is available. Using the worldbuilding information and the character\'s backstory below, invent an engaging opening scene for an open-world D&D campaign. Be creative — introduce a conflict, a mystery, or an opportunity. End by asking the player what they do.' },
-            { role: 'user', content: `Worldbuilding:\n${truncated}\n\nSetting: ${location}\nTone: ${tone}\nCharacter: ${charInfo}\n\nInvent an opening scene that hooks the player immediately. End with "What do you do?"` }
-          ],
-          max_tokens: 600,
-          temperature: 0.9
-        })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        const opening = data.choices?.[0]?.message?.content;
-        if (opening) {
-          appendDMMessage(opening);
-          chatHistory.push({ role: 'assistant', content: opening });
-          saveChatHistory();
-          return;
-        }
-      }
-    } catch (e) {
-      console.warn('AI fallback scene also failed:', e);
     }
   }
 
@@ -4871,21 +5798,170 @@ function updateChatTopbar() {
   }
 }
 
-function updateModelBadge() {
-  const saved = localStorage.getItem('dnd_ai_settings');
-  let modelName = 'No model set';
-  if (saved) {
-    try {
-      const s = JSON.parse(saved);
-      if (s.model) {
-        // Extract friendly name (last segment after /)
-        const parts = s.model.split('/');
-        modelName = parts[parts.length - 1] || s.model;
-      }
-    } catch(e) { /* ignore */ }
+function buildGeminiRequest(messages, systemPrompt, maxTokens = 768, temperature = 0.85) {
+  const contents = messages
+    .filter(m => m.role !== 'system')
+    .map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+  const body = {
+    contents,
+    generationConfig: {
+      maxOutputTokens: maxTokens,
+      temperature,
+      topP: 0.95,
+    },
+  };
+  if (systemPrompt) {
+    body.systemInstruction = { parts: [{ text: systemPrompt }] };
   }
+  return body;
+}
+
+async function callGemini(messages, systemPrompt, maxTokens = 600, temperature = 0.7) {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('API key missing.');
+  const body = buildGeminiRequest(messages, systemPrompt, maxTokens, temperature);
+  const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GOOGLE_MODEL + ':generateContent?key=' + encodeURIComponent(apiKey), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `HTTP ${response.status}`);
+  }
+  const data = await response.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+async function callOpenRouter(messages, systemPrompt, maxTokens = 600, temperature = 0.7) {
+  const apiKey = getApiKey();
+  if (!apiKey) throw new Error('API key missing.');
+  const model = getActiveModel();
+  const orMessages = systemPrompt
+    ? [{ role: 'system', content: systemPrompt }, ...messages]
+    : messages;
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': window.location.origin,
+      'X-Title': 'DnD DM'
+    },
+    body: JSON.stringify({
+      model: model,
+      messages: orMessages,
+      max_tokens: maxTokens,
+      temperature: temperature
+    })
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `HTTP ${response.status}`);
+  }
+  const data = await response.json();
+  return data.choices?.[0]?.message?.content || '';
+}
+
+function callAI(messages, systemPrompt, maxTokens = 600, temperature = 0.7) {
+  const provider = getActiveProvider();
+  if (provider === 'openrouter') {
+    return callOpenRouter(messages, systemPrompt, maxTokens, temperature);
+  }
+  return callGemini(messages, systemPrompt, maxTokens, temperature);
+}
+
+/**
+ * Safely process an SSE stream (OpenRouter or Gemini) and update a streaming bubble.
+ * @param {Response} response - Fetch API Response with a readable body stream.
+ * @param {string} bubbleId - DOM element ID for the streaming bubble.
+ * @param {'openrouter'|'gemini'} apiType - Which API format to parse.
+ * @returns {Promise<string>} The full accumulated text from the stream.
+ */
+async function handleAIStream(response, bubbleId, apiType) {
+  if (!response.body) {
+    console.error('ReadableStream not supported.');
+    return { fullText: '', finishReason: '' };
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let lineBuffer = '';
+  let fullText = '';
+  let finishReason = '';
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+
+      lineBuffer += decoder.decode(value, { stream: true });
+      const lines = lineBuffer.split('\n');
+      lineBuffer = lines.pop() || '';
+
+      for (const line of lines) {
+        const cleaned = line.trim();
+        if (!cleaned || cleaned === 'data: [DONE]') continue;
+
+        if (cleaned.startsWith('data: ')) {
+          const jsonStr = cleaned.slice(6).trim();
+          if (!jsonStr) continue;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+
+            if (apiType === 'openrouter') {
+              // OpenRouter sends deltas — append them
+              const delta = parsed.choices?.[0]?.delta?.content || '';
+              if (delta) fullText += delta;
+              finishReason = parsed.choices?.[0]?.finish_reason || finishReason;
+            } else {
+              // Gemini streaming — append each chunk to avoid truncation
+              const candidate = parsed.candidates?.[0];
+              if (candidate) {
+                finishReason = candidate.finishReason || finishReason;
+                const textPart = candidate.content?.parts?.[0]?.text || '';
+                if (textPart) fullText += textPart;
+              }
+            }
+
+            if (fullText) {
+              updateStreamingBubble(bubbleId, fullText);
+              scrollToBottom();
+            }
+          } catch (jsonError) {
+            console.warn('Partial JSON frame, buffering:', jsonError.message);
+          }
+        }
+      }
+    }
+  } catch (streamError) {
+    console.error('Stream read error:', streamError);
+  }
+
+  return { fullText, finishReason };
+}
+
+function buildGeminiContents() {
+  const messages = chatHistory.filter(m => m.role !== 'system');
+  return messages.map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }]
+  }));
+}
+
+function updateModelBadge() {
   const el = document.getElementById('chatModelName');
-  if (el) el.textContent = modelName;
+  if (!el) return;
+  const s = getSettings();
+  if (s.provider === 'openrouter') {
+    el.textContent = (s.openRouterModel || DEFAULT_OPENROUTER_MODEL) + ' (OR)';
+  } else {
+    el.textContent = GOOGLE_MODEL;
+  }
 }
 
 // ── Context chip toggle ──
@@ -4939,8 +6015,6 @@ function getSubclassMechanicalEssence(className, subclassName) {
     "Oath of Vengeance": "\n- Level 3: Channel Divinity: Abjure Enemy (frighten one creature), Vow of Enmity (advantage on attacks against one creature for 1 minute).\n- Level 7: Relentless Avenger – opportunity attack reduces target's speed to 0.\n- Level 15: Soul of Vengeance – when a creature under your Vow attacks, you can make an opportunity attack.\n- Level 20: Avenging Angel – gain flying speed, aura of fear.",
     "Oath of Conquest": "\n- Level 3: Channel Divinity: Conquering Presence (frighten creatures within 30 ft), Guided Strike (+10 to attack).\n- Level 7: Aura of Conquest – frightened creatures have speed 0 and take psychic damage if they start turn in aura.\n- Level 15: Scornful Rebuke – when a creature hits you, it takes psychic damage.\n- Level 20: Invincible Conqueror – resistance to all damage, extra attack.",
     "Oath of Redemption": "\n- Level 3: Channel Divinity: Emissary of Peace (+10 Persuasion), Rebuke the Violent (deal radiant damage to attacker).\n- Level 7: Aura of the Guardian – take damage meant for an ally within 10 ft.\n- Level 15: Protective Spirit – regain HP each turn when below half HP.\n- Level 20: Emissary of Redemption – resistance to all damage, attackers take radiant damage.",
-    "Oath of Glory": "\n- Level 3: Channel Divinity: Peerless Athlete (advantage on Str/Dex checks, jump distance), Inspiring Smite (give temporary HP to allies).\n- Level 7: Aura of Alacrity – your speed increases by 10 ft; allies in aura also gain 10 ft.\n- Level 15: Glorious Defense – when you miss an attack, you can add your Cha to AC and gain temporary HP.\n- Level 20: Living Legend – you can reroll a missed attack and gain advantage on all attacks for 1 minute.",
-    "Oath of the Watchers": "\n- Level 3: Channel Divinity: Watcher's Will (advantage on Int/Wis/Cha saves for you and allies), Abjure the Extraplanar (turn aberrations, celestials, elementals, fey, fiends).\n- Level 7: Aura of the Sentinel – advantage on initiative rolls, you and allies within 10 ft.\n- Level 15: Vigilant Rebuke – when a creature you can see makes a save, you can deal radiant damage.\n- Level 20: Watcher's Refuge – you and allies become invisible for 1 minute, gain +10 to Stealth.",
     "Champion": "\n- Improved Critical (19-20), Remarkable Athlete (add half proficiency to physical ability checks), Additional Fighting Style, Superior Critical (18-20), Survivor (regain HP each turn).",
     "Battle Master": "\n- Maneuvers are chosen by the player; use the selected maneuvers.",
     "Eldritch Knight": "\n- No additional resources beyond spellcasting; AI tracks.",
@@ -4962,446 +6036,60 @@ function getSubclassMechanicalEssence(className, subclassName) {
 // ── System prompt builder ──
 function buildSystemPrompt() {
   const camp = campaigns.find(c => c.id === selectedCampaignId) || campaigns[0];
-  let prompt = `# DM Guardrails & Guide – Revised for Narration Quality & Combat Fun
+  let prompt = `# DM Core Directives
 
-These instructions define the Dungeon Master’s (AI’s) behavior. Follow D&D 5e (2024) rules. Prioritise immersive narration, dynamic combat, and automatic character sheet updates.
+## 1. Narration, Player Agency & Formatting (Strict)
+- Never narrate the player's actions, dialogue, or internal thoughts. Always end with a prompt asking what they do.
+- NPCs have limited knowledge. They do not know the player's class, patron, or secrets unless explicitly revealed in-game.
+- NPCs act according to their alignment and motivations. High Persuasion rolls are not mind control.
+- **Formatting Rules**: Use plain text for 90% of narration and dialogue. Use *italics* only for internal thoughts or subtle atmospheric emphasis (e.g., *the wind howls*). Use **bold** only for loud shouts, prominent sounds (e.g., **BOOM**), or the first mention of a critical item (e.g., **the Amulet of Khelben**). Do not italicize or bold entire dialogue lines or long descriptive paragraphs—over‑formatting reduces impact.
 
----
+## 2. Mandatory Response Header
+Begin every response with this exact format:
+\`| Time of Day | HH:MM AM/PM | Weekday, Month Day, Year | Moon Phase | Current Location | Season | Weather |\`
+(e.g., \`| Evening | 07:15 PM | Thursday, June 11, 2026 | Waxing Gibbous | Phandalin | Summer | Clear |\`)
 
-## 0. Message Header Format (Mandatory)
+## 3. Mechanics & Rules
+- Use D&D 5e (2024) rules.
+- Roll dice honestly. Natural 1 is a critical failure; Natural 20 is a critical success.
+- Combat: Use the Combat Tags below. Player drinks potion as a bonus action.
+- Rest: Short Rest (2 hours, max 2/day) allows Hit Dice spending. Long Rest (8 hours, max 1/day) fully restores HP, spell slots, and resources.
 
-**At the beginning of every message**, you must include a header with the following format:
+## 4. System Tags (Strict Syntax – Use These to Update the Game State)
+**Character Changes:**
+- HP: \`<!-- char_hp_change amount="-5" -->\` (negative = damage)
+- Currency: \`<!-- char_currency cp="0" sp="0" ep="0" gp="25" pp="0" -->\` (use negative for spending)
+- Items: \`<!-- char_add_item name="Potion" quantity="1" -->\` / \`<!-- char_remove_item name="Potion" quantity="1" -->\`
+- Armor: \`<!-- char_set_armor name="Leather Armor" -->\` / \`<!-- char_set_shield equipped="true" -->\`
+- Weapons: \`<!-- char_add_weapon name="Longsword" quantity="1" -->\` / \`<!-- char_remove_weapon name="Longsword" -->\`
+- Ability Scores: \`<!-- char_ability strength="+1" dexterity="+2" -->\`
+- Level/HP Max: \`<!-- char_level value="5" -->\` / \`<!-- char_max_hp value="28" -->\`
+- Spell Slots: \`<!-- char_spell_slots level="1" count="4" -->\`
+- Conditions: \`<!-- char_add_condition name="Poisoned" duration="1 minute" -->\` / \`<!-- char_remove_condition name="Poisoned" -->\`
+- Misc Features/Feats: \`<!-- char_add_feature name="Action Surge" description="..." -->\` / \`<!-- char_feat name="Great Weapon Master" -->\` / \`<!-- char_set_fighting_style name="Archery" -->\` / \`<!-- char_set_pact_boon name="Pact of the Blade" -->\` / \`<!-- char_add_invocation name="Agonizing Blast" -->\` / \`<!-- char_add_metamagic name="Quickened Spell" -->\` / \`<!-- char_add_maneuver name="Trip Attack" -->\`
+- Resources: \`<!-- resource spend type="Rage" amount="1" -->\` / \`<!-- resource set type="LayOnHands" amount="25" -->\`
+- Notes/Properties: \`<!-- char_set_property key="Hexblade's Curse" value="active" -->\` / \`<!-- char_add_note text="Has the ring." -->\`
 
-\`| Time of Day | HH:MM AM/PM (12H format) | Day of the week, Month Day, Year | Moon Phase | Current Location | Season | Weather |\`
+**Combat Tracker (Critical for Combat):**
+- Start: \`<!-- combat start initiative="Player:17, Goblin:14" enemies='[{"name":"Goblin"},{"name":"Goblin"}]' -->\` (System auto-fills HP/AC from DB).
+- Damage: \`<!-- combat damage id="enemy_0" amount="5" -->\` (Use \`id="player"\` for player).
+- Heal: \`<!-- combat heal id="player" amount="4" -->\`
+- Next Turn: \`<!-- combat next_turn -->\`
+- End: \`<!-- combat end -->\`
 
-- **Time of Day:** e.g., "Morning", "Afternoon", "Evening", "Night"
-- **HH:MM AM/PM:** e.g., 08:30 AM, 03:15 PM, 10:45 PM
-- **Day of the week, Month Day, Year:** Use the Gregorian calendar. Example: "Thursday, June 11, 2026"
-- **Moon Phase:** e.g., "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon", "Waning Gibbous", "Last Quarter", "Waning Crescent"
-- **Current Location:** The name of the area, settlement, or terrain (e.g., "Neverwinter", "High Road – Forest", "Wave Echo Cave")
-- **Season:** "Spring", "Summer", "Autumn (Fall)", "Winter"
-- **Weather:** Brief description (e.g., "Clear skies, light breeze", "Heavy rain", "Snowstorm", "Foggy")
+**Quest & NPC Management:**
+- Quest Create: \`[QUEST CREATE: "Clear the Cave"|"Goblins are here."|"Find entrance,Defeat chief"]\`
+- Quest Milestone: \`[QUEST MILESTONE: "Clear the Cave"|"Find entrance"|complete]\`
+- Quest Complete: \`[QUEST COMPLETE: "Clear the Cave"]\` / \`[QUEST FAIL: "Clear the Cave"]\`
+- NPC Add: \`<!-- npc_add name="Elara" role="Innkeeper" location="Phandalin" description="..." relationship="Friendly" -->\`
 
-**Example header:**
-\`| Evening | 07:15 PM | Thursday, June 11, 2026 | Waxing Gibbous | Phandalin | Summer | Clear skies, warm |\`
-
-This header provides essential time, location, and atmospheric context for the player.
-
----
-
-## 0.1 Setting the Scene
-
-**Before narrating any action or dialogue, you must set the scene.** Use the current header information, the campaign's context, and the character's backstory to describe the environment, mood, and immediate situation.
-
-- Read the character's backstory and personality traits (stored in \`currentCharacter.backstory\` and \`currentCharacter.personalityTraits\`).
-- Consider the campaign's plot or open-world status.
-- Weave these elements into a vivid, sensory description that places the player in the world.
-
-**Example:** Instead of "You are in a forest", write: *"The late autumn sun hangs low over the Neverwinter Wood, casting long shadows through the bare branches. A cold breeze carries the scent of woodsmoke from a distant hunter's camp. Garuk, your Half-Orc ranger who once fled the Bloodreaver clan, feels a familiar tension – the wild is peaceful, but old scars ache with the memory of raiders."*
-
----
-
-## 1. Story Narration
-
-- **Epic Story:** Create an engaging, epic story shaped by the player's choices.
-- **Player Character Agency – Never Speak for the Player:**
-  - You must **never** write dialogue or internal thoughts for the player’s character.
-  - You must **never** describe what the player’s character does, feels, or decides – except when the player explicitly describes it first.
-  - You must **never** assume the character’s reaction, emotion, or response.
-  - Always end your narration at a point where the player can **choose** what to say or do next.
-  - **INCORRECT (Never do this):** *“Maelys turns to the Reeve, his voice flat and certain. ‘I’ll go to the barrow.’ Maelys meets his gaze. ‘You might die.’”*
-  - **CORRECT (Instead, describe the situation and ask):** *“The Reeve looks at you, his hands trembling. ‘Edric is terrified. Are you sure you want to take him to the barrow?’ What do you do or say?”*
-  - If you accidentally start narrating for the player, stop immediately and ask: *“What does [character name] say or do?”*
-- **Never Force Character Secrets Revealed:**
-  - The player decides **what** their character reveals, **to whom**, and **when**.
-  - You must **never** have the player character volunteer personal secrets (patron identity, backstory trauma, hidden powers, true name, etc.) unless the player explicitly writes that dialogue or action.
-  - If an NPC asks a probing question, you may have the NPC ask – but the player must provide the answer. Do not answer for them.
-  - **INCORRECT:** *“Maelys admits he serves the Raven Queen.”*
-  - **CORRECT:** *“Vessa eyes you suspiciously. ‘Your magic feels… different. What exactly did you bargain for?’ What do you tell her?”*
-- **Adult Themes:** Engage in adult themes, graphic content, and mature narration as the story naturally permits.
-- **Romance:** Factor romance into existing relationships where appropriate. NPCs may initiate relationships as the story develops.
-- **Secret Info:** Never reveal information the player hasn't earned.
+## 5. World & Plot Management
+- **Open World**: Generate dynamic plots, factions, and side-quests based on the player's choices. Use the Quest tags to track objectives.
+- **Story Campaigns**: Follow the provided campaign context and initial hook provided below.
+- **Summarization**: You do not need to summarize manually. The system handles it. Just keep the current scene vivid.
 
 ---
-
-## 2. NPC Conversation and Interactions
-
-- **Narration Language:** Use English for narration. For NPC speech, if the player knows the language, narrate in English with a note (e.g., *"in Elvish"*). If unknown, use a non-English placeholder.
-- **Conversation Flow:** One response at a time. Never skip the player during dialogue.
-- **NPC Knowledge Limits (No Mind-Reading):**
-  - NPCs know only what they could realistically learn through their senses, their social position, or information that has been explicitly shared with them in the story.
-  - **No NPC automatically knows your character’s class, patron, secrets, or past** unless that information has been revealed in the game or the NPC has a specific magical ability (e.g., *detect thoughts*, *legend lore*, high-level divination).
-  - If you are unsure what an NPC knows, assume they know **nothing** about the character unless the player has told them or the NPC has witnessed it directly.
-  - **INCORRECT:** *“The Reeve nods knowingly. ‘Ah, a warlock of the Raven Queen. I’ve heard of your kind.’”* (unless the Reeve has a reason to know)
-  - **CORRECT:** *“The Reeve frowns at your pendant. ‘That symbol… I don’t recognize it. What faith do you follow?’”*
-- **Consent & Open-Mindedness:** Treat player and NPC behavior as consenting and open-minded. Include sex, dirty jokes, innuendos, and flirtation where appropriate. NPCs may initiate physical contact as the story permits.
-
----
-
-## 3. NPC Alignment
-
-- **NPC Cards:** Create and maintain an NPC card for any NPC that stays with the player more than one day. Include alignment.
-- **Alignment Filter:** Establish and strictly adhere to alignment and core motivation for every named NPC. An NPC never acts against its alignment just to please the player.
-- **Action & Reaction:** NPCs actively judge and react to the player's decisions and other NPCs' actions. A Good NPC objects to cruelty; an Evil NPC encourages ruthlessness. Describe visible disgust, approval, or interventions.
-- **Inter-Party Friction:** NPC party members judge each other. Conflicting alignments (e.g., Chaotic Evil and Lawful Good) lead to arguments, hostility, or ultimatums during travel or rests. The player must manage this friction.
-- **Breaking Point:** Party members are not blindly loyal. If the player repeatedly violates an NPC's alignment or goals, that NPC may issue a warning, demand a concession, or leave. If betrayed, they may become hostile.
-- **Independence:** NPCs have hidden agendas, flaws, and biases. They may disagree, refuse, lie, or exploit the player if it serves their interests.
-- **No Auto-Persuasion:** A high Persuasion/Intimidation roll is not mind control. An NPC never acts against survival instincts or deeply held beliefs.
-- **Party Friction:** Party members voice dissenting opinions and argue if a decision conflicts with their alignment or goals. They do not blindly follow into obvious danger without convincing.
-
----
-
-## 4. Skill Checks & Saving Throws
-
-- **When to Roll:** Roll an ability/skill check when the outcome is uncertain, there is a meaningful consequence for failure, and the task is neither trivially easy nor impossibly hard.
-- **Consequence of Failure:** Failure must result in a tangible, immediate negative consequence (e.g., damage, lost resource, alerted enemies, broken item, severe narrative setback).
-- **DC Guidance:** Use standard DCs (5 = Very Easy, 10 = Easy, 15 = Moderate, 20 = Hard, 25 = Very Hard, 30 = Nearly Impossible).
-- **Outcome:** Always provide the result of the check or save immediately after the roll. Never foreshadow the outcome.
-
----
-
-## 5. Player Story (Simplified)
-
-- **Story Framework:** Maintain a nested structure:
-  - **Campaign:** The main storyline (one active at a time).
-  - **Adventures:** 1-2 goals that help complete the Campaign (last at least 1 week).
-  - **Milestones:** 1-2 per Adventure (last a few days).
-  - **Side Adventures:** Brief respites (50% combat, 50% non-combat) with consequences if ignored.
-- **Campaign Transition:** When a Campaign ends, seamlessly introduce a new one. The theme may draw from the player's background, party members, world events, class, or factions.
-- **Story Notes:** Maintain a "Story Notes" section (in the character data or a separate log) with: Campaign status, Adventure status, Milestone status, Side Adventure status. Keep it clean.
-- **Environments:** Use varied backgrounds: dungeons, caves, ruins, tombs, mines, enemy encampments, etc.
-- **Settlements:** Use Al'mundi locations. You may create smaller settlements of any size and alignment.
-- **Campaign Scale by APL:**
-  - APL 1-4: Local village/countryside
-  - APL 5-10: Town/small city
-  - APL 11-16: Continental
-  - APL 17-20: Extraplanar / god-like
-- **NPC Side Adventures:** Occasionally introduce side adventures centred on an NPC's personal goal not tied to the main Campaign.
-
----
-
-## 6. Time System
-
-- **Combat Round:** 6 seconds (per 5e).
-- **Short Rest:** 2 hours, maximum 2 per day. Allows Hit Dice healing, Arcane Recovery, etc.
-- **Long Rest:** 8 hours, maximum 1 per day.
-
----
-
-## 7. Roll Protocol
-
-- **DM Rolls:** Always roll randomly (never fudge). All NPC rolls are made by the DM (or the system).
-- **Player Rolls:** The player rolls for all their character's actions (attacks, saves, checks).
-- **Natural 20:** Critical success – automatically succeeds.
-- **Natural 1:** Critical failure – automatically fails.
-
----
-
-## 8. Weather (Simplified)
-
-- Describe weather appropriate for the season. Change it naturally every 2-4 in-game days. Apply mechanical effects (difficult terrain, low visibility) when extreme, but only when they enhance the scene or combat.
-
----
-
-## 9. Travel (Simplified)
-
-- **DM Responsibility:** Determine terrain, pace, roads, mounts, magic, and weight. Never ignore travel factors for convenience.
-- **Map & Coordinates:** Use Al'mundi geography. Track approximate coordinates only when necessary. You may create minor locations between known points.
-- **Travel Day:** 8 hours, default pace = Normal.
-- **Pace Effects:**
-  - Fast (4 mph, 32 mpd): Disadvantage on Perception/Survival/Stealth
-  - Normal (3 mph, 24 mpd): Disadvantage on Stealth
-  - Slow (2 mph, 16 mpd): Advantage on Perception/Survival
-- **Terrain Caps:**
-  - Fast: Arctic (with gear) or Grassland
-  - Normal: Coast, Desert, Forest, Hills, Underdark, Urban
-  - Slow: Mountain, Swamp
-  Improved roads increase pace by one step.
-- **Exhaustion:** Apply 5e 2024 exhaustion rules during travel.
-- **Non-Foot Travel:** Consult the 5e DMG.
-- **Visibility (default):**
-  Forest/Swamp: 2d8x10 ft | Hills: 2d10x10 ft | Mountain: 4d10x10 ft | Grass/Desert: 6d6x10 ft
-
----
-
-## 10. Encounters
-
-- **Privacy:** Never share encounter check rolls or internal calculations with the player – only narrate outcomes.
-- **Frequency:** Generate 1-3 encounters per travel day, depending on terrain and precautions. Aim for a mix: Combat (40%), Exploration/Hazards (30%), Roleplay (20%), Lore/Milestone (10%).
-- **Realism:** Creatures and scenarios must fit the environment/biome. Only 25% of encounters should directly relate to the Campaign, Adventure, or Milestone.
-- **Brutality:** The world is lethal. Traps are deadly, weather causes exhaustion, resources dwindle. Do not artificially save the player from bad decisions.
-
----
-
-## 11. Dungeon Encounter Rules
-
-- **Zoning:** Conceptualise dungeons as zones: (1) entrance, (2) common area(s), (3) boss area. This is an out-of-story framework.
-- **Encounter Frequency:** Roll for an encounter at least once per zone.
-- **Noise:** Loud actions (shouting, explosions) trigger realistic reactions in adjacent zones: ambushes, fleeing, reinforcements.
-- **Rest Interference:**
-  - Short rest: 50% chance of an encounter roll
-  - Long rest: 100% chance
-  Players may create a secure environment (e.g., Leomund's tiny hut, barricaded room) to avoid this.
-- **Objective Variety:** Dungeon encounters should not be just "kill everything". Include puzzles, hazards, social challenges.
-
----
-
-## 12. Rewards
-
-- **XP Rules:** Use 5e rules. Divide XP by the number of party members. Use creature CR for XP values.
-- **XP Log:** Maintain an XP log in the character sheet (only for current level). Keep entries for combat, Campaign, Adventure, Milestone, and Side Quests only.
-- **Loot:** Exclusively use the DMG for loot rewards. Describe all rewards; note insignificant items. Minimise homebrew items or effects.
-
----
-
-## 13. Combat
-
-- **Initiative:** Always roll initiative at the start of combat.
-- **Surprise:** Determine surprise at the start. Surprised creatures have disadvantage on initiative.
-- **Difficulty:** Use DMG encounter building rules. A solo monster's CR must be <= APL+3.
-- **Enemy Types (by environment):**
-  - Urban: Humanoids, Undead, Constructs
-  - Terrestrial/Wilds: Beasts, Dragons, Fey, Giants, Monstrosities, Plants, Undead
-  - Underground: Aberrations, Oozes, Dragons, Giants, Undead
-  - Coastal/Sea/Aquatic: Beasts, Dragons, Elementals, Giants, Undead
-  - Planar: Aberrations, Celestials, Elementals, Fey, Fiends
-
----
-
-## 14. Combat Procedures
-
-- **Turn Order:** Complete combat by round. Each combatant has one turn based on initiative.
-- **Description:** Briefly narrate each combatant's movement, action, and bonus action (if strategic). Keep it vivid but concise.
-- **NPC Control:** The DM controls NPCs and rolls for them. Summons commanded by the player are controlled by the player.
-- **Player Control:** The player always controls their character, unless under a control spell/ability. Confirm when the player's turn ends.
-- **Turn Actions:** Each turn: movement, 1 action, 1 bonus action, 1 reaction (unless an ability grants more).
-- **Reactions:** Prompt the player to use reactions (opportunity attack, counterspell, shield) when available. NPCs also use reactions intelligently.
-- **Enemy Tactics:** Enemies fight to win, survive, and kill. Intelligent enemies focus fire on the weakest or most dangerous, use flanking, exploit mistakes, finish downed characters, and use the environment against the party.
-- **Combat End:** Combat ends when all enemies are restrained, unconscious, surrendered, or at 0 HP, **or** when they flee or surrender earlier.
-- **Potion Homebrew:** Drinking a potion is a bonus action.
-- **Critical Damage:** Use standard 5e rules.
-
----
-
-## 15. Inventory (Simplified)
-
-- **Rations:** Assume standard travel costs and rations are handled off-screen unless the party is lost.
-- **Non-magical Ammunition:** Infinite – no tracking needed.
-- **Magical Components:** Assume component pouches cover all component costs unless the spell has a costly component that is consumed. Mention when a costly component is required.
-
----
-
-## 16. Critical Rules
-
-- **AI Role:** The AI is the Dungeon Master (DM).
-- **Player Role:** The player is a character in the adventure. Their choices influence the story but do not control it.
-- **Default D&D Version:** 5e 2024.
-- **Monster Source:** You may use any official 5e monsters (not restricted to the Monster Manual).
-- **Party Cap:** The player may have at most 4 permanent combatants in their party. An extra 1-2 may join for story reasons but not for more than one day (excludes summons).
-- **Average Party Level (APL):** Calculate based on permanent combatants (excluding summons).
-
-- **Response Format – In Combat:**
-  *Header (mandatory – see section 0)*
-  *Initiative Order*
-  *Friendly Party Status* (HP, conditions)
-  *Enemy Party Status* (visible injuries, conditions)
-  *Combat Area Topography*
-  *Narrative* (includes scene setting)
-  *Player Input Request*
-  *Footer:* Player HP, Spell slots by level (if applicable)
-
-- **Response Format – Out of Combat:**
-  *Header (mandatory – see section 0)*
-  *Narrative* (includes scene setting)
-  *Player Input Request*
-
----
-
-## 17. Character Sheet Auto-Updates (DM Must Use Tags)
-
-The DM **must** automatically update the player's character sheet using hidden tags. When the following changes occur, include the corresponding tag in your response. The tags will be parsed and removed from the player's view.
-
-**CRITICAL - Tag formatting rules (must follow exactly):**
-- Always write tags exactly as shown: open with angle bracket, exclamation, two dashes and close with two dashes, angle bracket.
-- Never replace the closing part of the tag with any arrow symbol or other character.
-- Never omit the closing part of the tag.
-- Do not use arrow symbols, Unicode characters, or any variation inside tags.
-- Use the exact attribute names shown - no aliases, no extra spaces.
-
-Examples (copy exactly):
-- **HP change:** \`<!-- char_hp_change amount="-5" -->\` (negative = damage, positive = healing)
-- **Currency change:** \`<!-- char_currency cp="10" sp="0" ep="0" gp="25" pp="0" -->\` (signed integers)
-- **Add item:** \`<!-- char_add_item name="Potion of Healing" quantity="1" weight="0.5" notes="Heals 2d4+2" -->\`
-- **Remove item:** \`<!-- char_remove_item name="Potion of Healing" quantity="1" -->\`
-- **Set armor:** \`<!-- char_set_armor name="Leather Armor" -->\`
-- **Set shield:** \`<!-- char_set_shield equipped="true" -->\`
-- **Add weapon:** \`<!-- char_add_weapon name="Longsword" quantity="1" -->\`
-- **Remove weapon:** \`<!-- char_remove_weapon name="Longsword" quantity="1" -->\`
-- **XP award:** \`<!-- xp_award amount="200" reason="Defeated goblin" -->\`
-- **Ability score change (optional):** \`<!-- char_ability strength="+2" constitution="+1" -->\`
-- **Quest Create (HTML tag):** \`<!-- quest_create name="Rescue the Blacksmith" description="The blacksmith has been taken by goblins" milestones="Find the goblin camp,Defeat the goblin chief,Free the blacksmith" -->\`
-- **Quest Create (inline text — alternative):** \`[QUEST CREATE: "Rescue the Blacksmith"|"The blacksmith has been taken by goblins"]\`
-- **Quest Complete (inline):** \`[QUEST COMPLETE: "Rescue the Blacksmith"]\`
-- **Quest Milestone (inline):** \`[QUEST MILESTONE: "Rescue the Blacksmith"|"Find the goblin camp"|complete]\`
-- **NPC Add:** \`<!-- npc_add name="Elara" role="Innkeeper" location="Phandalin" description="A friendly halfling with a warm smile" relationship="Friendly" -->\`
-- **Combat Start:** \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin","hp":7,"ac":15}]' -->\`
-- **Combat Damage:** \`<!-- combat damage id="enemy_0" amount="5" -->\`
-- **Combat Next Turn:** \`<!-- combat next_turn -->\`
-- **Combat End:** \`<!-- combat end -->\`
-- **Spell Consume:** \`<!-- spell_consume level="1" -->\`
-- **Short Rest:** \`<!-- short_rest -->\`
-- **Long Rest:** \`<!-- long_rest -->\`
-- **Stabilize:** \`<!-- stabilize -->\`
-- **Condition Add:** \`<!-- char_add_condition name="Poisoned" duration="1 minute" -->\`
-- **Condition Remove:** \`<!-- char_remove_condition name="Poisoned" -->\`
-- **Resource Spend:** \`<!-- resource spend type="Rage" amount="1" -->\`
-- **Store any property:** \`<!-- char_set_property key="Hexblade's Curse" value="1 use per short rest" -->\`
-- **Add a note:** \`<!-- char_add_note text="Hexblade's Curse: As a bonus action, curse a creature. Once per short rest." -->\`
-
-Use \`char_set_property\` for any class feature, racial trait, proficiency, language, resource description, or other text that should be stored as a named entry. Use \`char_add_note\` for longer descriptions or general notes. The player will see these in the character sheet.
-
-Always update the character sheet after any change. Save to localStorage and refresh any open sheet UI.
-
-**Warning: Malformed tags will be silently dropped by the system.** Double-check each tag before including it.
-
----
-
-## 18. Monster Stat Database
-
-You do not need to provide hp and ac for common monsters. The system will automatically look them up from a built-in database. You can still supply explicit values if you want a custom monster.
-
-**Examples:**
-- For a standard goblin, you can write:
-  \`<!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin"}]' -->\`
-  The system will fill in HP 7 and AC 15.
-- For a custom monster not in the database, provide full stats:
-  \`<!-- combat start initiative="Thalion:17, Shadow Beast:9" enemies='[{"name":"Shadow Beast","hp":45,"ac":14}]' -->\`
-
-Always include the monster's name **exactly** as it appears in the database (case-insensitive). The database contains monsters from the official 5e Monster Manual.
-
----
-
-## 19. Open World Plot Creation
-
-If the campaign is **open world** (no predefined main plot or subplots), you are **allowed and encouraged to create** your own overarching plots, faction conflicts, personal character arcs, and side quests as the story unfolds. Introduce interesting NPCs, locations, and events that respond to the player's actions. Create a sandbox experience where the player's choices shape the world. Use the quest-creation and NPC tags to materialise these elements.
-
-When generating the opening scene for an open-world campaign, invent an engaging starting scenario based on the character's backstory and a fitting location. Hint at possible adventures but leave the direction open.
-
----
-
-## 20. COMBAT TRACKER – AUTOMATIC USE
-
-When a fight starts, you MUST output a combat start tag **as the first thing in your message** (after the mandatory header, but before any narrative). The tag uses the format:
-
-\`<!-- combat start initiative="PlayerName:20, Enemy1:15, Enemy2:10" enemies='[{"name":"Enemy1"},{"name":"Enemy2"}]' -->\`
-
-**Rules:**
-- Roll initiative for each participant (1d20 + Dexterity modifier). Use the player's character name exactly as it appears in the character sheet.
-- List all participants in descending initiative order.
-- For enemies, provide the JSON array with at least the \`name\` field. The system will automatically look up their HP and AC from the built‑in monster database. If the monster is custom (not in the database), include \`hp\` and \`ac\` explicitly, e.g.: \`{"name":"Shadow Beast","hp":45,"ac":14}\`.
-- Never put any text before the tag – it must be the very first thing after the header.
-
-**During combat:**
-- When the player or an enemy takes damage, output: \`<!-- combat damage id="player" amount="5" -->\` or \`<!-- combat damage id="enemy_0" amount="8" -->\`.
-- To advance to the next turn: \`<!-- combat next_turn -->\`.
-- When combat ends (all enemies defeated or fled): \`<!-- combat end -->\`.
-
-**The system will automatically display the combat tracker UI and update HP.** You do not need to manually track HP in your narrative – just use the tags.
-
-**Example response (first turn of combat):**
-
-\`<!-- combat start initiative="Thalion:18, Goblin Archer:14, Goblin Warrior:11" enemies='[{"name":"Goblin"},{"name":"Goblin"}]' -->
-*The goblins draw rusty scimitars and snarl. One nocks an arrow.*
-Initiative order: Thalion, Goblin Archer, Goblin Warrior. Thalion, what do you do?
-\`
-
----
-
-## 21. QUEST TRACKER – AUTOMATIC CREATION AND UPDATES
-
-Whenever the story introduces a clear objective, you **must** create a quest using the inline text format (easier for you to generate). The system automatically parses these tags and updates the quest tracker UI.
-
-**Quest creation** – use this pattern inside your narrative (it will be removed from the player's view):
-
-\`[QUEST CREATE: "Quest Name"|"Brief description"]\`
-
-Optionally, you can add initial milestones by appending them after a comma, e.g.:
-
-\`[QUEST CREATE: "Find the Lost Amulet"|"The duke's heirloom was stolen."|"Question the tavern keeper,Search the old well"]\`
-
-**Milestone updates** – when the player achieves part of a quest:
-
-\`[QUEST MILESTONE: "Quest Name"|"Milestone text"|complete]\`
-
-**Quest completion** – when the quest is finished (successfully):
-
-\`[QUEST COMPLETE: "Quest Name"]\`
-
-**Quest failure** – when the quest becomes impossible or abandoned:
-
-\`[QUEST FAIL: "Quest Name"]\`
-
-**When to create a quest:**
-- An NPC gives a task with a clear reward or consequence.
-- The party discovers a problem that needs solving (e.g., a monster to slay, a missing person).
-- The story introduces a long‑term goal (e.g., "defeat the dragon").
-- Any time the player expresses an intent that could become a tracked objective.
-
-**Example:**
-
-\`[QUEST CREATE: "Clear the Cragmaw Hideout"|"Goblins have taken over an old cave near Phandalin."|"Find the hideout entrance,Defeat the goblin chief"]\`
-
-Later, after the player finds the entrance:
-
-\`[QUEST MILESTONE: "Clear the Cragmaw Hideout"|"Find the hideout entrance"|complete]\`
-
-Finally, after defeating the chief:
-
-\`[QUEST COMPLETE: "Clear the Cragmaw Hideout"]\`
-
-The system will show the quest log and progress bars automatically.
-
----
-
-## 22. AUTOMATIC SUBCLASS FEATURES AND CHOICES
-
-When a character gains a subclass feature (at creation or level‑up), you **must** add it to the character sheet using the \`char_add_feature\` tag. Do this for **every** feature described in the subclass, including passive bonuses and action options.
-
-**Format:** \`<!-- char_add_feature name="Feature Name" description="Short description" level="X" -->\`
-
-If the feature requires a choice from a list (e.g., Eldritch Invocations, Metamagic, Battle Master Maneuvers, Arcane Shots, Pact Boon), you **must** also output a \`char_choice_required\` tag immediately after adding the feature. The system will prompt the player to select the options.
-
-**Example for Warlock (level 2):**
-
-\`<!-- char_add_feature name="Eldritch Invocations" description="You can choose two invocations." level="2" -->\`
-\`<!-- char_choice_required type="invocations" count="2" class="Warlock" -->\`
-
-**For Sorcerer (level 3) with Metamagic:**
-
-\`<!-- char_add_feature name="Metamagic" description="You gain two metamagic options." level="3" -->\`
-\`<!-- char_choice_required type="metamagic" count="2" class="Sorcerer" -->\`
-
-**For Fighter Battle Master (level 3):**
-
-\`<!-- char_add_feature name="Combat Superiority" description="You gain three maneuvers and four superiority dice." level="3" -->\`
-\`<!-- char_choice_required type="maneuvers" count="3" class="Fighter" subclass="Battle Master" -->\`
-
-**For Warlock Pact Boon (level 3):**
-
-\`<!-- char_add_feature name="Pact Boon" description="Choose a pact boon." level="3" -->\`
-\`<!-- char_choice_required type="pactBoon" count="1" class="Warlock" -->\`
-
-**For Dragonborn race – Draconic Ancestry choice:**
-
-\`<!-- char_choice_required type="dragonbornAncestry" count="1" class="Dragonborn" -->\`
-
-After the player makes the selection, the system will store the choices. You do not need to do anything else – the sheet will reflect the chosen features.
-
-When a character levels up (either because you awarded XP or the player manually increased the level), you **must** immediately output the appropriate \`char_add_feature\` and \`char_choice_required\` tags for the new level's subclass features. Do not wait for the player to ask.
-
----
-
-*End of Guardrails*`;
+*End of Core Directives*`;
 
   // Campaign context
   if (camp) {
@@ -5463,10 +6151,23 @@ You are provided with two sources of campaign memory:
     prompt += `\n**Ability Scores:** ${scores}`;
     if (c.backstory) prompt += `\n**Backstory:** ${c.backstory}`;
     if (c.personalityTraits) prompt += `\n**Personality Traits:** ${c.personalityTraits}`;
+    if (c.fightingStyle) prompt += `\n**Fighting Style:** ${c.fightingStyle}`;
+    if (c.feats?.length) prompt += `\n**Feats:** ${c.feats.join(', ')}`;
+    if (c.subclassChoices && Object.keys(c.subclassChoices).length) prompt += `\n**Subclass Choices:** ${JSON.stringify(c.subclassChoices)}`;
     if (c.cantrips?.length) prompt += `\n**Cantrips:** ${c.cantrips.join(', ')}`;
     if (c.spells?.length) prompt += `\n**Spells:** ${c.spells.join(', ')}`;
-    if (c.equipment?.weapons?.length) prompt += `\n**Weapons:** ${c.equipment.weapons.map(w => w.name + (w.quantity > 1 ? ' x' + w.quantity : '')).join(', ')}`;
-    if (c.equipment?.armor) prompt += `\n**Armor:** ${c.equipment.armor}`;
+    if (c.equipment) {
+      prompt += `\n**Armor:** ${c.equipment.armor?.name || "None"} (AC ${c.equipment.armor?.ac || 10}, Weight ${c.equipment.armor?.weight || 0} lbs)`;
+      if (c.equipment.shield) prompt += `, Shield equipped.`;
+      const addWeapon = (label, w) => {
+        if (w && w.name) {
+          prompt += `\n**${label}:** ${w.name} (Attack: ${w.attack || "?"}, Damage: ${w.damage || "?"}, Properties: ${w.properties?.join(", ") || "none"})`;
+        }
+      };
+      addWeapon("Main Hand", c.equipment.mainHand);
+      addWeapon("Off Hand", c.equipment.offHand);
+      addWeapon("Ranged", c.equipment.ranged);
+    }
   }
 
   // Subclass mechanical essence
@@ -5585,14 +6286,9 @@ async function sendChatMessage() {
   saveChatHistory();
 
   // Read settings
-  const saved = localStorage.getItem('dnd_ai_settings');
-  let apiKey = '', model = '';
-  if (saved) {
-    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
-  }
-
-  if (!apiKey || !model) {
-    appendDMMessage('*The DM peers at you curiously…*\n\n**No API key or model configured.** Open Settings (⚙) and add your OpenRouter API key and select a model to bring the Dungeon Master to life.');
+  if (!getApiKey()) {
+    const providerLabel = getActiveProvider() === 'openrouter' ? 'OpenRouter' : 'Google AI Studio';
+    appendDMMessage('*The DM peers at you curiously…*\n\n**No API key configured.** Open Settings (⚙) and add your ' + providerLabel + ' API key to bring the Dungeon Master to life.');
     chatHistory.push({ role: 'assistant', content: '[Settings not configured]' });
     saveChatHistory();
     return;
@@ -5603,111 +6299,126 @@ async function sendChatMessage() {
   showTyping(true);
   if (sendBtn) sendBtn.disabled = true;
 
+  const provider = getActiveProvider();
+  const systemPrompt = buildSystemPrompt();
+
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'DnD DM'
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: chatHistory,
-        stream: true,
-        max_tokens: 1024,
-        temperature: 0.85
-      })
-    });
+    if (provider === 'openrouter') {
+      // ── OpenRouter streaming ──
+      const model = getActiveModel();
+      const orMessages = [{ role: 'system', content: systemPrompt }, ...chatHistory.filter(m => m.role !== 'system')];
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error?.message || `HTTP ${response.status}`);
-    }
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${getApiKey()}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': window.location.origin,
+          'X-Title': 'DnD DM'
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: orMessages,
+          stream: true,
+          max_tokens: 2048,
+          temperature: 0.85
+        })
+      });
 
-    showTyping(false);
-    // Create DM bubble for streaming
-    const bubbleId = 'msg-stream-' + Date.now();
-    appendDMMessageStreaming(bubbleId);
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let fullText = '';
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop(); // keep incomplete line
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const data = line.slice(6).trim();
-        if (data === '[DONE]') break;
-        try {
-          const parsed = JSON.parse(data);
-          const delta = parsed.choices?.[0]?.delta?.content || '';
-          if (delta) {
-            fullText += delta;
-            updateStreamingBubble(bubbleId, fullText);
-          }
-        } catch(e) { /* skip malformed chunk */ }
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `HTTP ${response.status}`);
       }
+
+      showTyping(false);
+      const bubbleId = 'msg-stream-' + Date.now();
+      appendDMMessageStreaming(bubbleId);
+
+      const { fullText } = await handleAIStream(response, bubbleId, 'openrouter');
+      const parsedText = parseAITags(fullText);
+      finalizeStreamingBubble(bubbleId, parsedText);
+      chatHistory.push({ role: 'assistant', content: fullText });
+      saveChatHistory();
+      await checkAndSummarize();
+
+    } else {
+      // ── Gemini streaming ──
+      const contents = buildGeminiContents();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
+      const requestBody = {
+        contents: contents,
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          maxOutputTokens: 2048,
+          temperature: 0.85,
+          topP: 0.95
+        }
+      };
+
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GOOGLE_MODEL + ':streamGenerateContent?alt=sse&key=' + encodeURIComponent(getApiKey()), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errText = await response.text().catch(() => '');
+        let errMsg = `HTTP ${response.status}`;
+        try { const errJson = JSON.parse(errText); errMsg = errJson.error?.message || errMsg; } catch(e) {}
+        throw new Error(errMsg);
+      }
+
+      showTyping(false);
+      const bubbleId = 'msg-stream-' + Date.now();
+      appendDMMessageStreaming(bubbleId);
+
+      let { fullText, finishReason } = await handleAIStream(response, bubbleId, 'gemini');
+      console.log('Gemini stream ended. finishReason:', finishReason, '| Total length:', fullText.length);
+
+      // Only retry if the API explicitly says the response was cut off by token limit
+      let retryCount = 0;
+      if (finishReason === 'MAX_TOKENS' && retryCount < 1) {
+        retryCount++;
+        console.warn('Response truncated (MAX_TOKENS), retrying with 4096 tokens...');
+        requestBody.generationConfig.maxOutputTokens = 4096;
+        // Clear the streaming bubble content before retry
+        const bubbleEl = document.getElementById(bubbleId);
+        if (bubbleEl) bubbleEl.textContent = '';
+        try {
+          const retryResponse = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + GOOGLE_MODEL + ':generateContent?key=' + encodeURIComponent(getApiKey()), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody)
+          });
+          if (retryResponse.ok) {
+            const retryData = await retryResponse.json();
+            const retryText = retryData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (retryText && retryText.length > fullText.length) {
+              fullText = retryText;
+              updateStreamingBubble(bubbleId, fullText);
+            }
+          }
+        } catch(e) {
+          console.warn('Retry failed:', e);
+        }
+      }
+
+      // Safety: if the text is suspiciously short and looks like an error payload
+      if (fullText.length > 0 && fullText.length < 50 && /^\{/.test(fullText.trim())) {
+        console.error('Suspiciously short JSON-like response, keeping original stream content.');
+      }
+
+      const parsedText = parseAITags(fullText);
+      finalizeStreamingBubble(bubbleId, parsedText);
+      chatHistory.push({ role: 'assistant', content: fullText });
+      saveChatHistory();
+      await checkAndSummarize();
     }
-
-    // Parse AI tags for automatic updates
-    const parsedText = parseAITags(fullText);
-    finalizeStreamingBubble(bubbleId, parsedText);
-    chatHistory.push({ role: 'assistant', content: fullText });
-    saveChatHistory();
-
-    // Trigger summarization check after assistant response
-    await checkAndSummarize();
 
   } catch(err) {
-    // Fallback: retry with the default model if the primary model failed
-    if (model !== DEFAULT_MODEL) {
-      console.warn(`Primary model "${model}" failed, falling back to "${DEFAULT_MODEL}"`);
-      try {
-        const fallbackResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.origin,
-            'X-Title': 'DnD DM'
-          },
-          body: JSON.stringify({
-            model: DEFAULT_MODEL,
-            messages: chatHistory,
-            stream: false,
-            max_tokens: 1024,
-            temperature: 0.85
-          })
-        });
-        if (fallbackResponse.ok) {
-          const fallbackData = await fallbackResponse.json();
-          const fallbackText = fallbackData.choices?.[0]?.message?.content || '';
-          if (fallbackText) {
-            showTyping(false);
-            const fbBubbleId = 'msg-stream-' + Date.now();
-            appendDMMessageStreaming(fbBubbleId);
-            const fbParsed = parseAITags(fallbackText);
-            finalizeStreamingBubble(fbBubbleId, fbParsed);
-            chatHistory.push({ role: 'assistant', content: fallbackText });
-            saveChatHistory();
-            appendSystemMessage(`⚠️ Used fallback model (${DEFAULT_MODEL})`);
-            // Trigger summarization check after fallback response
-            await checkAndSummarize();
-            return; // skip the error message below
-          }
-        }
-      } catch(fbErr) {
-        console.error('Fallback also failed:', fbErr);
-      }
-    }
     showTyping(false);
     appendDMMessage(`*The arcane link flickers…*\n\n**Error:** ${escapeHtml(err.message)}`, true);
   } finally {
@@ -5827,12 +6538,7 @@ function fallbackRoll(btn, formula, result) {
 
 // ── Context summarization ──
 async function summarizeOldMessages(oldMessages) {
-  const saved = localStorage.getItem('dnd_ai_settings');
-  let apiKey = '', model = '';
-  if (saved) {
-    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
-  }
-  if (!apiKey || !model) return;
+  if (!getApiKey()) return;
 
   // Concatenate old messages into a log string
   const logLines = oldMessages.map(m => {
@@ -5856,25 +6562,12 @@ ${logText}
 Core facts:`;
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'DnD DM'
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: [{ role: 'user', content: systemPrompt }],
-        max_tokens: 200,
-        temperature: 0.4
-      })
-    });
-
-    if (!response.ok) return;
-    const data = await response.json();
-    const summaryUpdate = data.choices?.[0]?.message?.content;
+    const summaryUpdate = await callAI(
+      [{ role: 'user', content: systemPrompt }],
+      '',  // no system prompt needed for summarization
+      200,
+      0.4
+    );
     if (!summaryUpdate) return;
 
     // Store the result (replace, not append)
@@ -5927,20 +6620,25 @@ async function summarizeAndTrim() {
   const toKeep = nonSystem.slice(-MAX_VISIBLE_MESSAGES);
   const toSummarize = nonSystem.slice(0, -MAX_VISIBLE_MESSAGES);
 
-  if (toSummarize.length > 0) {
-    await summarizeOldMessages(toSummarize);
+  try {
+    if (toSummarize.length > 0) {
+      await summarizeOldMessages(toSummarize);
+    }
+
+    // Rebuild chatHistory
+    chatHistory = systemMsg ? [systemMsg, ...toKeep] : toKeep;
+    messagesSinceLastSummary = toKeep.length;
+    renderChatHistory();
+    appendSystemMessage('✅ Summary complete. Continue your adventure!');
+  } catch (e) {
+    console.warn('Summarization failed temporarily:', e);
+    appendSystemMessage('⚠️ Summary service temporarily unavailable. Continuing without summarization.');
+  } finally {
+    // CRITICAL: Always restore input state, even on API failure
+    if (chatInput) chatInput.disabled = wasDisabled;
+    if (sendBtn) sendBtn.disabled = false;
+    isSummarizing = false;
   }
-
-  // Rebuild chatHistory
-  chatHistory = systemMsg ? [systemMsg, ...toKeep] : toKeep;
-  messagesSinceLastSummary = toKeep.length;
-  renderChatHistory();
-
-  // Re-enable input
-  if (chatInput) chatInput.disabled = wasDisabled;
-  if (sendBtn) sendBtn.disabled = false;
-  appendSystemMessage('✅ Summary complete. Continue your adventure!');
-  isSummarizing = false;
 }
 
 // ── DOM helpers ──
@@ -6212,7 +6910,13 @@ function parseCharacterTags(content) {
   const setArmorRegex = /<!--\s*char_set_armor\s+name="([^"]*)"\s*-->/g;
   result = result.replace(setArmorRegex, (match, name) => {
     if (!char.equipment) char.equipment = {};
-    char.equipment.armor = name || '';
+    var armorData = window.armorData || {};
+    var armorInfo = armorData[name] || {};
+    char.equipment.armor = {
+      name: name || '',
+      weight: armorInfo.weight || 0,
+      ac: parseInt(armorInfo.ac) || 10
+    };
     localStorage.setItem('dnd_current_character', JSON.stringify(char));
     if (document.getElementById('characterSheetModal').style.display === 'flex') {
       populateEquipmentTab();
@@ -6317,7 +7021,7 @@ function parseCharacterTags(content) {
         char.maxHp = hitDieVal + conMod;
         char.hitDiceTotal = char.level;
         char.hitDiceRemaining = char.hitDiceTotal;
-        const slots = getSpellSlotsForClass(char.class, char.level);
+        const slots = getSpellSlotsForClass(char.class, char.level, char.subclass);
         if (!char.spellSlots) char.spellSlots = {};
         for (let k in slots) {
           if (!char.spellSlots[k]) char.spellSlots[k] = { used: 0, max: slots[k] };
@@ -6415,6 +7119,15 @@ function parseCharacterTags(content) {
     return '';
   });
 
+  // ── Set Fighting Style: <!-- char_set_fighting_style name="Archery" --> ──
+  result = result.replace(/<!--\s*char_set_fighting_style\s+name="([^"]+)"\s*-->/g, function(match, name) {
+    if (char) {
+      char.fightingStyle = name;
+      saveCharacter();
+    }
+    return '';
+  });
+
   // ── Set Pact Boon: <!-- char_set_pact_boon name="Pact of the Blade" --> ──
   const setPactBoonRegex = /<!--\s*char_set_pact_boon\s+name="([^"]+)"\s*-->/g;
   result = result.replace(setPactBoonRegex, (match, name) => {
@@ -6438,7 +7151,9 @@ function parseCharacterTags(content) {
   // ── Resource set/spend: <!-- resource set type="LayOnHands" amount="25" --> or resource spend
   const resourceSetSpendRegex = /<!--\s*resource\s+(set|spend)\s+type="([^"]+)"\s+amount="(\d+)"\s*-->/g;
   result = result.replace(resourceSetSpendRegex, (match, action, type, amount) => {
-    if (char && char.classResources && char.classResources[type]) {
+    if (char) {
+      if (!char.classResources) char.classResources = {};
+      if (!char.classResources[type]) char.classResources[type] = { current: 0, max: parseInt(amount) };
       const res = char.classResources[type];
       if (action === 'set') res.current = parseInt(amount);
       else if (action === 'spend') res.current = Math.max(0, res.current - parseInt(amount));
@@ -6503,10 +7218,9 @@ function parseCharacterTags(content) {
   // ── Add feat ──
   result = result.replace(/<!--\s*char_feat\s+name="([^"]+)"(?:\s+description="([^"]*)")?\s*-->/g, (match, name, description) => {
     if (char) {
-      if (!char.feats) char.feats = "";
+      if (!char.feats || !Array.isArray(char.feats)) char.feats = [];
       const featLine = description ? `${name}: ${description}` : name;
-      if (char.feats) char.feats += "\n" + featLine;
-      else char.feats = featLine;
+      if (!char.feats.includes(featLine)) char.feats.push(featLine);
       saveCharacter();
     }
     return '';
@@ -6601,6 +7315,60 @@ function saveDMGuide() {
 }
 
 /* ── Campaign Summary ── */
+function toggleSummaryEdit() {
+  const display = document.getElementById('summaryDisplay');
+  const editor = document.getElementById('summaryEditor');
+  const editBtn = document.getElementById('editSummaryBtn');
+  const saveBtn = document.getElementById('saveSummaryBtn');
+  const refreshBtn = document.getElementById('refreshSummaryBtn');
+
+  if (!isEditingSummary) {
+    // Enter edit mode: copy current text into editor
+    const currentText = display.innerText.trim();
+    editor.value = currentText;
+    display.style.display = 'none';
+    editor.style.display = 'block';
+    editBtn.style.display = 'none';
+    saveBtn.style.display = 'inline-block';
+    refreshBtn.disabled = true;
+    isEditingSummary = true;
+  } else {
+    // Cancel edit mode without saving
+    display.style.display = 'block';
+    editor.style.display = 'none';
+    editBtn.style.display = 'inline-block';
+    saveBtn.style.display = 'none';
+    refreshBtn.disabled = false;
+    isEditingSummary = false;
+  }
+}
+
+function saveSummaryEdit() {
+  const editor = document.getElementById('summaryEditor');
+  const newText = editor.value.trim();
+  if (!newText) {
+    alert('Summary cannot be empty.');
+    return;
+  }
+
+  // Save to localStorage with manual flag
+  const key = `dnd_campaign_summary_${selectedCampaignId}`;
+  const timestamp = new Date().toLocaleString();
+  const data = { text: newText, timestamp: timestamp, manual: true };
+  localStorage.setItem(key, JSON.stringify(data));
+
+  // Update display
+  const display = document.getElementById('summaryDisplay');
+  display.innerText = newText;
+  display.style.display = 'block';
+  editor.style.display = 'none';
+  document.getElementById('editSummaryBtn').style.display = 'inline-block';
+  document.getElementById('saveSummaryBtn').style.display = 'none';
+  document.getElementById('refreshSummaryBtn').disabled = false;
+  document.getElementById('summaryTimestamp').innerText = `Last edited: ${timestamp}`;
+  isEditingSummary = false;
+}
+
 function openCampaignSummaryModal() {
   const modal = document.getElementById('campaignSummaryModal');
   if (!modal) return;
@@ -6608,18 +7376,33 @@ function openCampaignSummaryModal() {
   // Load stored summary
   const key = `dnd_campaign_summary_${selectedCampaignId}`;
   const stored = localStorage.getItem(key);
+  let text = 'No summary yet. Click "Refresh Summary" to generate one.';
+  let timestamp = '';
   if (stored) {
     try {
       const parsed = JSON.parse(stored);
-      document.getElementById('summaryContent').innerText = parsed.text || 'No summary yet.';
-      document.getElementById('summaryTimestamp').innerText = parsed.timestamp ? `Last updated: ${parsed.timestamp}` : '';
+      text = parsed.text || text;
+      timestamp = parsed.timestamp || '';
     } catch (e) {
-      document.getElementById('summaryContent').innerText = stored;
+      text = stored;
     }
-  } else {
-    document.getElementById('summaryContent').innerText = 'No summary yet. Click "Refresh Summary" to generate one.';
-    document.getElementById('summaryTimestamp').innerText = '';
   }
+
+  // Populate display and editor
+  document.getElementById('summaryDisplay').innerText = text;
+  document.getElementById('summaryEditor').value = text;
+  document.getElementById('summaryTimestamp').innerText = timestamp ? `Last updated: ${timestamp}` : '';
+
+  // Reset to display mode (hide editor, show display, enable buttons)
+  const display = document.getElementById('summaryDisplay');
+  const editor = document.getElementById('summaryEditor');
+  display.style.display = 'block';
+  editor.style.display = 'none';
+  document.getElementById('editSummaryBtn').style.display = 'inline-block';
+  document.getElementById('saveSummaryBtn').style.display = 'none';
+  document.getElementById('refreshSummaryBtn').disabled = false;
+  isEditingSummary = false;
+
   modal.style.display = 'flex';
   setTimeout(() => modal.classList.add('show'), 10);
 }
@@ -6632,65 +7415,70 @@ function closeCampaignSummaryModal() {
 }
 
 async function refreshCampaignSummary() {
-  const saved = localStorage.getItem('dnd_ai_settings');
-  let apiKey = '', model = '';
-  if (saved) {
-    try { const s = JSON.parse(saved); apiKey = s.apiKey || ''; model = s.model || ''; } catch(e) {}
+  // Check if manual edit exists
+  const key = `dnd_campaign_summary_${selectedCampaignId}`;
+  const stored = localStorage.getItem(key);
+  let isManual = false;
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (parsed.manual) isManual = true;
+    } catch(e) {}
   }
-  if (!apiKey || !model) {
-    alert('Please configure your API key and model in Settings first.');
+  if (isManual) {
+    if (!confirm('You have manually edited this summary. Refreshing will overwrite your changes. Continue?')) {
+      return;
+    }
+  }
+
+  if (!getApiKey()) {
+    alert('Please configure your API key in Settings first.');
     return;
   }
 
   const loadingEl = document.getElementById('summaryLoading');
-  const contentEl = document.getElementById('summaryContent');
+  const displayEl = document.getElementById('summaryDisplay');
   loadingEl.style.display = 'block';
-  contentEl.innerText = '';
+  displayEl.innerText = '';
 
   // Collect data
   const recentMessages = chatHistory.filter(m => m.role !== 'system').slice(-80);
   const activeQuests = quests.filter(q => q.status === 'active');
   const npcsList = npcs.filter(n => n.relationship !== 'Unknown').slice(0, 10);
 
+  const systemPrompt = `You are a scribe summarizing a D&D campaign. Based on the following chat history, active quests, and NPCs, write a concise, narrative summary (150-300 words) of the story so far.
+
+CRITICAL RULES:
+- DO NOT include any game mechanics (e.g., "they rolled a 19", "took 5 damage", "made a DC 15 save"). 
+- DO NOT mention dice, rolls, ability checks, or numbers of any kind.
+- Focus solely on narrative events: what happened, where they went, who they met, what was decided, what they are trying to achieve.
+- Write in past tense, third person.
+- Write as a single, cohesive paragraph – no bullet points or lists.
+- Use natural, descriptive storytelling language – like a novel's recap.`;
+
   const userPrompt = `Chat History:\n${JSON.stringify(recentMessages.map(m => ({role: m.role, content: m.content.slice(0,500)})))}\n\nActive Quests:\n${JSON.stringify(activeQuests)}\n\nNotable NPCs:\n${JSON.stringify(npcsList)}`;
 
   try {
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': window.location.origin,
-        'X-Title': 'DnD DM'
-      },
-      body: JSON.stringify({
-        model: model,
-        messages: [
-          { role: 'system', content: 'You are a scribe summarizing a D&D campaign. Based on the following chat history, active quests, and NPCs, write a concise, narrative summary (150-300 words) of the story so far. Include key events, current location/goal, important NPCs, and active quests. Write in past tense, third person. Use only natural language — no JSON, no markup.' },
-          { role: 'user', content: userPrompt }
-        ],
-        max_tokens: 600,
-        temperature: 0.7
-      })
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data = await response.json();
-    const summary = data.choices?.[0]?.message?.content || 'Failed to generate summary.';
-    contentEl.innerText = summary;
-    // Store
+    const summary = await callAI(
+      [{ role: 'user', content: userPrompt }],
+      systemPrompt,
+      600,
+      0.7
+    ) || 'Failed to generate summary.';
+    displayEl.innerText = summary;
+    // Store with manual: false
     const now = new Date().toLocaleString();
-    const key = `dnd_campaign_summary_${selectedCampaignId}`;
-    localStorage.setItem(key, JSON.stringify({ text: summary, timestamp: now }));
+    localStorage.setItem(key, JSON.stringify({ text: summary, timestamp: now, manual: false }));
     document.getElementById('summaryTimestamp').innerText = `Last updated: ${now}`;
   } catch (err) {
-    contentEl.innerText = `❌ Failed to generate summary: ${err.message}`;
+    displayEl.innerText = `❌ Failed to generate summary: ${err.message}`;
   } finally {
     loadingEl.style.display = 'none';
   }
 }
 
 function copyCampaignSummary() {
-  const text = document.getElementById('summaryContent').innerText;
+  const text = document.getElementById('summaryDisplay').innerText;
   if (!text || text === 'No summary yet. Click "Refresh Summary" to generate one.') return;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('copySummaryBtn');
@@ -6755,11 +7543,11 @@ function parseAITags(content) {
   let result = content;
 
   // ── Pre-processing: recover malformed tag closings ──
-  // Fix: replace arrow/Unicode symbol closings (→, ➔, ➤, etc.) with -->
+  // Fix: replace arrow/Unicode symbol closings (→, ➔, ➤, ➡, ⇒, etc.) with -->
   // Only fix inside HTML comment patterns to avoid touching narrative text
-  result = result.replace(/<!--[^>]*?[\u2192\u2794\u27A4]\s*/g, function(match) {
+  result = result.replace(/<!--[^>]*?[\u2190-\u21FF\u27A0-\u27FF\u2900-\u297F\u2B00-\u2BFF\u2794\u279C-\u27BE]\s*/g, function(match) {
     console.warn("Repaired malformed tag closing: " + match);
-    return match.replace(/[\u2192\u2794\u27A4]\s*$/, '--> ');
+    return match.replace(/[\u2190-\u21FF\u27A0-\u27FF\u2900-\u297F\u2B00-\u2BFF\u2794\u279C-\u27BE]\s*$/, '--> ');
   });
   // Fix: tags that are missing closing --> entirely (tag ends at end of line)
   result = result.replace(/<!--\s*char_hp_change\s+amount="[^"]+"\s*$/gm, function(match) {
@@ -6768,7 +7556,7 @@ function parseAITags(content) {
   });
   // Fix: any HTML comment opened with <!-- but missing --> before end of line
   // that looks like a known tag pattern
-  result = result.replace(/<!--\s*(char_\w+|xp_award|combat|spell_consume|short_rest|long_rest|stabilize|resource|level_up)[^>]*?\s*$/gm, function(match) {
+  result = result.replace(/<!--\s*(char_\w+|xp_award|combat|spell_consume|short_rest|long_rest|stabilize|resource|level_up|quest_create|quest_update|quest_complete|npc_add)[^>]*?\s*$/gm, function(match) {
     console.warn("Repaired missing tag close for known tag: " + match);
     return match + ' -->';
   });
@@ -6853,7 +7641,7 @@ function parseAITags(content) {
   // ---- NEW FEATURE TAGS ----
   
   // Combat start: <!-- combat start initiative="Thalion:17, Goblin:14" enemies='[{"name":"Goblin","hp":7,"ac":15}]' -->
-  const combatStartRegex = /<!--\s*combat start\s+initiative="([^"]+)"\s+enemies=(['"])(.+?)\2\s*-->/;
+  const combatStartRegex = /<!--\s*combat start\s+initiative="([^"]+)"\s+enemies=(['"])([\s\S]+?)\2\s*-->/;
   const combatStartMatch = result.match(combatStartRegex);
   if (combatStartMatch) {
     try {
@@ -6891,6 +7679,13 @@ function parseAITags(content) {
   const combatDmgRegex = /<!--\s*combat damage\s+id="([^"]+)"\s+amount="([^"]+)"\s*-->/g;
   result = result.replace(combatDmgRegex, function(match, id, amount) {
     updateCombat({ id: id, damage: amount });
+    return '';
+  });
+
+  // Combat heal: <!-- combat heal id="player" amount="5" -->
+  const combatHealRegex = /<!--\s*combat heal\s+id="([^"]+)"\s+amount="([^"]+)"\s*-->/g;
+  result = result.replace(combatHealRegex, function(match, id, amount) {
+    updateCombat({ id: id, heal: amount });
     return '';
   });
   
@@ -7048,29 +7843,37 @@ function copyMsgText(btn) {
 function calculateAC() {
   if (!currentCharacter) return 10;
   const eq = currentCharacter.equipment || {};
-  const armorName = eq.armor;
+  const armor = eq.armor || { name: "", ac: 10 };
   let ac = 10;
-  const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
-  if (armorName && armorData[armorName]) {
-    const a = armorData[armorName];
-    if (a.category === "Light") { ac = 11 + dex; }
-    else if (a.category === "Medium") { ac = Math.min(12 + dex, 14); }
-    else if (a.category === "Heavy") { ac = parseInt(a.ac); }
-    else { ac = parseInt(a.ac) || 10; }
+  // If a known armor from armorData, use its rules
+  if (armor.name && armorData[armor.name]) {
+    const a = armorData[armor.name];
+    const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
+    if (a.category === "Light") ac = 11 + dex;
+    else if (a.category === "Medium") ac = Math.min(12 + dex, 14);
+    else if (a.category === "Heavy") ac = parseInt(a.ac);
+    else ac = parseInt(a.ac) || 10;
+  } else if (armor.ac) {
+    // Custom armor: use the player-provided AC
+    ac = armor.ac;
   } else {
-    const cls = classes[currentCharacter.class];
-    if (cls) {
-      if (currentCharacter.class === "Barbarian") {
-        const con = calculateModifier(currentCharacter.abilityScores.Constitution);
-        ac = 10 + dex + con;
-      } else if (currentCharacter.class === "Monk") {
-        const wis = calculateModifier(currentCharacter.abilityScores.Wisdom);
-        ac = 10 + dex + wis;
-      }
+    // Unarmored calculation
+    const dex = calculateModifier(currentCharacter.abilityScores.Dexterity);
+    if (currentCharacter.class === "Barbarian") {
+      const con = calculateModifier(currentCharacter.abilityScores.Constitution);
+      ac = 10 + dex + con;
+    } else if (currentCharacter.class === "Monk") {
+      const wis = calculateModifier(currentCharacter.abilityScores.Wisdom);
+      ac = 10 + dex + wis;
     }
   }
   if (eq.shield) ac += 2;
   return ac;
+}
+
+function updateACDisplay() {
+  const acSpan = document.getElementById("sheetAC");
+  if (acSpan) acSpan.innerText = calculateAC();
 }
 // ====================================================================
 // COMBAT TRACKER FUNCTIONS
@@ -7315,6 +8118,20 @@ function updateCombat(tagData) {
       if (tagData.damage) { p.hp = Math.max(0, p.hp - parseInt(tagData.damage)); }
       if (tagData.heal) { p.hp = Math.min(p.maxHp, p.hp + parseInt(tagData.heal)); }
     }
+    // Sync player HP with currentCharacter when 'player' takes damage or healing
+    if (tagData.id === "player" && currentCharacter) {
+      if (tagData.damage) {
+        currentCharacter.hp = Math.max(0, (currentCharacter.hp || currentCharacter.maxHp) - parseInt(tagData.damage));
+        if (currentCharacter.hp === 0) {
+          appendSystemMessage("\u26A0\uFE0F " + currentCharacter.name + " is at 0 HP and is unconscious!");
+        }
+      }
+      if (tagData.heal) {
+        currentCharacter.hp = Math.min(currentCharacter.maxHp || currentCharacter.hp, (currentCharacter.hp || 0) + parseInt(tagData.heal));
+      }
+      saveCharacter();
+      updateHPDisplay();
+    }
   }
   if (tagData.action === "next_turn") {
     activeCombat.currentTurnIndex++;
@@ -7336,7 +8153,7 @@ function updateCombat(tagData) {
 function initSpellSlots() {
   if (!currentCharacter) return;
   if (!currentCharacter.spellSlots) {
-    const slots = getSpellSlotsForClass(currentCharacter.class, currentCharacter.level);
+    const slots = getSpellSlotsForClass(currentCharacter.class, currentCharacter.level, currentCharacter.subclass);
     let obj = {};
     for (let k in slots) {
       obj[k] = { used: 0, max: slots[k] };
@@ -7492,7 +8309,7 @@ function applyShortRest() {
   }
   // Restore short rest resources
   if (currentCharacter.class === "Warlock") {
-    const slots = getSpellSlotsForClass("Warlock", currentCharacter.level);
+    const slots = getSpellSlotsForClass("Warlock", currentCharacter.level, currentCharacter.subclass);
     if (currentCharacter.spellSlots) {
       for (let k in slots) {
         if (currentCharacter.spellSlots[k]) currentCharacter.spellSlots[k].used = 0;
@@ -7810,29 +8627,29 @@ function calculateEncumbrance() {
   if (!currentCharacter) return { total: 0, capacity: 0, ratio: 0 };
   let total = 0;
   const eq = currentCharacter.equipment || {};
-  if (eq.armor && armorData[eq.armor]) {
-    total += armorData[eq.armor].weight;
-  }
+
+  // Armor weight
+  if (eq.armor && eq.armor.weight) total += eq.armor.weight;
+  // Shield weight (rough estimate 6 lbs)
   if (eq.shield) total += 6;
-  if (eq.weapons) {
-    eq.weapons.forEach(function(w) {
-      const wd = weaponsData[w.name];
-      if (wd) total += wd.weight * (w.quantity || 1);
-    });
-  }
+  // Weapons
+  const weapons = [eq.mainHand, eq.offHand, eq.ranged];
+  weapons.forEach(w => {
+    if (w && w.weight) total += w.weight * (w.quantity || 1);
+  });
+  // Inventory items
   if (currentCharacter.inventory) {
-    currentCharacter.inventory.forEach(function(item) {
+    currentCharacter.inventory.forEach(item => {
       const w = parseFloat(item.weight) || 0;
       total += w * (item.quantity || 1);
     });
   }
-  const currency = currentCharacter.currency || {};
-  const coinWeight = ((currency.cp || 0) + (currency.sp || 0) + (currency.ep || 0) + (currency.gp || 0) + (currency.pp || 0)) / 50;
-  total += coinWeight;
+  // Currency (50 coins = 1 lb)
+  const cur = currentCharacter.currency || {};
+  total += (cur.cp + cur.sp + cur.ep + cur.gp + cur.pp) / 50;
   const str = currentCharacter.abilityScores.Strength || 10;
   const capacity = str * 15;
-  const ratio = total / capacity;
-  return { total: total, capacity: capacity, ratio: ratio, overCapacity: total > capacity, doubleCapacity: total > capacity * 2 };
+  return { total, capacity, ratio: total / capacity, overCapacity: total > capacity, doubleCapacity: total > capacity * 2 };
 }
 
 function updateEncumbranceDisplay() {
@@ -7881,6 +8698,8 @@ function getClassResources(className, subclass, level) {
   } else if (className === "Fighter") {
     resources.ActionSurge = { max: 1, current: 1 };
     resources.SecondWind = { max: 1, current: 1 };
+  } else if (className === "Blood Hunter") {
+    resources.BloodMaledict = { max: getBloodMaledictMax(level), current: getBloodMaledictMax(level) };
   }
   return resources;
 }
@@ -7925,6 +8744,196 @@ function updateClassResourcesUI() {
       }
     });
   });
+}
+
+// ====================================================================
+// BLOOD HUNTER FUNCTIONS
+// ====================================================================
+
+function updateBloodHunterUI() {
+  const section = document.getElementById("bloodHunterSheetSection");
+  if (!section) return;
+  if (!currentCharacter || currentCharacter.class !== "Blood Hunter") {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "block";
+  const level = currentCharacter.level || 1;
+  const die = hemocraftDieByLevel[level] || "d4";
+  const dieSpan = document.getElementById("hemocraftDie");
+  if (dieSpan) dieSpan.innerText = die;
+
+  // Blood Maledict uses
+  const uses = currentCharacter.classResources?.BloodMaledict?.current || 0;
+  const maxUses = currentCharacter.classResources?.BloodMaledict?.max || 0;
+  const usesSpan = document.getElementById("bloodMaledictUses");
+  if (usesSpan) usesSpan.innerText = uses + " / " + maxUses;
+
+  // Populate rite dropdown
+  const riteSelect = document.getElementById("activeRiteSelect");
+  if (riteSelect) {
+    const learnedRites = currentCharacter.learnedRites || ["Rite of the Flame"];
+    riteSelect.innerHTML = '<option value="">None</option>' +
+      learnedRites.map(function(r) { return '<option value="' + r + '">' + r + '</option>'; }).join("");
+    if (currentCharacter.activeRite) riteSelect.value = currentCharacter.activeRite;
+  }
+
+  // Populate blood curses list
+  const cursesListDiv = document.getElementById("bloodCursesList");
+  if (cursesListDiv) {
+    const knownCurses = currentCharacter.bloodCurses || [];
+    cursesListDiv.innerHTML = knownCurses.map(function(c) {
+      var name = typeof c === "string" ? c : c.name;
+      var curseObj = bloodCurses.find(function(bc) { return bc.name === name; });
+      var desc = curseObj ? curseObj.description : "";
+      var amplifyText = curseObj && curseObj.amplify ? '<br><span class="feature-desc" style="color:#C8A96E;">Amplify: ' + curseObj.amplify + '</span>' : "";
+      return '<div class="feature-item" style="margin-bottom:6px;">' +
+        '<strong>' + name + '</strong><br>' +
+        '<span class="feature-desc">' + desc + '</span>' + amplifyText +
+        '<div style="margin-top:4px;">' +
+          '<button class="small-btn use-curse-btn" data-curse="' + name + '">Use</button> ' +
+          '<label style="font-size:0.85em;"><input type="checkbox" class="amplify-checkbox" data-curse="' + name + '"> Amplify</label>' +
+        '</div></div>';
+    }).join("");
+
+    // Bind curse use buttons
+    cursesListDiv.querySelectorAll(".use-curse-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var curseName = btn.dataset.curse;
+        var amplifyCb = btn.parentElement.querySelector(".amplify-checkbox");
+        var amplified = amplifyCb ? amplifyCb.checked : false;
+        useBloodCurse(curseName, amplified);
+      });
+    });
+  }
+
+  // ── Bind Blood Hunter sheet buttons (one-time setup) ──
+  var activateBtn = document.getElementById("activateRiteBtn");
+  if (activateBtn && !activateBtn._bhBound) {
+    activateBtn._bhBound = true;
+    activateBtn.addEventListener("click", function() {
+      var sel = document.getElementById("activeRiteSelect");
+      if (sel && sel.value && sel.value !== "") {
+        activateCrimsonRite(sel.value);
+      }
+    });
+  }
+  var deactivateBtn = document.getElementById("deactivateRiteBtn");
+  if (deactivateBtn && !deactivateBtn._bhBound) {
+    deactivateBtn._bhBound = true;
+    deactivateBtn.addEventListener("click", function() {
+      deactivateCrimsonRite();
+    });
+  }
+  // Bind Blood Maledict resource buttons in the Blood Hunter section
+  var bhSection = document.getElementById("bloodHunterSheetSection");
+  if (bhSection) {
+    bhSection.querySelectorAll(".resource-btn[data-resource='bloodMaledict']").forEach(function(btn) {
+      if (btn._bhBound) return;
+      btn._bhBound = true;
+      btn.addEventListener("click", function() {
+        var action = btn.dataset.action;
+        if (!currentCharacter.classResources?.BloodMaledict) return;
+        var res = currentCharacter.classResources.BloodMaledict;
+        if (action === "use") {
+          if (res.current > 0) { res.current--; saveCharacter(); updateBloodHunterUI(); updateClassResourcesUI(); }
+        } else if (action === "restore") {
+          if (res.current < res.max) { res.current++; saveCharacter(); updateBloodHunterUI(); updateClassResourcesUI(); }
+        }
+      });
+    });
+  }
+}
+
+function activateCrimsonRite(riteName) {
+  var rite = crimsonRites.find(function(r) { return r.name === riteName; });
+  if (!rite) return;
+  var hemDie = hemocraftDieByLevel[currentCharacter.level] || "d4";
+  var roll = rollDiceExpression("1" + hemDie);
+  if (!roll) return;
+  var dmg = roll.total;
+  var newHp = currentCharacter.hp - dmg;
+  if (newHp < 1) {
+    alert("Not enough HP to activate rite! You would be reduced to 0 HP.");
+    return;
+  }
+  currentCharacter.hp = newHp;
+  currentCharacter.maxHp = (currentCharacter.maxHp || currentCharacter.hp) - dmg;
+  currentCharacter.activeRite = riteName;
+  saveCharacter();
+  updateHPDisplay();
+  updateBloodHunterUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage("\uD83D\uDC0E " + currentCharacter.name + " activates " + riteName + ", losing " + dmg + " HP and reducing max HP by " + dmg + ".");
+  }
+}
+
+function deactivateCrimsonRite() {
+  if (!currentCharacter) return;
+  var restoredHp = currentCharacter.maxHp - (currentCharacter.hp || currentCharacter.maxHp);
+  currentCharacter.hp = (currentCharacter.hp || 0) + restoredHp;
+  currentCharacter.maxHp = currentCharacter.hp;
+  currentCharacter.activeRite = null;
+  saveCharacter();
+  updateHPDisplay();
+  updateBloodHunterUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage(currentCharacter.name + " deactivates their Crimson Rite.");
+  }
+}
+
+function useBloodCurse(curseName, amplified) {
+  if (!currentCharacter || !currentCharacter.classResources?.BloodMaledict) return;
+  var res = currentCharacter.classResources.BloodMaledict;
+  if (res.current <= 0) {
+    alert("No Blood Maledict uses remaining. Finish a short rest to restore them.");
+    return;
+  }
+  res.current--;
+  var curseObj = bloodCurses.find(function(c) { return c.name === curseName; });
+  var msg = "\uD83D\uDC0E " + currentCharacter.name + " uses " + curseName + ".";
+  if (amplified && curseObj && curseObj.amplify) {
+    var hemDie = hemocraftDieByLevel[currentCharacter.level] || "d4";
+    var roll = rollDiceExpression("1" + hemDie);
+    var ampDmg = roll ? roll.total : 0;
+    var newHp = currentCharacter.hp - ampDmg;
+    if (newHp > 0) {
+      currentCharacter.hp = newHp;
+      msg += " (Amplified: " + curseObj.amplify + " — takes " + ampDmg + " necrotic damage.)";
+    } else {
+      msg += " (Amplify attempted but not enough HP — curse used without amplification.)";
+    }
+  } else if (amplified) {
+    msg += " (Amplified.)";
+  }
+  saveCharacter();
+  updateBloodHunterUI();
+  updateClassResourcesUI();
+  if (typeof appendSystemMessage === "function") {
+    appendSystemMessage(msg);
+  }
+}
+
+function getBloodCurseMax(level) {
+  if (level >= 18) return 5;
+  if (level >= 14) return 4;
+  if (level >= 10) return 3;
+  if (level >= 6) return 2;
+  return 1;
+}
+
+function getBloodMaledictMax(level) {
+  if (level >= 17) return 4;
+  if (level >= 13) return 3;
+  if (level >= 6) return 2;
+  return 1;
+}
+
+function getCrimsonRiteMax(level, subclass) {
+  if (subclass === "Order of the Ghostslayer" && level >= 3) return 2; // Rite of the Flame + Rite of the Dawn
+  if (level >= 14) return 3;
+  if (level >= 7) return 2;
+  return 1;
 }
 
 // ====================================================================
@@ -7998,7 +9007,7 @@ function recalculateStatsOnLevelUp(newLevel, oldLevel) {
   const hpRoll = Math.floor(hitDieVal / 2) + 1;
   const hpIncrease = hpRoll + conMod;
   const newMaxHp = (currentCharacter.maxHp || hitDieVal + conMod) + hpIncrease;
-  const spellSlots = getSpellSlotsForClass(currentCharacter.class, newLevel);
+  const spellSlots = getSpellSlotsForClass(currentCharacter.class, newLevel, currentCharacter.subclass);
   const asiAvailable = (newLevel % 4 === 0);
   let features = [];
   if (currentCharacter.class === "Sorcerer" && newLevel >= 3) features.push("Metamagic (2 options)");
@@ -8026,7 +9035,7 @@ function processLevelUp() {
   currentCharacter.level = prop.newLevel;
   currentCharacter.hitDiceTotal = prop.newLevel;
   currentCharacter.hitDiceRemaining = prop.newLevel;
-  const slots = getSpellSlotsForClass(currentCharacter.class, prop.newLevel);
+  const slots = getSpellSlotsForClass(currentCharacter.class, prop.newLevel, currentCharacter.subclass);
   if (!currentCharacter.spellSlots) currentCharacter.spellSlots = {};
   for (let k in slots) {
     if (!currentCharacter.spellSlots[k]) {
